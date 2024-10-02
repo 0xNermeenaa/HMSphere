@@ -5,25 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMS_Models
+namespace HMSphere.Domain.Entities
 {
-    public class Appointment
+    internal class Appointment
     {
-        public int ID { get; set; }
-        [Required]
+        public string ID { get; set; }
         public DateTime Date { get; set; }
         public string? ReasonFor { get; set; }
-        [Required, MaxLength(10)]
         public string? Clinic { get; set; }
-        [Required,MaxLength(10)]
         public string? Status { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public bool IsDeleted { get; set; }
-        public int DoctorID { get; set; }
-        public Doctor doctor { get; set; }
-        public int PatientID { get; set; }
-        public Patient patient { get; set; }
-
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public bool IsDeleted { get; set; } = false;
+        public string DoctorID { get; set; }
+        public virtual Doctor doctor { get; set; }
+        public string PatientID { get; set; }
+        public virtual Patient patient { get; set; }
 
     }
 }

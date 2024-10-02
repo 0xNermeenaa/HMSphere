@@ -5,20 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMS_Models
+namespace HMSphere.Domain.Entities
 {
-    public class Shift
+    internal class Shift
     {
-        public int ID { get; set; }
-        [Required]
-        public DateTime ShiftDate { get; set; }
+        public string ID { get; set; }
+        public DateTime ShiftDate { get; set; } 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Notes { get; set; }
         public string ShiftType { get; set; }
         public bool IsActive { get; set; }
-        public bool IsDeleted { get; set; }
-        public ICollection<Doctor> Doctors { get; set; }
-        public ICollection<OtherStaff> Staff { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public virtual ICollection<Doctor> Doctors { get; set; }
+        public virtual ICollection<Staff> Staff { get; set; }
     }
 }
