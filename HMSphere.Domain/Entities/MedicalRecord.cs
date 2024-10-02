@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HMSphere.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    internal class MedicalRecord
+    public class MedicalRecord
     {
         public string ID { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; }
         public string Diagnosis { get; set; }
         public string TreatmentPlan { get; set; }
         public string Medications { get; set; }

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    internal class Shift
+    public class Shift
     {
         public string ID { get; set; }
-        public DateTime ShiftDate { get; set; } 
+        public DateTime ShiftDate { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Notes { get; set; }
