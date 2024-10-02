@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    internal class StaffShift
+    public class StaffShift
     {
         public int Id { get; set; }
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMS_Models
+namespace HMSphere.Domain.Entities
 {
     public class Shift
     {
@@ -19,6 +19,6 @@ namespace HMS_Models
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Doctor> Doctors { get; set; }
-        public ICollection<OtherStaff> Staff { get; set; }
+        public ICollection<Staff> Staff { get; set; }
     }
 }

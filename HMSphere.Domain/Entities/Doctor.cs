@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    internal class Doctor : ApplicationUser
+    public class Doctor : ApplicationUser
     {
         //[Required]
         //[StringLength(100)]

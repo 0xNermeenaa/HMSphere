@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HMSphere.Domain.Enums;
+
 
 namespace HMSphere.Domain.Entities
 {
-    internal class Staff : ApplicationUser
+    public class Staff : ApplicationUser
     {
-        //[Required]
-        //[StringLength(50)]
-        public string Role { get; set; }
 
+        public Role Role { get; set; }
 
         //[Required]
         //[StringLength(100)]

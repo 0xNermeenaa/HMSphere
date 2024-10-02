@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    internal class Patient : ApplicationUser
+    public class Patient : ApplicationUser
     {
         // Blood type(A+, B-, O+ , ..)
         //[Required]

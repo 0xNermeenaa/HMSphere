@@ -1,11 +1,12 @@
-﻿using System;
+﻿using HMSphere.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMS_Models
+namespace HMSphere.Domain.Entities
 {
     public class MedicalRecord
     {
