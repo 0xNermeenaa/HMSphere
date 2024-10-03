@@ -9,18 +9,15 @@ namespace HMSphere.Domain.Entities
 {
     public class Patient : ApplicationUser
     {
-        // Blood type(A+, B-, O+ , ..)
-        //[Required]
-        //[StringLength(5)]
-        public string Blood { get; set; }
 
-        //[StringLength(2000)]
-        public string DiseaseHistory { get; set; }
+        public string Blood { get; set; }=string.Empty;
 
-        //[Required]
+        public string DiseaseHistory { get; set; }= string.Empty;
+
         public double Weight { get; set; }
 
-        //[Required]
         public double Height { get; set; }
+        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
     }
 }

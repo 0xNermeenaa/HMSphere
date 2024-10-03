@@ -9,13 +9,13 @@ namespace HMSphere.Domain.Entities
 {
     public class Shift
     {
-        public string ID { get; set; }
-        public DateTime ShiftDate { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string Notes { get; set; }
-        public string ShiftType { get; set; }
-        public bool IsActive { get; set; }
+        public Guid ID { get; set; }= Guid.NewGuid();
+        public DateTime ShiftDate { get; set; }= DateTime.Now;
+        public DateTime StartTime { get; set; }=DateTime.Now;
+        public DateTime EndTime { get; set; }= DateTime.Now;
+        public string Notes { get; set; }= string.Empty;
+        public string ShiftType { get; set; }=string.Empty;
+        public bool IsActive { get; set; }=false;
         public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Doctor> Doctors { get; set; }
         public virtual ICollection<Staff> Staff { get; set; }

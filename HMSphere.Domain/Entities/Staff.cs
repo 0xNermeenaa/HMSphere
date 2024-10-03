@@ -1,4 +1,5 @@
 ﻿using HMSphere.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace HMSphere.Domain.Entities
@@ -7,23 +8,19 @@ namespace HMSphere.Domain.Entities
     {
 
         public Role Role { get; set; }
+        public string JobTitle { get; set; } = string.Empty;
+        public DateTime HireDate { get; set; } = DateTime.Now;
 
-        //[Required]
-        //[StringLength(100)]
-        public string JobTitle { get; set; }
+        [ForeignKey("Department")]
+        public string DeptId { get; set; }
+        [ForeignKey("Shift")]
+        public string ShiftId { get; set; }
 
-
-        //[Required]
-        //[DataType(DataType.Date)]
-        public DateTime HireDate { get; set; }
-
-        // Foreign Key for DeptId
-        //[Required]
-        public int DeptId { get; set; }
+        public virtual Department Department { get; set; } = new();
+        public virtual Shift Shift { get; set; } = new();
 
 
-        // Foreign Key for Shift 
-        //[Required]
-        public int ShiftId { get; set; }
+
+
     }
 }

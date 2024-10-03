@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,22 +9,18 @@ namespace HMSphere.Domain.Entities
 {
     public class Doctor : ApplicationUser
     {
-        //[Required]
-        //[StringLength(100)]
-        public string Specialization { get; set; }
+
+        public string Specialization { get; set; } = string.Empty;
+
+        [ForeignKey("Department")]
+        public string DeptId { get; set; }
+
+        public virtual Department Department { get; set; }
+        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
 
-        //[Required]
-        // Foreign Key for ApplicationUSer
-        //public int AppUserId { get; set; }
 
 
-        //[Required]
-        // Foreign Key for DeptId
-        public int DeptId { get; set; }
 
-        // Foreign Key for Shift 
-        //[Required]
-        public int ShiftId { get; set; }
     }
 }

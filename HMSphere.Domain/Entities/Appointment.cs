@@ -10,20 +10,23 @@ namespace HMSphere.Domain.Entities
 {
     public class Appointment
     {
-        public string ID { get; set; }
-        public DateTime Date { get; set; }
-        public string? ReasonFor { get; set; }
-        public string? Clinic { get; set; }
-        public string? Status { get; set; }
+        public Guid ID { get; set; } = Guid.NewGuid();
+        public DateTime Date { get; set; }= DateTime.Now;
+        public string ReasonFor { get; set; } = string.Empty;
+        public string Clinic { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
 
+        [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
-       // [ForeignKey("DoctorId")]
-        public virtual Doctor Doctor { get; set; }
+
+        [ForeignKey("Patient")]
         public string PatientId { get; set; }
-       // [ForeignKey("PatientId")]
-        public virtual Patient Patient { get; set; }
+
+        public virtual Doctor Doctor { get; set; } = new();
+
+        public virtual Patient Patient { get; set; }= new();
 
 
     }
