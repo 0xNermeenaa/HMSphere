@@ -1,8 +1,12 @@
+using HMSphere.Domain.Entities;
+using HMSphere.Infrastructure.DataContext;
+using Microsoft.AspNetCore.Identity;
+
 namespace HMSphere.MVC
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,15 @@ namespace HMSphere.MVC
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+            //For Seeding Data 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<HmsContext>();
+                var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                await StoredContextSeed.SeedAsync(context);
+               // await IdentitySeed.SeedUserAsync(usermanager);
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
