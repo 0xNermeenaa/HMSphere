@@ -1,4 +1,4 @@
-using HMSphere.MVC.Models;
+using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
