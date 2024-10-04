@@ -16,6 +16,14 @@ namespace HMSphere.Infrastructure.Configurations
 
             builder.Property(p => p.JobTitle)
                 .HasMaxLength(50);
+
+            builder.HasOne(s=>s.Department)
+                .WithMany().HasForeignKey(s=>s.DeptId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(d => d.StaffShifts)
+                .WithOne().HasForeignKey(ss => ss.StaffId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

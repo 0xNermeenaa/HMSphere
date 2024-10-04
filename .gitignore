@@ -7,7 +7,7 @@
 .env
 
 # ignore migrations
-Migrations/
+
 
 # User-specific files
 *.rsuser

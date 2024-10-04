@@ -16,6 +16,14 @@ namespace HMSphere.Infrastructure.Configurations
             builder.Property(p => p.Specialization)
                 .HasMaxLength(50);
 
+
+            builder.HasOne(d => d.Department)
+                .WithMany().HasForeignKey(d => d.DeptId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(d=>d.DoctorShifts)
+                .WithOne().HasForeignKey(ds=>ds.DoctorId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

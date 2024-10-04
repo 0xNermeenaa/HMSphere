@@ -9,18 +9,13 @@ namespace HMSphere.Domain.Entities
 
         public Role Role { get; set; }
         public string JobTitle { get; set; } = string.Empty;
-        public DateTime HireDate { get; set; } = DateTime.Now;
+        public DateOnly HireDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         [ForeignKey("Department")]
-        public string DeptId { get; set; }
-        [ForeignKey("Shift")]
-        public string ShiftId { get; set; }
+        public Guid DeptId { get; set; }
 
         public virtual Department Department { get; set; } = new();
-        public virtual Shift Shift { get; set; } = new();
-
-
-
+        public virtual ICollection<StaffShift> StaffShifts { get; set; } = new List<StaffShift>();
 
     }
 }

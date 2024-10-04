@@ -13,13 +13,12 @@ namespace HMSphere.Domain.Entities
         public string Specialization { get; set; } = string.Empty;
 
         [ForeignKey("Department")]
-        public string DeptId { get; set; }
+        public Guid DeptId { get; set; }
 
-        public virtual Department Department { get; set; }
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-
-
-
+        public virtual Department Department { get; set; } = new();
+        public virtual ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
+        public virtual ICollection<DoctorShift> DoctorShifts { get; set; } = new List<DoctorShift>();
+        public virtual ICollection<MedicalRecord>? MedicalRecords { get; set; } = new List<MedicalRecord>();
 
 
     }

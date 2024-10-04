@@ -1,6 +1,7 @@
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HMSphere.MVC
 {
@@ -12,6 +13,15 @@ namespace HMSphere.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            //Add Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<HmsContext>();
+
+            //Add DbContext
+            builder.Services.AddDbContext<HmsContext>(options =>
+            options.UseSqlServer(builder.Configuration
+            .GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
             //For Seeding Data 

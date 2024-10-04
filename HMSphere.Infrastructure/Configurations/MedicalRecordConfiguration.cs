@@ -14,7 +14,7 @@ namespace HMSphere.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<MedicalRecord> builder)
         {
-            builder.Property(p => p.ID)
+            builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd().IsRequired();
 
   
@@ -30,6 +30,10 @@ namespace HMSphere.Infrastructure.Configurations
 
             builder.Property(p => p.DoctorNotes)
                 .HasMaxLength(500);
+
+            builder.HasOne(m=>m.Patient)
+                .WithMany().HasForeignKey(m => m.PatientId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace HMSphere.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.Property(p => p.ID)
+
+            builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd().IsRequired();
 
             builder.Property(p => p.Name)
@@ -25,6 +26,16 @@ namespace HMSphere.Infrastructure.Configurations
             builder.Property(p=>p.Location)
                 .HasMaxLength (100);
 
+            builder.HasOne(d => d.DeptManager)
+                .WithOne().HasForeignKey<Department>(d => d.ManagerId);
+
+            builder.HasMany(d=>d.Doctors)
+                .WithOne().HasForeignKey(d => d.DeptId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(s => s.Staff)
+                .WithOne().HasForeignKey(s => s.DeptId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

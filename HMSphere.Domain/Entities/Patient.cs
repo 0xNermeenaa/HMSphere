@@ -11,13 +11,12 @@ namespace HMSphere.Domain.Entities
     {
 
         public string Blood { get; set; }=string.Empty;
-
-        public string DiseaseHistory { get; set; }= string.Empty;
-
+        public string? DiseaseHistory { get; set; }= string.Empty;
         public double Weight { get; set; }
-
         public double Height { get; set; }
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+        public virtual ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
+        public virtual ICollection<MedicalRecord>? MedicalRecords { get; set; } = new List<MedicalRecord>();
 
     }
 }

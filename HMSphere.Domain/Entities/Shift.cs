@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HMSphere.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,15 +10,15 @@ namespace HMSphere.Domain.Entities
 {
     public class Shift
     {
-        public Guid ID { get; set; }= Guid.NewGuid();
-        public DateTime ShiftDate { get; set; }= DateTime.Now;
-        public DateTime StartTime { get; set; }=DateTime.Now;
-        public DateTime EndTime { get; set; }= DateTime.Now;
-        public string Notes { get; set; }= string.Empty;
-        public string ShiftType { get; set; }=string.Empty;
+        public Guid Id { get; set; }= Guid.NewGuid();
+        public ShiftType Type { get; set; }= ShiftType.Morning;
+        public TimeOnly StartTime { get; set; }=TimeOnly.FromDateTime(DateTime.Now);
+        public TimeOnly EndTime { get; set; }= TimeOnly.FromDateTime(DateTime.Now);
+        public string? Notes { get; set; }= string.Empty;
         public bool IsActive { get; set; }=false;
         public bool IsDeleted { get; set; } = false;
-        public virtual ICollection<Doctor> Doctors { get; set; }
-        public virtual ICollection<Staff> Staff { get; set; }
+
+        public virtual ICollection<DoctorShift> DoctorShifts { get; set; }=new List<DoctorShift>();
+        public virtual ICollection<StaffShift> StaffShifts { get; set; }= new List<StaffShift>();
     }
 }

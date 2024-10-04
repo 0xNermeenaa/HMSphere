@@ -13,7 +13,7 @@ namespace HMSphere.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Appointment> builder)
         {
-            builder.Property(p => p.ID)
+            builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd().IsRequired();
 
 
@@ -28,8 +28,14 @@ namespace HMSphere.Infrastructure.Configurations
             builder.Property(p => p.ReasonFor)
                 .HasMaxLength(200);
 
+            builder.HasOne(a => a.Patient)
+                .WithMany().HasForeignKey(p => p.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-           
+            builder.HasOne(a => a.Doctor)
+                .WithMany().HasForeignKey(p => p.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
 
         }

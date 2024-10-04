@@ -13,14 +13,22 @@ namespace HMSphere.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Shift> builder)
         {
-            builder.Property(p => p.ID)
+            builder.Property(p => p.Id)
                .ValueGeneratedOnAdd().IsRequired();
 
             builder.Property(p => p.Notes)
                 .HasMaxLength(200);
 
-            builder.Property(p => p.ShiftType)
+            builder.Property(p => p.Type)
                 .HasMaxLength(50);
+
+            builder.HasMany(d => d.DoctorShifts)
+                .WithOne().HasForeignKey(ds => ds.ShiftId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(d => d.StaffShifts)
+                .WithOne().HasForeignKey(ss => ss.ShiftId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
