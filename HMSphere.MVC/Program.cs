@@ -1,7 +1,11 @@
+using HMSphere.Application.Interfaces;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace HMSphere.MVC
 {
@@ -22,6 +26,18 @@ namespace HMSphere.MVC
             builder.Services.AddDbContext<HmsContext>(options =>
             options.UseSqlServer(builder.Configuration
             .GetConnectionString("DefaultConnection")));
+
+
+            //configure  Services
+
+            builder.Services.AddScoped<IAccountService, IAccountService>();
+
+
+
+            //seeding Data
+            builder.Services.AddScoped<StoredContextSeed>();
+           // builder.Services.AddScoped<IdentitySeed>();
+
 
             var app = builder.Build();
             //For Seeding Data 
