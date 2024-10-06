@@ -1,4 +1,5 @@
 using HMSphere.Application.Interfaces;
+using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,9 +30,7 @@ namespace HMSphere.MVC
 
 
             //configure  Services
-
-            builder.Services.AddScoped<IAccountService, IAccountService>();
-
+            builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
 
 
             //seeding Data
