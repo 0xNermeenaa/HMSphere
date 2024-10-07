@@ -1,4 +1,5 @@
 ﻿using HMSphere.Application.Interfaces;
+using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMSphere.MVC.Controllers
@@ -11,6 +12,10 @@ namespace HMSphere.MVC.Controllers
             _accountService = accountService;
         }
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult Register(RegisterViewModel model)
         {
             return View();
         }

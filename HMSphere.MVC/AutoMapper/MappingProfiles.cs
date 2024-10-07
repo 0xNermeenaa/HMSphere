@@ -9,6 +9,9 @@ namespace HMSphere.MVC.AutoMapper
         public MappingProfiles()
         {
             CreateMap<AuthDTO,AuthViewModel>().ReverseMap();
+            CreateMap<RegisterDto, RegisterViewModel>().ReverseMap();
+            CreateMap<LoginDto, LoginViewModel>().ReverseMap();
+
 
         }
     }
