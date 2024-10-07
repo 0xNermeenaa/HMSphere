@@ -2,6 +2,7 @@ using HMSphere.Application.Interfaces;
 using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
+using HMSphere.MVC.AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace HMSphere.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             //Add Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()

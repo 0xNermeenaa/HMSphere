@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTOs\**" />
-    <EmbeddedResource Remove="DTOs\**" />
-    <None Remove="DTOs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Validations\" />
   </ItemGroup>
 
@@ -26,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HMSphere.Infrastructure\HMSphere.Infrastructure.csproj" />
+	  <ProjectReference Include="..\HMSphere.Infrastructure\HMSphere.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
