@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using HMSphere.Domain.Entities;
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,64 +18,117 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HMSphere.MVC.styles.css" asp-append-version="true" />
+	<style>
+
+		.sidebar {
+			background-color: #FFF;
+			min-height: 100vh;
+			color: black;
+			padding: 20px;
+			position: fixed;
+			margin-top:0;
+		}
+
+			.sidebar a {
+				color: black;
+				font-weight: bold;
+				text-decoration: none;
+				padding: 10px;
+				display: block;
+				border-radius: 4px;
+				margin-bottom: 10px;
+			}
+
+				.sidebar a:hover {
+					background-color: #eee;
+				}
+
+		.main-content {
+			margin-left: 280px;
+			padding: 20px;
+		}
+
+		.sidebar .profile-section {
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		.hospital {
+			width: 60px;
+			height: 60px;
+			margin-right: 10px;
+			align-items: center;
+		}
+
+		.sidebar .profile-section img {
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+			margin-right: 10px;
+		}
+
+		.sidebar .profile-section div {
+			color: black;
+		}
+
+		.w-80{
+			width:80%;
+		}
+
+		.w-17 {
+			width: 17%;
+			box-shadow: 0px 2px 8px lightgray;
+		}
+
+	</style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-primary mb-4 p-3" data-bs-theme="dark">
-            <div class="container-fluid">
+	<header>
+		<nav class="navbar navbar-expand-lg bg-primary p-2 w-100" data-bs-theme="dark">
+			<div class="container-fluid">
+				<li class="nav-item m-0 list-unstyled">
+					<a class="navbar-brand" asp-area="" asp-controller="" asp-action="">
+						<img class="hospital" src="~/images/Hospital.png" alt="Profile Picture" />
+					</a>
+				</li>
+				<a class="navbar-brand" asp-area="" asp-controller="Doctor" asp-action="Index">HMSphere</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					
+				</div>
+			</div>
+		</nav>
+	</header>
+	<main role="main" class="pb-3">
+		<div class="sidebar w-17 mr-2">
+			<div class="profile-section">
+				<img src="~/images/profile.png" alt="Profile Picture" />
+				<div>
+					@{
+						var user = await UserManager.GetUserAsync(User);
+						var role = user != null ? (await UserManager.GetRolesAsync(user)).FirstOrDefault() : "User";
+					}
+					<h5>Dr. @user?.FirstName @user?.LastName</h5>
+					<span>@role</span>
+				</div>
+			</div>
+			<a href="">Dashboard</a>
+			<a href="@Url.Action("Index", "Doctor")">My Account</a>
+			<a href="@Url.Action("Patients", "Doctor")">Patient</a>
+			<a href="#">About Us</a>
+			<a href="#">Support</a>
+		</div>
 
-                <a class="navbar-brand" asp-area="" asp-controller="Doctor" asp-action="Index">HMSphere</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Doctor" asp-action="Index">Home Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Doctor" asp-action="Patients">Patients</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Doctor" asp-action="Appointments">Appointments</a>
-                        </li>
-                    </ul>
-                </div>
+		<div class="main-content w-80">
+			@RenderBody()
+		</div>
+	</main>
 
-                @* @if (User.IsInRole("Admin"))
-                {
-                    
-                }
-
-                @if (User.IsInRole("Doctor"))
-                {
-
-                    
-                }
-
-                @if (User.IsInRole("Patient"))
-                {
-                    
-                }
-
-                @if (User.IsInRole("Staff"))
-                {
-
-                } *@
-
-            </div>
-        </nav>
-    </header>
-    <div class="container-fluid">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
