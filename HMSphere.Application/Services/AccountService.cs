@@ -44,7 +44,9 @@ namespace HMSphere.Application.Services
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-
+                NID=model.NID,
+                Gender=model.Gender,
+                Address=model.Address,
 
             };
 

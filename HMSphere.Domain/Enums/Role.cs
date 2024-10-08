@@ -9,6 +9,8 @@ namespace HMSphere.Domain.Enums
     public enum Role
     {
         OtherStaff,
-        Admin
+        Admin,
+        Doctor,
+        Patient
     }
 }
