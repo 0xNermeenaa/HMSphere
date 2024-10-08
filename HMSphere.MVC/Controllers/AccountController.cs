@@ -19,5 +19,9 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
+        public IActionResult Login(LoginViewModel model)
+        {
+            return View();
+        }
     }
 }
