@@ -3,49 +3,86 @@
 @{
     ViewData["Title"] = "Register";
 }
-<div class="container">
-    <h2>Hospital Registration</h2>
-    <form action="/submit_registration" method="post">
+<section class="container form animated flipInX">
+    <legend>Hospital Registration</legend>
+    <form asp-action="Register" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- First Name Field -->
         <div class="form-group">
-            <label for="first-name">First Name:</label>
-            <input type="text" id="first-name" name="first_name" required>
+            <label asp-for="FirstName" class="control-label mt-4"></label>
+            <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
+
+        <!-- Last Name Field -->
         <div class="form-group">
-            <label for="last-name">Last Name:</label>
-            <input type="text" id="last-name" name="last_name" required>
+            <label asp-for="LastName" class="control-label mt-4"></label>
+            <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
+
+        <!-- National ID Field -->
         <div class="form-group">
-            <label for="nid">National ID (NID):</label>
-            <input type="text" id="nid" name="nid" required>
+            <label asp-for="NID" class="control-label mt-4"></label>
+            <input asp-for="NID" class="form-control" placeholder="Enter your national ID" />
+            <span asp-validation-for="NID" class="text-danger"></span>
         </div>
+
+        <!-- Password Field -->
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <label asp-for="Password" class="control-label mt-4"></label>
+            <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
+
+        <!-- Gender Field -->
         <div class="form-group">
-            <label for="gender">Gender:</label>
-            <select id="gender" name="gender" required>
+            <label asp-for="Gender" class="control-label mt-4"></label>
+            <select asp-for="Gender" class="form-control">
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
             </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
+
+        <!-- Phone Number Field -->
         <div class="form-group">
-            <label for="contact">Phone Number:</label>
-            <input type="text" id="PhoneNumder" name="PhoneNumder" required>
+            <label asp-for="PhoneNumber" class="control-label mt-4"></label>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
+
+        <!-- Email Field -->
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label asp-for="Email" class="control-label mt-4"></label>
+            <input asp-for="Email" class="form-control" type="email" placeholder="Enter your email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
+
+        <!-- Address Field -->
         <div class="form-group">
-            <label for="address">Address:</label>
-            <textarea id="address" name="address" rows="3" required></textarea>
+            <label asp-for="Address" class="control-label mt-4"></label>
+            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter your address"></textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn">Register</button>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+
+        <!-- Display Server-side Errors -->
+        @if (ViewData.ModelState[""]?.Errors.Count > 0)
+        {
+            <div class="alert alert-danger">
+                @ViewData.ModelState[""]?.Errors[0].ErrorMessage
+            </div>
+        }
     </form>
-</div>
+</section>
 
 <style>
     body {
@@ -111,3 +148,8 @@
             background-color: #2c94d1;
         }
 </style>
+
+@section Scripts {
+    <!-- Include validation script for client-side validation -->
+    <partial name="_ValidationScriptsPartial" />
+}
