@@ -8,5 +8,15 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
+
+        public IActionResult Patients()
+        {
+            return View();
+        }
+
+        public IActionResult Appointments()
+        {
+            return View();
+        }
     }
 }
