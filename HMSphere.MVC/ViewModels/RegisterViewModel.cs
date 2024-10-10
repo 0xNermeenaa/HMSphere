@@ -14,6 +14,18 @@ namespace HMSphere.MVC.ViewModels
         public string Username { get; set; }
 
         [Required]
+        public string NID { get; set; }
+
+        [Required]
+        public int PhoneNumber { get; set; }
+
+        [Required]
+        public string Gender { get; set; }
+
+        [Required]
+        public string Address { get; set; }
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
