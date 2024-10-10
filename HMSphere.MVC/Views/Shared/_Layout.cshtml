@@ -113,22 +113,20 @@
 						var user = await UserManager.GetUserAsync(User);
 						var role = user != null ? (await UserManager.GetRolesAsync(user)).FirstOrDefault() : "User";
 					}
-					<h5>Dr. @user?.FirstName @user?.LastName</h5>
+					<h5>@user?.FirstName @user?.LastName</h5>
 					<span>@role</span>
 				</div>
-			</div>
+			</div> 
 			<a href="">Dashboard</a>
 			<a href="@Url.Action("Index", "Doctor")">My Account</a>
 			<a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patient</a>
 			<a href="#">About Us</a>
 			<a href="#">Support</a>
 		</div>
-
-		<div class="main-content w-80">
+		<div class="main-content w-80"> 
 			@RenderBody()
 		</div>
 	</main>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
