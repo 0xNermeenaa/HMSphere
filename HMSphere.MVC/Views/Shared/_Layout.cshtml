@@ -116,34 +116,32 @@
 					<h5>@user?.FirstName @user?.LastName</h5>
 					<span>@role</span>
 				</div>
-			</div>
+			</div> 
 			<a href="@Url.Action("Index", "Doctor")">Dashboard</a>
-			<a href="@Url.Action("Patients", "Doctor")">Patient</a>
+			<a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a>
 			<a href="@Url.Action("Appointments", "Doctor")">Appointments</a>
 
+
 			@* @if (User.IsInRole("Doctor"))
-			{		
+			{
 			}
 			@if (User.IsInRole("Patient"))
 			{
-				
+
 			}
 			@if (User.IsInRole("Staff"))
 			{
-				
+
 			}
 			@if (User.IsInRole("Admin"))
 			{
 
 			} *@
-
 		</div>
-
-		<div class="main-content w-80">
+		<div class="main-content w-80"> 
 			@RenderBody()
 		</div>
 	</main>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

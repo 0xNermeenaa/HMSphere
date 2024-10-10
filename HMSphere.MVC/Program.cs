@@ -3,6 +3,7 @@ using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
 using HMSphere.MVC.AutoMapper;
+using HMSphere.MVC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -69,9 +70,11 @@ namespace HMSphere.MVC
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
+			app.UseMiddleware<PerformanceMiddleware>();
+
+			app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Doctor}/{action=Index}/{id?}");
 
             app.Run();
         }
