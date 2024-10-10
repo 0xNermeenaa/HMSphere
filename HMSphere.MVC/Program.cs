@@ -3,6 +3,7 @@ using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
 using HMSphere.MVC.AutoMapper;
+using HMSphere.MVC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +35,11 @@ namespace HMSphere.MVC
 
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+		    builder.Services.AddScoped(typeof(IDoctorService), typeof(DoctorService));
 
 
-            //seeding Data
-            builder.Services.AddScoped<StoredContextSeed>();
+			//seeding Data
+			builder.Services.AddScoped<StoredContextSeed>();
            // builder.Services.AddScoped<IdentitySeed>();
 
 
@@ -67,9 +69,11 @@ namespace HMSphere.MVC
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
+			app.UseMiddleware<PerformanceMiddleware>();
+
+			app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Doctor}/{action=Index}/{id?}");
 
             app.Run();
         }

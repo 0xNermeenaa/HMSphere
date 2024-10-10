@@ -9,7 +9,6 @@ namespace HMSphere.Domain.Entities
 {
     public class Doctor : ApplicationUser
     {
-
         public string Specialization { get; set; } = string.Empty;
 
         [ForeignKey("Department")]

@@ -6,7 +6,6 @@ namespace HMSphere.Domain.Entities
 {
     public class Staff : ApplicationUser
     {
-
         public Role Role { get; set; }
         public string JobTitle { get; set; } = string.Empty;
         public DateOnly HireDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);

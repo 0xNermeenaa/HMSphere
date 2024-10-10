@@ -1,7 +1,9 @@
-﻿using HMSphere.Domain.Entities;
+﻿using E_Commerce.Domain.Entities;
+using HMSphere.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace HMSphere.Infrastructure.DataContext
@@ -13,6 +15,7 @@ namespace HMSphere.Infrastructure.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
@@ -26,6 +29,5 @@ namespace HMSphere.Infrastructure.DataContext
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         public DbSet<DoctorShift> DoctorShifts { get; set; }
         public DbSet<StaffShift> StaffShifts { get; set; }
-
-    }
+	}
 }

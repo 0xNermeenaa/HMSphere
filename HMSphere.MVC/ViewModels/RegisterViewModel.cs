@@ -17,7 +17,7 @@ namespace HMSphere.MVC.ViewModels
         public string NID { get; set; }
 
         [Required]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public string Gender { get; set; }

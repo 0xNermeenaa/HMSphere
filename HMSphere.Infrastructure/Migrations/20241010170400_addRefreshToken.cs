@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HMSphere.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class addRefreshToken : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,6 +76,8 @@ namespace HMSphere.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PatientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoctorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PatientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -143,6 +145,8 @@ namespace HMSphere.Infrastructure.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Specialization = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DeptId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DepartmentId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Blood = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
                     DiseaseHistory = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Weight = table.Column<double>(type: "float", nullable: true),
@@ -151,6 +155,8 @@ namespace HMSphere.Infrastructure.Migrations
                     JobTitle = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     HireDate = table.Column<DateOnly>(type: "date", nullable: true),
                     Staff_DeptId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Staff_DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Staff_DepartmentId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -211,7 +217,7 @@ namespace HMSphere.Infrastructure.Migrations
                         column: x => x.ManagerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,6 +228,9 @@ namespace HMSphere.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ShiftId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DoctorId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ShiftId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShiftId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,10 +241,22 @@ namespace HMSphere.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_DoctorShifts_AspNetUsers_DoctorId1",
+                        column: x => x.DoctorId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_DoctorShifts_Shifts_ShiftId",
                         column: x => x.ShiftId,
                         principalTable: "Shifts",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DoctorShifts_Shifts_ShiftId1",
+                        column: x => x.ShiftId1,
+                        principalTable: "Shifts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,6 +273,7 @@ namespace HMSphere.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     PatientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PatientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -267,6 +289,34 @@ namespace HMSphere.Infrastructure.Migrations
                         column: x => x.PatientId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MedicalRecords_AspNetUsers_PatientId1",
+                        column: x => x.PatientId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RevokedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => new { x.ApplicationUserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -277,6 +327,9 @@ namespace HMSphere.Infrastructure.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     StaffId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ShiftId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StaffId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ShiftId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShiftId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -287,10 +340,22 @@ namespace HMSphere.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_StaffShifts_AspNetUsers_StaffId1",
+                        column: x => x.StaffId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_StaffShifts_Shifts_ShiftId",
                         column: x => x.ShiftId,
                         principalTable: "Shifts",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StaffShifts_Shifts_ShiftId1",
+                        column: x => x.ShiftId1,
+                        principalTable: "Shifts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -299,9 +364,19 @@ namespace HMSphere.Infrastructure.Migrations
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Appointments_DoctorId1",
+                table: "Appointments",
+                column: "DoctorId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Appointments_PatientId",
                 table: "Appointments",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointments_PatientId1",
+                table: "Appointments",
+                column: "PatientId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -336,9 +411,19 @@ namespace HMSphere.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_DepartmentId",
+                table: "AspNetUsers",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_DeptId",
                 table: "AspNetUsers",
                 column: "DeptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Staff_DepartmentId",
+                table: "AspNetUsers",
+                column: "Staff_DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Staff_DeptId",
@@ -364,9 +449,19 @@ namespace HMSphere.Infrastructure.Migrations
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DoctorShifts_DoctorId1",
+                table: "DoctorShifts",
+                column: "DoctorId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DoctorShifts_ShiftId",
                 table: "DoctorShifts",
                 column: "ShiftId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorShifts_ShiftId1",
+                table: "DoctorShifts",
+                column: "ShiftId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecords_DoctorId",
@@ -379,14 +474,29 @@ namespace HMSphere.Infrastructure.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MedicalRecords_PatientId1",
+                table: "MedicalRecords",
+                column: "PatientId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StaffShifts_ShiftId",
                 table: "StaffShifts",
                 column: "ShiftId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StaffShifts_ShiftId1",
+                table: "StaffShifts",
+                column: "ShiftId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StaffShifts_StaffId",
                 table: "StaffShifts",
                 column: "StaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffShifts_StaffId1",
+                table: "StaffShifts",
+                column: "StaffId1");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Appointments_AspNetUsers_DoctorId",
@@ -397,12 +507,26 @@ namespace HMSphere.Infrastructure.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Appointments_AspNetUsers_DoctorId1",
+                table: "Appointments",
+                column: "DoctorId1",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Appointments_AspNetUsers_PatientId",
                 table: "Appointments",
                 column: "PatientId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Appointments_AspNetUsers_PatientId1",
+                table: "Appointments",
+                column: "PatientId1",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -429,12 +553,26 @@ namespace HMSphere.Infrastructure.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Departments_DepartmentId",
+                table: "AspNetUsers",
+                column: "DepartmentId",
+                principalTable: "Departments",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Departments_DeptId",
                 table: "AspNetUsers",
                 column: "DeptId",
                 principalTable: "Departments",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Departments_Staff_DepartmentId",
+                table: "AspNetUsers",
+                column: "Staff_DepartmentId",
+                principalTable: "Departments",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Departments_Staff_DeptId",
@@ -475,6 +613,9 @@ namespace HMSphere.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "MedicalRecords");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "StaffShifts");
