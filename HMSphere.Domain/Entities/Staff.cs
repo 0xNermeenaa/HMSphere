@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HMSphere.Domain.Entities
 {
-    public class Staff : ApplicationUser
+    public class Staff
     {
-
-        public Role Role { get; set; }
+        public string Id {  get; set; } // will be same as AppUser Id
+		public Role Role { get; set; }
         public string JobTitle { get; set; } = string.Empty;
-        public DateOnly HireDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly? HireDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        [ForeignKey("Department")]
-        public Guid DeptId { get; set; }
+        public int DepartmentId { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
         public virtual Department Department { get; set; } = new();
         public virtual ICollection<StaffShift> StaffShifts { get; set; } = new List<StaffShift>();
 

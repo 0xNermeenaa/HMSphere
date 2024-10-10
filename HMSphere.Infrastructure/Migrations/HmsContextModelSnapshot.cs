@@ -39,11 +39,6 @@ namespace HMSphere.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -118,17 +113,15 @@ namespace HMSphere.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Appointment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Clinic")
                         .IsRequired()
@@ -145,17 +138,11 @@ namespace HMSphere.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DoctorId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("PatientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PatientId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReasonFor")
@@ -171,20 +158,18 @@ namespace HMSphere.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("DoctorId1");
-
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("PatientId1");
 
                     b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Department", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
@@ -211,56 +196,65 @@ namespace HMSphere.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId")
-                        .IsUnique();
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("HMSphere.Domain.Entities.DoctorShift", b =>
+            modelBuilder.Entity("HMSphere.Domain.Entities.Doctor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DoctorId1")
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Specialization")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Doctors");
+                });
+
+            modelBuilder.Entity("HMSphere.Domain.Entities.DoctorShift", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DoctorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShiftId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShiftId2")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("DoctorId1");
-
                     b.HasIndex("ShiftId");
-
-                    b.HasIndex("ShiftId1");
 
                     b.ToTable("DoctorShifts");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.MedicalRecord", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -293,9 +287,6 @@ namespace HMSphere.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PatientId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("TreatmentPlan")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -306,16 +297,41 @@ namespace HMSphere.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("PatientId1");
-
                     b.ToTable("MedicalRecords");
+                });
+
+            modelBuilder.Entity("HMSphere.Domain.Entities.Patient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Blood")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("DiseaseHistory")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<double?>("Height")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Shift", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
@@ -342,29 +358,47 @@ namespace HMSphere.Infrastructure.Migrations
                     b.ToTable("Shifts");
                 });
 
+            modelBuilder.Entity("HMSphere.Domain.Entities.Staff", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("HireDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Staff");
+                });
+
             modelBuilder.Entity("HMSphere.Domain.Entities.StaffShift", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShiftId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShiftId2")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StaffId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffId1")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -372,11 +406,7 @@ namespace HMSphere.Infrastructure.Migrations
 
                     b.HasIndex("ShiftId");
 
-                    b.HasIndex("ShiftId1");
-
                     b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.ToTable("StaffShifts");
                 });
@@ -514,96 +544,6 @@ namespace HMSphere.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HMSphere.Domain.Entities.Doctor", b =>
-                {
-                    b.HasBaseType("HMSphere.Domain.Entities.ApplicationUser");
-
-                    b.Property<Guid?>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DepartmentId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DeptId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Specialization")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("DeptId");
-
-                    b.HasDiscriminator().HasValue("Doctor");
-                });
-
-            modelBuilder.Entity("HMSphere.Domain.Entities.Patient", b =>
-                {
-                    b.HasBaseType("HMSphere.Domain.Entities.ApplicationUser");
-
-                    b.Property<string>("Blood")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("DiseaseHistory")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<double>("Height")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
-                    b.HasDiscriminator().HasValue("Patient");
-                });
-
-            modelBuilder.Entity("HMSphere.Domain.Entities.Staff", b =>
-                {
-                    b.HasBaseType("HMSphere.Domain.Entities.ApplicationUser");
-
-                    b.Property<Guid?>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DepartmentId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DeptId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateOnly>("HireDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("DeptId");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("DepartmentId")
-                                .HasColumnName("Staff_DepartmentId");
-
-                            t.Property("DepartmentId1")
-                                .HasColumnName("Staff_DepartmentId1");
-
-                            t.Property("DeptId")
-                                .HasColumnName("Staff_DeptId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Staff");
-                });
-
             modelBuilder.Entity("HMSphere.Domain.Entities.ApplicationUser", b =>
                 {
                     b.OwnsMany("E_Commerce.Domain.Entities.RefreshToken", "RefreshTokens", b1 =>
@@ -644,24 +584,16 @@ namespace HMSphere.Infrastructure.Migrations
             modelBuilder.Entity("HMSphere.Domain.Entities.Appointment", b =>
                 {
                     b.HasOne("HMSphere.Domain.Entities.Doctor", "Doctor")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HMSphere.Domain.Entities.Doctor", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("DoctorId1");
-
                     b.HasOne("HMSphere.Domain.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Patient", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("PatientId1");
 
                     b.Navigation("Doctor");
 
@@ -671,38 +603,43 @@ namespace HMSphere.Infrastructure.Migrations
             modelBuilder.Entity("HMSphere.Domain.Entities.Department", b =>
                 {
                     b.HasOne("HMSphere.Domain.Entities.Doctor", "DeptManager")
-                        .WithOne()
-                        .HasForeignKey("HMSphere.Domain.Entities.Department", "ManagerId")
+                        .WithMany()
+                        .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DeptManager");
                 });
 
+            modelBuilder.Entity("HMSphere.Domain.Entities.Doctor", b =>
+                {
+                    b.HasOne("HMSphere.Domain.Entities.Department", "Department")
+                        .WithMany("Doctors")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HMSphere.Domain.Entities.ApplicationUser", "User")
+                        .WithOne("Doctor")
+                        .HasForeignKey("HMSphere.Domain.Entities.Doctor", "Id");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HMSphere.Domain.Entities.DoctorShift", b =>
                 {
-                    b.HasOne("HMSphere.Domain.Entities.Doctor", null)
+                    b.HasOne("HMSphere.Domain.Entities.Doctor", "Doctor")
                         .WithMany("DoctorShifts")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("HMSphere.Domain.Entities.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Shift", null)
+                    b.HasOne("HMSphere.Domain.Entities.Shift", "Shift")
                         .WithMany("DoctorShifts")
                         .HasForeignKey("ShiftId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Shift", "Shift")
-                        .WithMany()
-                        .HasForeignKey("ShiftId1")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -719,44 +656,54 @@ namespace HMSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("HMSphere.Domain.Entities.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Patient", null)
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("PatientId1");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("HMSphere.Domain.Entities.Patient", b =>
+                {
+                    b.HasOne("HMSphere.Domain.Entities.ApplicationUser", "User")
+                        .WithOne("Patient")
+                        .HasForeignKey("HMSphere.Domain.Entities.Patient", "Id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HMSphere.Domain.Entities.Staff", b =>
+                {
+                    b.HasOne("HMSphere.Domain.Entities.Department", "Department")
+                        .WithMany("Staff")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HMSphere.Domain.Entities.ApplicationUser", "User")
+                        .WithOne("Staff")
+                        .HasForeignKey("HMSphere.Domain.Entities.Staff", "Id");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HMSphere.Domain.Entities.StaffShift", b =>
                 {
-                    b.HasOne("HMSphere.Domain.Entities.Shift", null)
+                    b.HasOne("HMSphere.Domain.Entities.Shift", "Shift")
                         .WithMany("StaffShifts")
                         .HasForeignKey("ShiftId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("HMSphere.Domain.Entities.Shift", "Shift")
-                        .WithMany()
-                        .HasForeignKey("ShiftId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Staff", null)
+                    b.HasOne("HMSphere.Domain.Entities.Staff", "Staff")
                         .WithMany("StaffShifts")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("HMSphere.Domain.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId1")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Shift");
@@ -815,34 +762,13 @@ namespace HMSphere.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HMSphere.Domain.Entities.Doctor", b =>
+            modelBuilder.Entity("HMSphere.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("HMSphere.Domain.Entities.Department", null)
-                        .WithMany("Doctors")
-                        .HasForeignKey("DepartmentId");
+                    b.Navigation("Doctor");
 
-                    b.HasOne("HMSphere.Domain.Entities.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DeptId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("Patient");
 
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("HMSphere.Domain.Entities.Staff", b =>
-                {
-                    b.HasOne("HMSphere.Domain.Entities.Department", null)
-                        .WithMany("Staff")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("HMSphere.Domain.Entities.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DeptId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Department");
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Department", b =>
@@ -850,13 +776,6 @@ namespace HMSphere.Infrastructure.Migrations
                     b.Navigation("Doctors");
 
                     b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("HMSphere.Domain.Entities.Shift", b =>
-                {
-                    b.Navigation("DoctorShifts");
-
-                    b.Navigation("StaffShifts");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Doctor", b =>
@@ -873,6 +792,13 @@ namespace HMSphere.Infrastructure.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("MedicalRecords");
+                });
+
+            modelBuilder.Entity("HMSphere.Domain.Entities.Shift", b =>
+                {
+                    b.Navigation("DoctorShifts");
+
+                    b.Navigation("StaffShifts");
                 });
 
             modelBuilder.Entity("HMSphere.Domain.Entities.Staff", b =>

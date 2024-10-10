@@ -34,10 +34,12 @@ namespace HMSphere.MVC
 
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 
-            //seeding Data
-            builder.Services.AddScoped<StoredContextSeed>();
+			//seeding Data
+			builder.Services.AddScoped<StoredContextSeed>();
            // builder.Services.AddScoped<IdentitySeed>();
 
 
@@ -69,7 +71,7 @@ namespace HMSphere.MVC
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Doctor}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
             app.Run();
         }

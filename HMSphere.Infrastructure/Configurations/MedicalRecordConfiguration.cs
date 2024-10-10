@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Infrastructure.Configurations
 {
-    internal class MedicalRecordConfiguration : IEntityTypeConfiguration<MedicalRecord>
+	public class MedicalRecordConfiguration : IEntityTypeConfiguration<MedicalRecord>
     {
         public void Configure(EntityTypeBuilder<MedicalRecord> builder)
         {
@@ -31,9 +31,6 @@ namespace HMSphere.Infrastructure.Configurations
             builder.Property(p => p.DoctorNotes)
                 .HasMaxLength(500);
 
-            builder.HasOne(m=>m.Patient)
-                .WithMany().HasForeignKey(m => m.PatientId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

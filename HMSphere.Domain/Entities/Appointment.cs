@@ -11,7 +11,7 @@ namespace HMSphere.Domain.Entities
 {
     public class Appointment
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Id { get; set; }
         public DateTime Date { get; set; }= DateTime.Now;
         public Status Status { get; set; } = Status.Scheduled;
         public string ReasonFor { get; set; } = string.Empty;
@@ -19,16 +19,11 @@ namespace HMSphere.Domain.Entities
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
 
-        [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
-
-        [ForeignKey("Patient")]
         public string PatientId { get; set; }
 
         public virtual Doctor Doctor { get; set; } = new();
-
         public virtual Patient Patient { get; set; }= new();
-
 
     }
 }

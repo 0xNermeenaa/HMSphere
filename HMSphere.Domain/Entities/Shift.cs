@@ -10,7 +10,7 @@ namespace HMSphere.Domain.Entities
 {
     public class Shift
     {
-        public Guid Id { get; set; }= Guid.NewGuid();
+        public int Id { get; set; }
         public ShiftType Type { get; set; }= ShiftType.Morning;
         public TimeOnly StartTime { get; set; }=TimeOnly.FromDateTime(DateTime.Now);
         public TimeOnly EndTime { get; set; }= TimeOnly.FromDateTime(DateTime.Now);

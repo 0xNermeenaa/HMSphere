@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Domain.Entities
 {
-    public class Doctor : ApplicationUser
+    public class Doctor
     {
-
+        public string Id { get; set; } // will be same as AppUser Id
         public string Specialization { get; set; } = string.Empty;
 
-        [ForeignKey("Department")]
-        public Guid DeptId { get; set; }
+        public int DepartmentId { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
+        [ForeignKey("DepartmentId")]
         public virtual Department Department { get; set; } = new();
         public virtual ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
         public virtual ICollection<DoctorShift> DoctorShifts { get; set; } = new List<DoctorShift>();
         public virtual ICollection<MedicalRecord>? MedicalRecords { get; set; } = new List<MedicalRecord>();
-
 
     }
 }

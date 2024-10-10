@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Infrastructure.Configurations
 {
-    internal class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
+    public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
     {
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
@@ -18,12 +18,17 @@ namespace HMSphere.Infrastructure.Configurations
 
 
             builder.HasOne(d => d.Department)
-                .WithMany().HasForeignKey(d => d.DeptId)
+                .WithMany(de=>de.Doctors).HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(d=>d.DoctorShifts)
-                .WithOne().HasForeignKey(ds=>ds.DoctorId)
+                .WithOne(ds=>ds.Doctor).HasForeignKey(ds=>ds.DoctorId)
                 .OnDelete(DeleteBehavior.NoAction);
-        }
+
+			builder.HasMany(d => d.Appointments)
+	            .WithOne(a => a.Doctor)
+	            .HasForeignKey(a => a.DoctorId)
+	            .OnDelete(DeleteBehavior.Restrict);
+		}
     }
 }
