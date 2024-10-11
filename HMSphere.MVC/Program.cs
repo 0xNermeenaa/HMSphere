@@ -43,8 +43,8 @@ namespace HMSphere.MVC
 
 
 
-            //seeding Data
-            builder.Services.AddScoped<StoredContextSeed>();
+			//seeding Data
+			builder.Services.AddScoped<StoredContextSeed>();
            // builder.Services.AddScoped<IdentitySeed>();
 
 

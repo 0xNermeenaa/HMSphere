@@ -25,23 +25,12 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Login</button>
         </div>
-
-        <!-- Display Server-side Errors -->
-        @if (ViewData.ModelState[""]?.Errors.Count > 0)
-        {
-            <div class="alert alert-danger">
-                @ViewData.ModelState[""]?.Errors[0].ErrorMessage
-            </div>
-        }
-
-    </form>
-</section>
-
 <style>
     body {
-        background-image: url("https://i.pinimg.com/564x/5b/32/69/5b326928a380586eac8dcd72d1b774e7.jpg");
+        background-image: url('/images/loginBackground.jpg');
         background-repeat: no-repeat;
         background-size: cover;
+        background-position:center center;
         font-family: "Roboto", sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -104,3 +93,15 @@
     <!-- Include validation script for client-side validation -->
     <partial name="_ValidationScriptsPartial" />
 }
+
+        <!-- Display Server-side Errors -->
+        @if (ViewData.ModelState[""]?.Errors.Count > 0)
+        {
+            <div class="alert alert-danger">
+                @ViewData.ModelState[""]?.Errors[0].ErrorMessage
+            </div>
+        }
+
+    </form>
+</section>
+
