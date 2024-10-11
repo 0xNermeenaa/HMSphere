@@ -20,12 +20,15 @@ namespace HMSphere.Application.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
-        {
-            _userManager = userManager;
-            _configuration = configuration;
-        }
-        public async Task<AuthDTO> RegisterAsync(RegisterDto model)
+        private readonly IUserRoleFactory _userRoleFactory;
+
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory)
+		{
+			_userManager = userManager;
+			_configuration = configuration;
+			_userRoleFactory = userRoleFactory;
+		}
+		public async Task<AuthDTO> RegisterAsync(RegisterDto model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null)
             {
@@ -61,13 +64,15 @@ namespace HMSphere.Application.Services
                 return new AuthDTO { Message = errors };
             }
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, model.Role);
+            await _userRoleFactory.CreateUserEntity(model,user.Id);
+
             var Token = await CreateToken(user);
             return new AuthDTO
             {
                 Email = user.Email,
                 IsAuthenticated = true,
-                Roles = new List<string> { "User" },
+                Roles = new List<string> { model.Role },
                 Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 UserName = user.UserName,
             };

@@ -117,11 +117,26 @@
 					<span>@role</span>
 				</div>
 			</div> 
-			<a href="">Dashboard</a>
-			<a href="@Url.Action("Index", "Doctor")">My Account</a>
-			<a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patient</a>
-			<a href="#">About Us</a>
-			<a href="#">Support</a>
+			<a href="@Url.Action("Index", "Doctor")">Dashboard</a>
+			<a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a>
+			<a href="@Url.Action("Appointments", "Doctor")">Appointments</a>
+
+
+			@* @if (User.IsInRole("Doctor"))
+			{
+			}
+			@if (User.IsInRole("Patient"))
+			{
+
+			}
+			@if (User.IsInRole("Staff"))
+			{
+
+			}
+			@if (User.IsInRole("Admin"))
+			{
+
+			} *@
 		</div>
 		<div class="main-content w-80"> 
 			@RenderBody()

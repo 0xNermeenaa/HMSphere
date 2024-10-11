@@ -11,7 +11,7 @@ namespace HMSphere.Domain.Entities
 {
     public class MedicalRecord
     {
-        public Guid Id { get; set; }= Guid.NewGuid();
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; }= DateTime.Now;
         public string Diagnosis { get; set; }= string.Empty;
         public string? TreatmentPlan { get; set; }=string.Empty;
@@ -20,9 +20,7 @@ namespace HMSphere.Domain.Entities
         public DateTime LastUpdated { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        [ForeignKey("Patient")]
         public string PatientId { get; set; }
-        [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
 
         public virtual Patient Patient { get; set; }

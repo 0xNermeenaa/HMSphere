@@ -1,41 +1,38 @@
 ﻿@model HMSphere.MVC.ViewModels.RegisterViewModel
+
 @{
+    Layout = "_AccountLayout.cshtml";
     ViewData["Title"] = "Register";
 }
 <section class="container form animated flipInX">
     <legend>Hospital Registration</legend>
-    <form asp-action="Register" method="post">
+    <form asp-action="SaveRegister" method="post">
         @Html.AntiForgeryToken()
 
-        <!-- First Name Field -->
         <div class="form-group">
             <label asp-for="FirstName" class="control-label mt-4"></label>
             <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
-        <!-- Last Name Field -->
         <div class="form-group">
             <label asp-for="LastName" class="control-label mt-4"></label>
             <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
-        <!-- National ID Field -->
         <div class="form-group">
             <label asp-for="NID" class="control-label mt-4"></label>
             <input asp-for="NID" class="form-control" placeholder="Enter your national ID" />
             <span asp-validation-for="NID" class="text-danger"></span>
         </div>
 
-        <!-- Password Field -->
         <div class="form-group">
             <label asp-for="Password" class="control-label mt-4"></label>
             <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
-        <!-- Gender Field -->
         <div class="form-group">
             <label asp-for="Gender" class="control-label mt-4"></label>
             <select asp-for="Gender" class="form-control">
@@ -47,33 +44,36 @@
             <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
 
-        <!-- Phone Number Field -->
         <div class="form-group">
             <label asp-for="PhoneNumber" class="control-label mt-4"></label>
             <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
 
-        <!-- Email Field -->
         <div class="form-group">
             <label asp-for="Email" class="control-label mt-4"></label>
             <input asp-for="Email" class="form-control" type="email" placeholder="Enter your email" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
-        <!-- Address Field -->
         <div class="form-group">
             <label asp-for="Address" class="control-label mt-4"></label>
             <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter your address"></textarea>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
+        @* <div class="form-group">
+            <label asp-for="DeptId" class="control-label mt-4"></label>
+            <select asp-for="DeptId" class="form-control" asp-items="ViewBag.Departments">
+            </select>
+            <span asp-validation-for="DeptId" class="text-danger"></span>
+        </div> *@
 
-        <!-- Submit Button -->
+
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
 
-        <!-- Display Server-side Errors -->
         @if (ViewData.ModelState[""]?.Errors.Count > 0)
         {
             <div class="alert alert-danger">
@@ -149,6 +149,5 @@
 </style>
 
 @section Scripts {
-    <!-- Include validation script for client-side validation -->
     <partial name="_ValidationScriptsPartial" />
 }

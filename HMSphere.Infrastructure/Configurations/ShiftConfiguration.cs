@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Infrastructure.Configurations
 {
-    internal class ShiftConfiguration : IEntityTypeConfiguration<Shift>
+	public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
     {
         public void Configure(EntityTypeBuilder<Shift> builder)
         {
@@ -23,11 +23,11 @@ namespace HMSphere.Infrastructure.Configurations
                 .HasMaxLength(50);
 
             builder.HasMany(d => d.DoctorShifts)
-                .WithOne().HasForeignKey(ds => ds.ShiftId)
+                .WithOne(ds=>ds.Shift).HasForeignKey(ds => ds.ShiftId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(d => d.StaffShifts)
-                .WithOne().HasForeignKey(ss => ss.ShiftId)
+                .WithOne(ss=>ss.Shift).HasForeignKey(ss => ss.ShiftId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

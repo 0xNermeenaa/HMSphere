@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Infrastructure.Configurations
 {
-    internal class DepartmentConfiguration : IEntityTypeConfiguration<Department>
+    public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
@@ -25,17 +25,6 @@ namespace HMSphere.Infrastructure.Configurations
 
             builder.Property(p=>p.Location)
                 .HasMaxLength (100);
-
-            builder.HasOne(d => d.DeptManager)
-                .WithOne().HasForeignKey<Department>(d => d.ManagerId);
-
-            builder.HasMany(d=>d.Doctors)
-                .WithOne().HasForeignKey(d => d.DeptId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(s => s.Staff)
-                .WithOne().HasForeignKey(s => s.DeptId)
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }
