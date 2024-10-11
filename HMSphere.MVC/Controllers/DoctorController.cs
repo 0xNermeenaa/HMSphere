@@ -38,5 +38,10 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
+
+		public IActionResult MedicalRecords()
+		{
+			return View();
+		}
     }
 }

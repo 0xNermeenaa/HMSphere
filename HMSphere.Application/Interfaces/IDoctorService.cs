@@ -1,4 +1,5 @@
 ﻿using HMSphere.Domain.Entities;
+using HMSphere.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IDoctorService
     {
+
 		Task<IEnumerable<Patient>> GetAllPatientAsync(string doctorId);
+        Task<IEnumerable<MedicalRecord>> GetAllMedicalRecordsAsync(string doctorId, string pateintId);
 	}
 }
