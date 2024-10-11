@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HMSphere.Application.DTOs;
+using HMSphere.Domain.Entities;
 using HMSphere.MVC.ViewModels;
 
 namespace HMSphere.MVC.AutoMapper
@@ -8,10 +9,13 @@ namespace HMSphere.MVC.AutoMapper
     {
         public MappingProfiles()
         {
-            CreateMap<AuthDTO,AuthViewModel>().ReverseMap();
+            CreateMap<AuthDto,AuthViewModel>().ReverseMap();
             CreateMap<RegisterDto, RegisterViewModel>().ReverseMap();
             CreateMap<LoginDto, LoginViewModel>().ReverseMap();
-            CreateMap<PateintDto , PatientsHistoryViewModel>().ReverseMap();
+            CreateMap<Patient,PatientDto>().ReverseMap();   
+            CreateMap<PatientDto , PatientsHistoryViewModel>().ReverseMap();
+			CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
+			CreateMap<MedicalRecordDto , MedicalRecordViewModel>().ReverseMap();
         }
     }
 }

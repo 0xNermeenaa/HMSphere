@@ -1,5 +1,6 @@
 ﻿using HMSphere.Application.Interfaces;
 using HMSphere.Domain.Entities;
+using HMSphere.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMSphere.MVC.Controllers
@@ -7,9 +8,11 @@ namespace HMSphere.MVC.Controllers
     public class DoctorController : Controller
     {
         private readonly IDoctorService _repo;
-		public DoctorController(IDoctorService repo)
+		private readonly IBaseRepository<MedicalRecord> _baseRepository;
+		public DoctorController(IDoctorService repo, IBaseRepository<MedicalRecord> baseRepository)
 		{
 			_repo = repo;
+			_baseRepository = baseRepository;
 		}
 
 		public IActionResult Index()
@@ -39,8 +42,14 @@ namespace HMSphere.MVC.Controllers
             return View();
         }
 
-		public IActionResult MedicalRecords()
+		public async Task<IActionResult> MedicalRecords(string? patientId)
 		{
+			if(string.IsNullOrEmpty(patientId))
+			{
+				return BadRequest("Patient ID is required.");
+
+			}
+			var medicalRecords = await _repo.GetAllMedicalRecordsAsync(patientId);
 			return View();
 		}
     }

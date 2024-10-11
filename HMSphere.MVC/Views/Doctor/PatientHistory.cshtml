@@ -1,10 +1,5 @@
 ﻿@model IEnumerable<HMSphere.MVC.ViewModels.PatientsHistoryViewModel>
 
-
-@* @{
-	ViewData["Title"] = "Index";
-}
- *@
 @{
 	ViewData["Title"] = "Patients History";
 }
@@ -26,20 +21,24 @@
 			background-color: #17a2b8;
 		}
 </style>
+
 <div class="container mt-4">
 	<div class="d-flex justify-content-between mb-4">
 		<h2>Patients History</h2>
 	</div>
 
 	<div class="row mb-3">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<input type="text" class="form-control" placeholder="Search by Name">
 		</div>
-		<div class="col-md-4">
-			<input type="text" class="form-control" placeholder="Search by NSID">
+		<div class="col-md-3">
+			<input type="text" class="form-control" placeholder="Search by NID">
 		</div>
-		<div class="col-md-4">
-			<input type="text" class="form-control" placeholder="Perception by ID">
+		<div class="col-md-3">
+			<input type="text" class="form-control" placeholder="Search by Blood Type">
+		</div>
+		<div class="col-md-3">
+			<button class="btn btn-primary w-100">Search</button>
 		</div>
 	</div>
 
@@ -59,21 +58,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				@* @foreach (var patient in Model) *@
-				@for(int i=0;i<5;i++)
+				@for (int i = 0; i < 10; i++)
 				{
 					<tr>
-						@* <td>@patient.FirstName +" "+ @patient.LastName</td>
-						<td>@patient.Gender</td>
-						<td>@patient.Weight</td>
-						<td>@patient.Height</td>
-						<td>@patient.CalculateAgeFromNID(patient.NID)</td>
-						<td>@patient.Blood</td>
-						<td>@patient.PhoneNumber</td>
-						<td>@patient.GetLastVisitDate()?.ToShortDateString() ?? "N/A"</td>
-						<td>
-							<a class="btn btn-info" href="/ViewReport?id=@patient.NID">View</a>
-						</td> *@
 						<td>Nasser</td>
 						<td>Male</td>
 						<td>72</td>
@@ -81,12 +68,17 @@
 						<td>22</td>
 						<td>O-</td>
 						<td>01062276296</td>
-						<td>10-10-2024"</td>
-						<td><button class="btn btn-view">View</button></td>
+						<td>10-10-2024</td>
+						<td>
+							<form asp-controller="Doctor" asp-action="MedicalRecords" method="get">
+								<input type="hidden" name="patientId" value="1" />
+								<button type="submit" class="btn btn-view">View</button>
+							</form>
+						</td>
+
 					</tr>
 				}
 			</tbody>
 		</table>
 	</div>
 </div>
-

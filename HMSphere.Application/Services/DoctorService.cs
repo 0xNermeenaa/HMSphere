@@ -1,4 +1,6 @@
-﻿using HMSphere.Application.Interfaces;
+﻿using AutoMapper;
+using HMSphere.Application.DTOs;
+using HMSphere.Application.Interfaces;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
 using HMSphere.Infrastructure.Repositories;
@@ -11,33 +13,43 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Application.Services
 {
-    public class DoctorService : IDoctorService
-    {
+	public class DoctorService : IDoctorService
+	{
 		private readonly HmsContext _context;
-        private readonly IBaseRepository<MedicalRecord> _medicalRecord;
-
-        //private readonly DbSet<Patient> _dbSet;
-        public DoctorService(HmsContext context , IBaseRepository<MedicalRecord> medicalRecord)
+		private readonly IMapper _mapper;
+		//private readonly IBaseRepository<MedicalRecord> _medicalRecord;
+		//private readonly DbSet<Patient> _dbSet;
+		public DoctorService(HmsContext context, IMapper mapper/* , IBaseRepository<MedicalRecord> medicalRecord*/)
 		{
 			_context = context;
-			_medicalRecord = medicalRecord;
+			_mapper = mapper;
+			//_medicalRecord = medicalRecord;
 			//_dbSet = _context.Set<Patient>();
 		}
 
-		public async Task<IEnumerable<Patient>> GetAllPatientAsync(string doctorId)
+		public async Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId)
 		{
-			return await _context.MedicalRecords
+			var patients = await _context.MedicalRecords
 				.Where(m => m.DoctorId == doctorId && !m.IsDeleted)
 				.Select(m => m.Patient)
 				.Distinct()
 				.ToListAsync();
+			var patientsResult = patients.Select(p => _mapper.Map<PatientDto>(p)).ToList();
+			return patientsResult;
 		}
-		public async Task<IEnumerable<MedicalRecord>> GetAllMedicalRecordsAsync(string doctorId,string patientId )
+		public async Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string patientId)
 		{
-			return await _context.MedicalRecords
-				.Where(di => di.DoctorId == doctorId && di.PatientId == patientId)
+			var medicalRecords = await _context.MedicalRecords
+				.Where(di => di.PatientId == patientId)
 				.ToListAsync();
+			var medicalRecordsResult = medicalRecords.Select(mr => _mapper.Map<MedicalRecordDto>(mr)).ToList();
+			return medicalRecordsResult;
 		}
+		public async Task<bool> AddMedicalRecordAsync(MedicalRecordDto entity, string doctorId , string patientId)
+		{ 
+			return true;
+		}
+
 
 	}
 }

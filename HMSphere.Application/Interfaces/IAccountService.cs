@@ -9,8 +9,8 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IAccountService
     {
-        Task<AuthDTO> RegisterAsync(RegisterDto model);
-        Task<AuthDTO> LoginAsync(LoginDto model);
+        Task<AuthDto> RegisterAsync(RegisterDto model);
+        Task<AuthDto> LoginAsync(LoginDto model);
 
     }
 }

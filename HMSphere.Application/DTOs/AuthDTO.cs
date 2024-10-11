@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Application.DTOs
 {
-    public class AuthDTO
+    public class AuthDto
     {
         public string? Message { get; set; }
         public bool IsAuthenticated { get; set; } = false;

@@ -28,16 +28,16 @@ namespace HMSphere.Application.Services
 			_configuration = configuration;
 			_userRoleFactory = userRoleFactory;
 		}
-		public async Task<AuthDTO> RegisterAsync(RegisterDto model)
+		public async Task<AuthDto> RegisterAsync(RegisterDto model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null)
             {
-                return new AuthDTO { Message = "Email is already Registered!" };
+                return new AuthDto { Message = "Email is already Registered!" };
 
             }
             if (await _userManager.FindByNameAsync(model.Username) != null)
             {
-                return new AuthDTO { Message = "Username is already Registered!" };
+                return new AuthDto { Message = "Username is already Registered!" };
 
             }
 
@@ -61,14 +61,14 @@ namespace HMSphere.Application.Services
                 {
                     errors += $"{error.Description} , ";
                 }
-                return new AuthDTO { Message = errors };
+                return new AuthDto { Message = errors };
             }
 
             await _userManager.AddToRoleAsync(user, model.Role);
             await _userRoleFactory.CreateUserEntity(model,user.Id);
 
             var Token = await CreateToken(user);
-            return new AuthDTO
+            return new AuthDto
             {
                 Email = user.Email,
                 IsAuthenticated = true,
@@ -77,9 +77,9 @@ namespace HMSphere.Application.Services
                 UserName = user.UserName,
             };
         }
-        public async Task<AuthDTO> LoginAsync(LoginDto model)
+        public async Task<AuthDto> LoginAsync(LoginDto model)
         {
-            var authModel = new AuthDTO();
+            var authModel = new AuthDto();
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {

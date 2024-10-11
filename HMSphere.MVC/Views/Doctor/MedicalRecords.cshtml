@@ -1,5 +1,121 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<HMSphere.MVC.ViewModels.MedicalRecordViewModel>
+
 @{
+    ViewData["Title"] = "Patient Medical Records";
+    var newRecord = new HMSphere.MVC.ViewModels.MedicalRecordViewModel();
 }
+
+<style>
+    .table td, .table th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn-view {
+        background-color: #2a9fd9;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+    }
+        .btn-view:hover {
+            background-color: #17a2b8;
+        }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-4">
+        <h2>Nasser's Medical Record</h2>
+        @* <h2>@patient.FirstName +"'s " +Medical Records</h2> *@
+    </div>
+
+    <form asp-action="SaveCreate" asp-controller="Doctor">
+        <div class="row">
+            <!-- First Row with Three Inputs -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.CreatedDate"></label>
+                    <input asp-for="@newRecord.CreatedDate" type="date" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.CreatedDate"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.Diagnosis"></label>
+                    <input asp-for="@newRecord.Diagnosis" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.Diagnosis"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.TreatmentPlan"></label>
+                    <input asp-for="@newRecord.TreatmentPlan" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.TreatmentPlan"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Second Row with Three Inputs and the Save Button -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.Medications"></label>
+                    <input asp-for="@newRecord.Medications" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.Medications"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.DoctorNotes"></label>
+                    <input asp-for="@newRecord.DoctorNotes" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.DoctorNotes"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label asp-for="@newRecord.LastUpdated"></label>
+                    <input asp-for="@newRecord.LastUpdated" type="date" class="form-control" />
+                    <span class="text-danger" asp-validation-for="@newRecord.LastUpdated"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Save Button Aligned to the Right in the Second Row -->
+            <div class="col-md-12 text-end">
+                <button type="submit" class="btn btn-success">Add New Medical Record</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </form>
+    </br>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CreatedDate</th>
+                    <th>Diagnosis</th>
+                    <th>TreamentPlan</th>
+                    <th>Medications</th>
+                    <th>Doctor's Name</th>
+                    <th>Doctor's Note</th>
+                    <th>LastUpdated</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < 5; i++)
+                {
+                    <tr>
+                        <td>5-10-2024</td>
+                        <td>Cholera</td>
+                        <td>Take the treatment for two weeks</td>
+                        <td>Congestal</td>
+                        <td>Mohammed Ali</td>
+                        <td>Take Treatment after dinner</td>
+                        <td>10-10-2024</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

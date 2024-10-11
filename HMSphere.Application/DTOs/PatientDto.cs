@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HMSphere.Application.DTOs
+﻿namespace HMSphere.Application.DTOs
 {
-	public class PateintDto
+    public class PatientDto
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }

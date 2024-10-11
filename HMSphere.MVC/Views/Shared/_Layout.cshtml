@@ -18,41 +18,50 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HMSphere.MVC.styles.css" asp-append-version="true" />
-	<style>
+    <style>
+        .navbar {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1050; 
+        }
 
-		.sidebar {
-			background-color: #FFF;
-			min-height: 100vh;
-			color: black;
-			padding: 20px;
-			position: fixed;
-			margin-top:0;
-		}
+        .sidebar {
+            background-color: #FFF;
+            min-height: calc(100vh - 56px); /* Adjust for navbar height (56px is typical for Bootstrap navbar) */
+            color: black;
+            padding-top:30px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            width: 290px;
+            position: fixed;
+            top: 56px; /* Start below the navbar */
+            left: 0;
+            overflow-y: auto; /* Allow scrolling if content overflows */
+            z-index: 1000; /* Ensure it stays below the navbar */
+            box-shadow: 0px 2px 8px lightgray;
+        }
 
-			.sidebar a {
-				color: black;
-				font-weight: bold;
-				text-decoration: none;
-				padding: 10px;
-				display: block;
-				border-radius: 4px;
-				margin-bottom: 10px;
-			}
+            .sidebar a {
+                color: black;
+                font-weight: bold;
+                text-decoration: none;
+                padding: 10px;
+                display: block;
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
 
-				.sidebar a:hover {
-					background-color: #eee;
-				}
+                .sidebar a:hover {
+                    background-color: #eee;
+                }
 
-		.main-content {
-			margin-left: 280px;
-			padding: 20px;
-		}
-
-		.sidebar .profile-section {
-			display: flex;
-			align-items: center;
-			margin-bottom: 20px;
-		}
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            margin-top: 56px; /* Offset to match the navbar height */
+        }
 
 		.hospital {
 			width: 60px;
@@ -61,26 +70,33 @@
 			align-items: center;
 		}
 
-		.sidebar .profile-section img {
-			border-radius: 50%;
-			width: 60px;
-			height: 60px;
-			margin-right: 10px;
-		}
+        .sidebar .profile-section {
+            display: flex;
+            align-items: center; /* Vertically centers the image and text */
+            margin-bottom: 20px;
+        }
 
-		.sidebar .profile-section div {
-			color: black;
-		}
+            .sidebar .profile-section img {
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                margin-right: 10px; /* Adds space between the image and the text */
+            }
 
-		.w-80{
-			width:80%;
-		}
+            .sidebar .profile-section div {
+                display: flex;
+                flex-direction: column; /* Stacks the h5 and span vertically */
+                color: black;
+            }
 
-		.w-17 {
-			width: 17%;
-			box-shadow: 0px 2px 8px lightgray;
-		}
+        .w-80 {
+            width: 80%;
+        }
 
+        .w-17 {
+            width: 17%;
+            box-shadow: 0px 2px 8px lightgray;
+        }
 	</style>
 </head>
 
@@ -113,7 +129,8 @@
 						var user = await UserManager.GetUserAsync(User);
 						var role = user != null ? (await UserManager.GetRolesAsync(user)).FirstOrDefault() : "User";
 					}
-					<h5>@user?.FirstName @user?.LastName</h5>
+					@* <h5>Dr.@user?.FirstName</h5> *@
+                    <h5>Dr.Ahmed</h5>
 					<span>@role</span>
 				</div>
 			</div> 

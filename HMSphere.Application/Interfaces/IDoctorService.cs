@@ -1,4 +1,5 @@
-﻿using HMSphere.Domain.Entities;
+﻿using HMSphere.Application.DTOs;
+using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IDoctorService
     {
-
-		Task<IEnumerable<Patient>> GetAllPatientAsync(string doctorId);
-        Task<IEnumerable<MedicalRecord>> GetAllMedicalRecordsAsync(string doctorId, string pateintId);
+		Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId);
+        Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string pateintId);
+		Task<bool> AddMedicalRecordAsync(MedicalRecordDto entity, string doctorId , string patientId);
 	}
 }
