@@ -72,7 +72,7 @@ namespace HMSphere.Application.Services
             {
                 Email = user.Email,
                 IsAuthenticated = true,
-                Roles = new List<string> { "User" },
+                Roles = new List<string> { model.Role },
                 Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 UserName = user.UserName,
             };

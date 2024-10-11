@@ -37,10 +37,12 @@ namespace HMSphere.MVC
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 
-			//seeding Data
-			builder.Services.AddScoped<StoredContextSeed>();
+
+            //seeding Data
+            builder.Services.AddScoped<StoredContextSeed>();
            // builder.Services.AddScoped<IdentitySeed>();
 
 
