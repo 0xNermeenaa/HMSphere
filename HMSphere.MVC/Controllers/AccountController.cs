@@ -29,7 +29,7 @@ namespace HMSphere.MVC.Controllers
 
         public async Task<IActionResult> Register()
         {
-            ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
+            //ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
 
             return View("Register");
         }
@@ -54,9 +54,12 @@ namespace HMSphere.MVC.Controllers
                     ModelState.AddModelError("", authResult.Message ?? "Username or Password is incorrect");
                 }
             }
-            ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
+            //ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
 
             return View("Register", userViewModel);
+     
+                
+            
         }
         public IActionResult Login()
         {

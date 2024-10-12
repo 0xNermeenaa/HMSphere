@@ -8,6 +8,9 @@
     <legend>Hospital Registration</legend>
     <form asp-action="SaveRegister" method="post">
         @Html.AntiForgeryToken()
+        <div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
 
         <div class="form-group">
             <label asp-for="FirstName" class="control-label mt-4"></label>
@@ -19,6 +22,11 @@
             <label asp-for="LastName" class="control-label mt-4"></label>
             <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
             <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Username" class="control-label mt-4"></label>
+            <input asp-for="Username" class="form-control" placeholder="Enter your user name" />
+            <span asp-validation-for="Username" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -67,13 +75,65 @@
             </select>
             <span asp-validation-for="DeptId" class="text-danger"></span>
         </div> *@
+        <!-- Role selection -->
+        <div class="form-group">
+            <label asp-for="Role" class="control-label mt-4"></label>
+            <select asp-for="Role" class="form-control" id="role-select">
+                <option value="">Select Role</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Patient">Patient</option>
+                <option value="Staff">Staff</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
 
+        <!-- Doctor-specific fields -->
+        <div id="doctor-fields" class="role-fields" style="display: none;">
+            <div class="form-group">
+                <label asp-for="Specialization" class="control-label mt-4"></label>
+                <input asp-for="Specialization" class="form-control" placeholder="Enter your specialization" />
+                <span asp-validation-for="Specialization" class="text-danger"></span>
+            </div>
+        </div>
 
+        <!-- Patient-specific fields -->
+        <div id="patient-fields" class="role-fields" style="display: none;">
+            <div class="form-group">
+                <label asp-for="Blood" class="control-label mt-4"></label>
+                <input asp-for="Blood" class="form-control" placeholder="Enter your blood type" />
+                <span asp-validation-for="Blood" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiseaseHistory" class="control-label mt-4"></label>
+                <textarea asp-for="DiseaseHistory" class="form-control" placeholder="Enter your disease history"></textarea>
+                <span asp-validation-for="DiseaseHistory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label mt-4"></label>
+                <input asp-for="Weight" class="form-control" placeholder="Enter your weight" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Height" class="control-label mt-4"></label>
+                <input asp-for="Height" class="form-control" placeholder="Enter your height" />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
+        </div>
 
+        <!-- Staff-specific fields -->
+        <div id="staff-fields" class="role-fields" style="display: none;">
+            <div class="form-group">
+                <label asp-for="JobTitle" class="control-label mt-4"></label>
+                <input asp-for="JobTitle" class="form-control" placeholder="Enter your job title" />
+                <span asp-validation-for="JobTitle" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Submit button -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
-
         @if (ViewData.ModelState[""]?.Errors.Count > 0)
         {
             <div class="alert alert-danger">
@@ -82,6 +142,15 @@
         }
     </form>
 </section>
+
+
+       
+        @if (ViewData.ModelState[""]?.Errors.Count > 0)
+        {
+            <div class="alert alert-danger">
+                @ViewData.ModelState[""]?.Errors[0].ErrorMessage
+            </div>
+        }
 
 <style>
     body {
@@ -149,5 +218,25 @@
 </style>
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('role-select').addEventListener('change', function () {
+            var selectedRole = this.value;
+
+            // Hide all role-specific fields
+            document.querySelectorAll('.role-fields').forEach(function (el) {
+                el.style.display = 'none';
+            });
+
+            // Show fields based on the selected role
+            if (selectedRole === 'Doctor') {
+                document.getElementById('doctor-fields').style.display = 'block';
+            } else if (selectedRole === 'Patient') {
+                document.getElementById('patient-fields').style.display = 'block';
+            } else if (selectedRole === 'Staff' || selectedRole === 'Admin') {
+                document.getElementById('staff-fields').style.display = 'block';
+            }
+        });
+    </script>
 }
