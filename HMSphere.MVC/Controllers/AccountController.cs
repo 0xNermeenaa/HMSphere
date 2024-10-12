@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HMSphere.Application.DTOs;
 using HMSphere.Application.Interfaces;
+using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -12,17 +13,22 @@ namespace HMSphere.MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountService _accountService;
+		private readonly IAccountService _accountService;
         private readonly IDepartmentService _departmentService;
         private readonly IMapper _mapper;
-        public AccountController(IAccountService accountService, IMapper mapper,
-                                   IDepartmentService departmentService)
-        {
-            _accountService = accountService;
-            _mapper = mapper;
-            _departmentService = departmentService;
-        }
-        public IActionResult Index()
+        private readonly IUserRoleFactory _userRoleFactory;
+		private readonly UserManager<ApplicationUser> _userManager;
+
+		public AccountController(IAccountService accountService, IMapper mapper,
+								   IDepartmentService departmentService, IUserRoleFactory userRoleFactory, UserManager<ApplicationUser> userManager)
+		{
+			_accountService = accountService;
+			_mapper = mapper;
+			_departmentService = departmentService;
+			_userRoleFactory = userRoleFactory;
+			_userManager = userManager;
+		}
+		public IActionResult Index()
         {
             return View();
         }
@@ -47,7 +53,7 @@ namespace HMSphere.MVC.Controllers
 
                 if (authResult.IsAuthenticated)
                 {
-                    return RedirectToAction("Index", "Doctor");
+                    return RedirectToAction("Login", "Account");
                 }
                 else
                 {
@@ -71,7 +77,9 @@ namespace HMSphere.MVC.Controllers
         [ValidateAntiForgeryToken]//requets.form['_requetss]
         public async Task<IActionResult> SaveLogin(LoginViewModel userViewModel)
         {
-            if (ModelState.IsValid)
+            var currentUser = await _accountService.GetCurrentUser(userViewModel.Email);
+
+			if (ModelState.IsValid)
             {
                 var loginDto = new LoginDto
                 {
@@ -80,10 +88,20 @@ namespace HMSphere.MVC.Controllers
                 };
 
                 var authResult = await _accountService.LoginAsync(loginDto);
+                var roleRedirects = _userRoleFactory.roleRedirects;
 
-                if (authResult.IsAuthenticated)
+				if (authResult.IsAuthenticated)
                 {
-                    return RedirectToAction("Index", "Doctor");
+                    foreach(var role in roleRedirects)
+                    {
+                        if (currentUser != null)
+                        {
+						    if (await _userManager.IsInRoleAsync(currentUser, role.Key))
+						    {
+							    return RedirectToAction(role.Value.action, role.Value.controller);
+						    }
+                        }
+					}
                 }
                 else
                 {

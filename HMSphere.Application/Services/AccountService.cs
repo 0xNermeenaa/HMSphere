@@ -21,13 +21,26 @@ namespace HMSphere.Application.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IUserRoleFactory _userRoleFactory;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory)
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager)
 		{
 			_userManager = userManager;
 			_configuration = configuration;
 			_userRoleFactory = userRoleFactory;
+			_roleManager = roleManager;
 		}
+
+        public async Task<ApplicationUser> GetCurrentUser(string email)
+        {
+            var currentUser= await _userManager.FindByEmailAsync(email);
+            if(currentUser != null)
+            {
+                return currentUser;
+            }
+            return null;
+		}
+
 		public async Task<AuthDto> RegisterAsync(RegisterDto model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null)
@@ -64,8 +77,22 @@ namespace HMSphere.Application.Services
                 return new AuthDto { Message = errors };
             }
 
-            await _userManager.AddToRoleAsync(user, model.Role);
-            await _userRoleFactory.CreateUserEntity(model,user.Id);
+			if (!await _roleManager.RoleExistsAsync(model.Role))
+			{
+				var roleResult = await _roleManager.CreateAsync(new IdentityRole(model.Role));
+				if (!roleResult.Succeeded)
+				{
+					return new AuthDto { IsAuthenticated = false,Message = "Error occured, try again later!" };
+				}
+			}
+
+			var addResult=await _userManager.AddToRoleAsync(user, model.Role);
+			if (!addResult.Succeeded)
+			{
+				return new AuthDto { IsAuthenticated = false, Message = "Error occured, try again later!" };
+			}
+
+			await _userRoleFactory.CreateUserEntity(model,user.Id);
 
             var Token = await CreateToken(user);
             return new AuthDto

@@ -10,5 +10,6 @@ namespace HMSphere.Application.Interfaces
 	public interface IUserRoleFactory
 	{
 		Task CreateUserEntity(RegisterDto dto,string userId);
+		Dictionary<string, (string action, string controller)> roleRedirects { get; set; }
 	}
 }

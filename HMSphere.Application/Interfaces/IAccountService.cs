@@ -1,4 +1,5 @@
 ﻿using HMSphere.Application.DTOs;
+using HMSphere.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IAccountService
     {
-        Task<AuthDto> RegisterAsync(RegisterDto model);
+        Task<ApplicationUser> GetCurrentUser(string email);
+		Task<AuthDto> RegisterAsync(RegisterDto model);
         Task<AuthDto> LoginAsync(LoginDto model);
 
     }
