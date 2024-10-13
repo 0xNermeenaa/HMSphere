@@ -13,22 +13,22 @@ namespace HMSphere.MVC.Controllers
 {
     public class AccountController : Controller
     {
-		private readonly IAccountService _accountService;
+        private readonly IAccountService _accountService;
         private readonly IDepartmentService _departmentService;
         private readonly IMapper _mapper;
         private readonly IUserRoleFactory _userRoleFactory;
-		private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-		public AccountController(IAccountService accountService, IMapper mapper,
-								   IDepartmentService departmentService, IUserRoleFactory userRoleFactory, UserManager<ApplicationUser> userManager)
-		{
-			_accountService = accountService;
-			_mapper = mapper;
-			_departmentService = departmentService;
-			_userRoleFactory = userRoleFactory;
-			_userManager = userManager;
-		}
-		public IActionResult Index()
+        public AccountController(IAccountService accountService, IMapper mapper,
+                                   IDepartmentService departmentService, IUserRoleFactory userRoleFactory, UserManager<ApplicationUser> userManager)
+        {
+            _accountService = accountService;
+            _mapper = mapper;
+            _departmentService = departmentService;
+            _userRoleFactory = userRoleFactory;
+            _userManager = userManager;
+        }
+        public IActionResult Index()
         {
             return View();
         }
@@ -36,8 +36,17 @@ namespace HMSphere.MVC.Controllers
         public async Task<IActionResult> Register()
         {
             //ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
+            //var viewModel = new RegisterViewModel
+            //{
+            //    Departments = new List<Department>{
+            //new Department { Id = 1, Name = "Cardiology" },
+            //new Department { Id = 2, Name = "Neurology" },
+            //new Department { Id = 3, Name = "Pediatrics" },
+            //new Department { Id = 4, Name = "General Surgery" },
+            //new Department { Id = 5, Name = "Orthopedics" } }
+            //};
 
-            return View("Register");
+            return View("Register"/*, viewModel*/);
         }
 
 
@@ -63,9 +72,9 @@ namespace HMSphere.MVC.Controllers
             //ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
 
             return View("Register", userViewModel);
-     
-                
-            
+
+
+
         }
         public IActionResult Login()
         {
@@ -79,7 +88,7 @@ namespace HMSphere.MVC.Controllers
         {
             var currentUser = await _accountService.GetCurrentUser(userViewModel.Email);
 
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var loginDto = new LoginDto
                 {
@@ -90,18 +99,18 @@ namespace HMSphere.MVC.Controllers
                 var authResult = await _accountService.LoginAsync(loginDto);
                 var roleRedirects = _userRoleFactory.roleRedirects;
 
-				if (authResult.IsAuthenticated)
+                if (authResult.IsAuthenticated)
                 {
-                    foreach(var role in roleRedirects)
+                    foreach (var role in roleRedirects)
                     {
                         if (currentUser != null)
                         {
-						    if (await _userManager.IsInRoleAsync(currentUser, role.Key))
-						    {
-							    return RedirectToAction(role.Value.action, role.Value.controller);
-						    }
+                            if (await _userManager.IsInRoleAsync(currentUser, role.Key))
+                            {
+                                return RedirectToAction(role.Value.action, role.Value.controller);
+                            }
                         }
-					}
+                    }
                 }
                 else
                 {
