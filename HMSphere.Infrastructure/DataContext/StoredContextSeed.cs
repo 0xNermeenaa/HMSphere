@@ -13,13 +13,13 @@ namespace HMSphere.Infrastructure.DataContext
     {
         public static async Task SeedAsync(HmsContext context)
         {
-            //if (!context.Doctors.Any())
+            //if (!context.Departments.Any())
             //{
-            //    var doctorsData = File.ReadAllText(".json");
-            //    var doctors = JsonSerializer.Deserialize<List<Doctor>>(doctorsData);
-            //    foreach (var item in doctors)
+            //    var departmentsData = File.ReadAllText("../HMSphere.Infrastructure/SeedData/Departments.json");
+            //    var departments = JsonSerializer.Deserialize<List<Department>>(departmentsData);
+            //    foreach (var item in departments)
             //    {
-            //        context.Doctors.Add(item);
+            //        context.Departments.Add(item);
             //    }
             //    await context.SaveChangesAsync();
             //}

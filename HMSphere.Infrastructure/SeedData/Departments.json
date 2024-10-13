@@ -1,0 +1,142 @@
+[
+  {
+    "Name": "القلب والأوعية الدموية",
+    "Description": "خدمات القلب والأوعية الدموية",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى أ، الطابق الثالث"
+  },
+  {
+    "Name": "الأعصاب",
+    "Description": "رعاية الدماغ والجهاز العصبي",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ب، الطابق الثاني"
+  },
+  {
+    "Name": "طب الأطفال",
+    "Description": "الرعاية الصحية للأطفال",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى أ، الطابق الأول"
+  },
+  {
+    "Name": "الأورام",
+    "Description": "مركز علاج السرطان",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ج، الطابق الرابع"
+  },
+  {
+    "Name": "الأمراض الجلدية",
+    "Description": "علاج ورعاية الجلد",
+    "IsActive": false,
+    "IsDeleted": false,
+    "Location": "المبنى ب، الطابق الأول"
+  },
+  {
+    "Name": "الأشعة",
+    "Description": "خدمات التصوير الطبي",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى د، الطابق الخامس"
+  },
+  {
+    "Name": "العظام",
+    "Description": "رعاية العظام والمفاصل",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى هـ، الطابق الثالث"
+  },
+  {
+    "Name": "المسالك البولية",
+    "Description": "صحة الجهاز البولي والتناسلي",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى و، الطابق الثاني"
+  },
+  {
+    "Name": "الجهاز الهضمي",
+    "Description": "علاج أمراض الجهاز الهضمي",
+    "IsActive": false,
+    "IsDeleted": false,
+    "Location": "المبنى أ، الطابق الخامس"
+  },
+  {
+    "Name": "الطب النفسي",
+    "Description": "خدمات الصحة النفسية",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ب، الطابق الرابع"
+  },
+  {
+    "Name": "الكلى",
+    "Description": "رعاية أمراض الكلى",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ج، الطابق الثاني"
+  },
+  {
+    "Name": "الغدد الصماء",
+    "Description": "رعاية الأمراض الهرمونية",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى د، الطابق الأول"
+  },
+  {
+    "Name": "الرئة والجهاز التنفسي",
+    "Description": "رعاية أمراض الرئة والجهاز التنفسي",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى هـ، الطابق الثاني"
+  },
+  {
+    "Name": "العيون",
+    "Description": "خدمات رعاية العيون",
+    "IsActive": false,
+    "IsDeleted": false,
+    "Location": "المبنى و، الطابق الثالث"
+  },
+  {
+    "Name": "التوليد",
+    "Description": "رعاية الحمل والولادة",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى أ، الطابق الثاني"
+  },
+  {
+    "Name": "أمراض النساء",
+    "Description": "صحة الجهاز التناسلي للمرأة",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ب، الطابق الخامس"
+  },
+  {
+    "Name": "أمراض الدم",
+    "Description": "علاج اضطرابات الدم",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى ج، الطابق الثالث"
+  },
+  {
+    "Name": "المناعة",
+    "Description": "رعاية أمراض المناعة والحساسية",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى د، الطابق الرابع"
+  },
+  {
+    "Name": "الرعاية التلطيفية",
+    "Description": "رعاية المرضى ذوي الحالات الحرجة",
+    "IsActive": false,
+    "IsDeleted": false,
+    "Location": "المبنى هـ، الطابق الرابع"
+  },
+  {
+    "Name": "التأهيل",
+    "Description": "العلاج الطبيعي والوظيفي",
+    "IsActive": true,
+    "IsDeleted": false,
+    "Location": "المبنى و، الطابق الأول"
+  }
+]

@@ -14,11 +14,25 @@ namespace HMSphere.Application.Services
 	public class UserRoleFactory:IUserRoleFactory
 	{
 		private readonly HmsContext _context;
+		public Dictionary<string, (string action, string controller)> roleRedirects
+			= new()
+			{
+				{ "Doctor", ("Index", "Doctor") },
+				{ "Patient", ("Index", "Patient") },
+				{ "Staff", ("Index", "Staff") },
+				{ "Admin", ("Index", "Admin") },
+			};
+		Dictionary<string, (string action, string controller)> IUserRoleFactory.roleRedirects 
+		{ 
+			get { return roleRedirects; }
+			set { roleRedirects = value; }
+		}
 
 		public UserRoleFactory(HmsContext context)
 		{
 			_context = context;
 		}
+
 
 		public async Task CreateUserEntity(RegisterDto dto, string userId)
 		{
