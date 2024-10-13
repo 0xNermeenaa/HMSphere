@@ -41,8 +41,9 @@ namespace HMSphere.Application.Services
 				var doctor = new Doctor
 				{
 					Id = userId,
-					Specialization = dto.Specialization
-				};
+					Specialization = dto.Specialization,
+                    DepartmentId=dto.DepartmentId,
+                };
 				await _context.Doctors.AddAsync(doctor);
 			}
 			else if (dto.Role == "Patient")

@@ -1,142 +1,143 @@
 [
   {
-    "Name": "القلب والأوعية الدموية",
-    "Description": "خدمات القلب والأوعية الدموية",
+    "Name": "Cardiology",
+    "Description": "Heart and vascular services",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى أ، الطابق الثالث"
+    "Location": "Building A, Floor 3"
   },
   {
-    "Name": "الأعصاب",
-    "Description": "رعاية الدماغ والجهاز العصبي",
+    "Name": "Neurology",
+    "Description": "Brain and nervous system care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ب، الطابق الثاني"
+    "Location": "Building B, Floor 2"
   },
   {
-    "Name": "طب الأطفال",
-    "Description": "الرعاية الصحية للأطفال",
+    "Name": "Pediatrics",
+    "Description": "Healthcare for children",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى أ، الطابق الأول"
+    "Location": "Building A, Floor 1"
   },
   {
-    "Name": "الأورام",
-    "Description": "مركز علاج السرطان",
+    "Name": "Oncology",
+    "Description": "Cancer treatment center",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ج، الطابق الرابع"
+    "Location": "Building C, Floor 4"
   },
   {
-    "Name": "الأمراض الجلدية",
-    "Description": "علاج ورعاية الجلد",
+    "Name": "Dermatology",
+    "Description": "Skin care and treatment",
     "IsActive": false,
     "IsDeleted": false,
-    "Location": "المبنى ب، الطابق الأول"
+    "Location": "Building B, Floor 1"
   },
   {
-    "Name": "الأشعة",
-    "Description": "خدمات التصوير الطبي",
+    "Name": "Radiology",
+    "Description": "Medical imaging services",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى د، الطابق الخامس"
+    "Location": "Building D, Floor 5"
   },
   {
-    "Name": "العظام",
-    "Description": "رعاية العظام والمفاصل",
+    "Name": "Orthopedics",
+    "Description": "Bone and joint care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى هـ، الطابق الثالث"
+    "Location": "Building E, Floor 3"
   },
   {
-    "Name": "المسالك البولية",
-    "Description": "صحة الجهاز البولي والتناسلي",
+    "Name": "Urology",
+    "Description": "Urinary and reproductive health",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى و، الطابق الثاني"
+    "Location": "Building F, Floor 2"
   },
   {
-    "Name": "الجهاز الهضمي",
-    "Description": "علاج أمراض الجهاز الهضمي",
+    "Name": "Gastroenterology",
+    "Description": "Digestive system treatment",
     "IsActive": false,
     "IsDeleted": false,
-    "Location": "المبنى أ، الطابق الخامس"
+    "Location": "Building A, Floor 5"
   },
   {
-    "Name": "الطب النفسي",
-    "Description": "خدمات الصحة النفسية",
+    "Name": "Psychiatry",
+    "Description": "Mental health services",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ب، الطابق الرابع"
+    "Location": "Building B, Floor 4"
   },
   {
-    "Name": "الكلى",
-    "Description": "رعاية أمراض الكلى",
+    "Name": "Nephrology",
+    "Description": "Kidney care services",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ج، الطابق الثاني"
+    "Location": "Building C, Floor 2"
   },
   {
-    "Name": "الغدد الصماء",
-    "Description": "رعاية الأمراض الهرمونية",
+    "Name": "Endocrinology",
+    "Description": "Hormone-related care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى د، الطابق الأول"
+    "Location": "Building D, Floor 1"
   },
   {
-    "Name": "الرئة والجهاز التنفسي",
-    "Description": "رعاية أمراض الرئة والجهاز التنفسي",
+    "Name": "Pulmonology",
+    "Description": "Lung and respiratory care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى هـ، الطابق الثاني"
+    "Location": "Building E, Floor 2"
   },
   {
-    "Name": "العيون",
-    "Description": "خدمات رعاية العيون",
+    "Name": "Ophthalmology",
+    "Description": "Eye care services",
     "IsActive": false,
     "IsDeleted": false,
-    "Location": "المبنى و، الطابق الثالث"
+    "Location": "Building F, Floor 3"
   },
   {
-    "Name": "التوليد",
-    "Description": "رعاية الحمل والولادة",
+    "Name": "Obstetrics",
+    "Description": "Pregnancy and childbirth care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى أ، الطابق الثاني"
+    "Location": "Building A, Floor 2"
   },
   {
-    "Name": "أمراض النساء",
-    "Description": "صحة الجهاز التناسلي للمرأة",
+    "Name": "Gynecology",
+    "Description": "Women's reproductive health",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ب، الطابق الخامس"
+    "Location": "Building B, Floor 5"
   },
   {
-    "Name": "أمراض الدم",
-    "Description": "علاج اضطرابات الدم",
+    "Name": "Hematology",
+    "Description": "Blood disorder treatment",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى ج، الطابق الثالث"
+    "Location": "Building C, Floor 3"
   },
   {
-    "Name": "المناعة",
-    "Description": "رعاية أمراض المناعة والحساسية",
+    "Name": "Immunology",
+    "Description": "Allergy and immune system care",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى د، الطابق الرابع"
+    "Location": "Building D, Floor 4"
   },
   {
-    "Name": "الرعاية التلطيفية",
-    "Description": "رعاية المرضى ذوي الحالات الحرجة",
+    "Name": "Palliative Care",
+    "Description": "Care for serious illnesses",
     "IsActive": false,
     "IsDeleted": false,
-    "Location": "المبنى هـ، الطابق الرابع"
+    "Location": "Building E, Floor 4"
   },
   {
-    "Name": "التأهيل",
-    "Description": "العلاج الطبيعي والوظيفي",
+    "Name": "Rehabilitation",
+    "Description": "Physical and occupational therapy",
     "IsActive": true,
     "IsDeleted": false,
-    "Location": "المبنى و، الطابق الأول"
+    "Location": "Building F, Floor 1"
   }
 ]
+

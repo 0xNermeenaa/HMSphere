@@ -21,8 +21,10 @@ namespace HMSphere.Application.DTOs
 
         //for doctor
 		public string? Specialization { get; set; }
+        public int? DepartmentId { get; set; }
+
         //for patient
-		public string? Blood { get; set; }
+        public string? Blood { get; set; }
 		public string? DiseaseHistory { get; set; }
 		public double? Weight { get; set; }
 		public double? Height { get; set; }

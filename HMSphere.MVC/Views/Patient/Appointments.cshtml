@@ -1,55 +1,172 @@
-﻿<body>
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
+﻿@{
+    ViewData["Title"] = "Home Dashboard";
+}
+
+<style>
+    .profile-card {
+        background-color: #2a9fd9;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .profile-text {
+        margin-left: 20px;
+    }
+
+        .profile-text h2 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .profile-text p {
+            margin: 0;
+        }
+
+    .experience {
+        margin-top: 10px;
+        font-style: italic;
+    }
+
+    .has-shadow {
+        box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.2);
+        width: 32%;
+    }
+
+    .bi {
+        font-size: 80px;
+        margin-left: 1.5vw;
+        margin-right: 1vw;
+    }
+
+    .table-header {
+        background-color: #2a9fd9;
+        color: white;
+    }
+
+    .btn-view {
+        background-color: #2a9fd9;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+    }
+
+        .btn-view:hover {
+            background-color: #17a2b8;
+        }
+
+    .table-container {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-title {
+        background-color: #2a9fd9;
+        color: white;
+        padding: 10px 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-bottom: 0;
+    }
+
+    .table-width {
+        width: 90%;
+    }
+
+</style>
+<div class="row justify-content-around">
+    <div class="table-width m-2">
+        <div class="container-fluid mt-3">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Search by ID">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Search by Date">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Search by Diagnosis">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-dark">Search</button>
+                </div>
+
+            </div>
+            <h5 class="table-title">Appointments</h5>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Reason For Appointment</th>
+                        <th scope="col">Clinic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-active">
+                        <td>1</td>
+                        <td>Dr. Izabella Sippial</td>
+                        <td>13-8-2024</td>
+                        <td>Completed</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
+                        </td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td>1</td>
+                        <td>Dr. Izabella Sippial</td>
+                        <td>13-8-2024</td>
+                        <td>Completed</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
+                        </td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td>1</td>
+                        <td>Dr. Izabella Sippial</td>
+                        <td>13-8-2024</td>
+                        <td>Completed</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
+                        </td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td>1</td>
+                        <td>Dr. Izabella Sippial</td>
+                        <td>13-8-2024</td>
+                        <td>Completed</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
+                        </td>
+                        <td>4</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td>1</td>
+                        <td>Dr. Izabella Sippial</td>
+                        <td>13-8-2024</td>
+                        <td>Completed</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
+                        </td>
+                        <td>4</td>
+                    </tr>
+            </table>
+
+        </div>
     </div>
-    <b class="mb-1">Your Appointmens</b>
-  </a>
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Dr. Izabella Sippial</h5>
-    </div>
-    <p class="mb-1">4:00pm</p>
-    <p class="mb-1">Tuesday, 4 May</p>
-            <p class="mb-1">Clinic 4</p>
-    <small class="text-muted">Status: Completed</small>
-  </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Dr. Izabella Sippial</h5>
-            </div>
-            <p class="mb-1">4:00pm</p>
-            <p class="mb-1">Tuesday, 4 May</p>
-            <p class="mb-1">Clinic 4</p>
-            <small class="text-muted">Status: Completed</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Dr. Izabella Sippial</h5>
-            </div>
-            <p class="mb-1">4:00pm</p>
-            <p class="mb-1">Tuesday, 4 May</p>
-            <p class="mb-1">Clinic 4</p>
-            <small class="text-muted">Status: Completed</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Dr. Izabella Sippial</h5>
-            </div>
-            <p class="mb-1">4:00pm</p>
-            <p class="mb-1">Tuesday, 4 May</p>
-            <p class="mb-1">Clinic 4</p>
-            <small class="text-muted">Status: Completed</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Dr. Izabella Sippial</h5>
-            </div>
-            <p class="mb-1">4:00pm</p>
-            <p class="mb-1">Tuesday, 4 May</p>
-            <p class="mb-1">Clinic 4</p>
-            <small class="text-muted">Status: Completed</small>
-        </a>
+
 </div>
-</body>
