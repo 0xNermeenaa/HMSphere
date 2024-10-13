@@ -37,6 +37,8 @@ namespace HMSphere.MVC.ViewModels
 
         // Conditional fields (doctor, patient, staff)
         public string? Specialization { get; set; }
+        public int? DepartmentId { get; set; }
+
         public string? Blood { get; set; }
         public string? DiseaseHistory { get; set; }
         public double? Weight { get; set; }

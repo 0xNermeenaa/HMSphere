@@ -69,12 +69,7 @@
             <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter your address"></textarea>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
-        @* <div class="form-group">
-            <label asp-for="DeptId" class="control-label mt-4"></label>
-            <select asp-for="DeptId" class="form-control" asp-items="ViewBag.Departments">
-            </select>
-            <span asp-validation-for="DeptId" class="text-danger"></span>
-        </div> *@
+
         <!-- Role selection -->
         <div class="form-group">
             <label asp-for="Role" class="control-label mt-4"></label>
@@ -95,7 +90,14 @@
                 <input asp-for="Specialization" class="form-control" placeholder="Enter your specialization" />
                 <span asp-validation-for="Specialization" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label mt-4"></label>
+                <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments">
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
         </div>
+        
 
         <!-- Patient-specific fields -->
         <div id="patient-fields" class="role-fields" style="display: none;">
