@@ -16,6 +16,7 @@ namespace HMSphere.MVC.AutoMapper
             CreateMap<PatientDto , PatientsHistoryViewModel>().ReverseMap();
 			CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
 			CreateMap<MedicalRecordDto , MedicalRecordViewModel>().ReverseMap();
+			CreateMap<Doctor , DoctorViewModel>().ReverseMap();
         }
     }
 }

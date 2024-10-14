@@ -78,7 +78,7 @@ namespace HMSphere.MVC
 
 			app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Register}/{id?}");
+                pattern: "{controller=Doctor}/{action=AppointmentDetails}/{id?}");
 
             app.Run();
         }

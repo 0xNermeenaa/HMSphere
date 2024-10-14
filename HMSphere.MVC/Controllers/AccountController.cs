@@ -98,7 +98,7 @@ namespace HMSphere.MVC.Controllers
                         {
                             if (await _userManager.IsInRoleAsync(currentUser, role.Key))
                             {
-                                return RedirectToAction(role.Value.action, role.Value.controller);
+                                return RedirectToAction(role.Value.action, role.Value.controller,new {id=currentUser.Id});
                             }
                         }
                     }
