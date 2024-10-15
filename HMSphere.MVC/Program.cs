@@ -40,6 +40,7 @@ namespace HMSphere.MVC
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped(typeof(IPatientService), typeof(PatientService));
 
 
 
