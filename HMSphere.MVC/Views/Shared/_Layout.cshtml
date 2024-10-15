@@ -134,8 +134,9 @@
 					<span>@role</span>
 				</div>
 			</div> 
-			<a href="@Url.Action("Index", "Doctor")">Dashboard</a>
-			<a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a>
+			<a href="@Url.Action("Index", "Doctor",new {id="1"})">Dashboard</a>
+            <a asp-action="PatientHistory" asp-controller="Doctor">Patients</a>
+			@* <a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a> *@
 			<a href="@Url.Action("Appointments", "Doctor")">Appointments</a>
 
 
