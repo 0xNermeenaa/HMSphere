@@ -15,11 +15,15 @@ namespace HMSphere.MVC.Controllers
         {
             _patientService = patientService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string patientId)
         {
-            //var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(patientId);
+            if(patientId == null)
+            {
+                return BadRequest("PatientID is missing.");
+            }
+            var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(patientId);
 
-            //var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(patientId);
+            var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(patientId);
 
             return View();
         }
