@@ -31,7 +31,9 @@ namespace HMSphere.Application.Services
 		{
 			try
 			{
-				var doctor = await _context.Doctors.FindAsync(id);
+				var doctor = await _context.Doctors.Include(d=>d.User)
+					.Include(d=>d.Department)
+					.FirstOrDefaultAsync(d=>d.Id==id);
 				if (doctor != null)
 				{
 					return new ResponseDTO

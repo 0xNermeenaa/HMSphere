@@ -1,4 +1,5 @@
 ﻿using HMSphere.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,26 +28,30 @@ namespace HMSphere.Infrastructure.DataContext
 
 
         }
-        //    public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager)
+        //public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, HmsContext context)
+        //{
+        //    if (!userManager.Users.Any())
         //    {
-        //        if (!userManager.Users.Any())
+        //        //create new users
+        //        var user = new ApplicationUser
         //        {
-        //            //create new users
-        //            var user = new ApplicationUser
-        //            {
-        //                FirstName = "",
-        //                LastName = "",
-        //                Email = "",
-        //                UserName = "",
-        //                Address =""
+        //            FirstName = "Mohamed",
+        //            LastName = "Ali",
+        //            Email = "mohdali30060@gmail.com",
+        //            UserName = "",
+        //            Address = ""
+        //        };
+        //        await userManager.CreateAsync(user, "Asd123@");
+        //        await userManager.AddToRoleAsync(user, "Doctor");
 
-
-
-
-        //            };
-        //            await userManager.CreateAsync(user, "Em19@63");
-
-
+        //        var doctor = new Doctor
+        //        {
+        //            Id=user.Id,
+        //            Specialization = "General surgery",
+        //            DepartmentId = 2,
+        //        };
+        //        await context.Doctors.AddAsync(doctor);
+        //        await context.SaveChangesAsync();
         //    }
 
         //}

@@ -33,7 +33,6 @@ namespace HMSphere.Application.Services
 			_context = context;
 		}
 
-
 		public async Task CreateUserEntity(RegisterDto dto, string userId)
 		{
 			if (dto.Role == "Doctor")
