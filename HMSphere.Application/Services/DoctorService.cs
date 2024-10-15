@@ -26,7 +26,7 @@ namespace HMSphere.Application.Services
 			//_medicalRecord = medicalRecord;
 			//_dbSet = _context.Set<Patient>();
 		}
-
+		
 		public async Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId)
 		{
 			var patients = await _context.MedicalRecords
@@ -50,6 +50,29 @@ namespace HMSphere.Application.Services
 			return true;
 		}
 
+        public async Task<List<Doctor>> GetAllDoctorsAsync()
+        {
+			return  await _context.Doctors.ToListAsync();
+			
+        }
+        public async Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId)
+        {
+            if (departmentId == null)
+            {
+                return await _context.Doctors.Include(d => d.User).ToListAsync();
+            }
 
-	}
+            var doctors = await _context.Doctors
+                .Where(d => d.DepartmentId == departmentId)
+                .Include(d => d.User)
+                .ToListAsync();
+
+            return doctors;
+        }
+
+
+
+
+
+    }
 }

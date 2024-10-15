@@ -39,6 +39,8 @@ namespace HMSphere.MVC
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 
@@ -55,7 +57,7 @@ namespace HMSphere.MVC
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<HmsContext>();
                 var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                await StoredContextSeed.SeedAsync(context);
+                //await StoredContextSeed.SeedAsync(context);
                // await IdentitySeed.SeedUserAsync(usermanager);
             }
 
