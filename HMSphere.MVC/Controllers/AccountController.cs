@@ -5,6 +5,7 @@ using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -57,10 +58,15 @@ namespace HMSphere.MVC.Controllers
 			{
 				var registerDto = _mapper.Map<RegisterDto>(userViewModel);
 				var authResult = await _accountService.RegisterAsync(registerDto);
-
-				if (authResult.IsAuthenticated)
+                if (authResult.IsAuthenticated)
 				{
-					return RedirectToAction("Login", "Account");
+                    HttpContext.Response.Cookies.Append("AuthToken", authResult.Token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        Expires = DateTime.Now.AddDays(1)
+                    });
+                    return RedirectToAction("Login", "Account");
 				}
 				else
 				{
@@ -88,12 +94,12 @@ namespace HMSphere.MVC.Controllers
 
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]//requets.form['_requetss]
+		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> SaveLogin(LoginViewModel userViewModel)
 		{
-			var currentUser = await _accountService.GetCurrentUser(userViewModel.Email);
+            var currentUser=await _userManager.GetUserAsync(User);
 
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
 			{
 				var loginDto = new LoginDto
 				{
@@ -106,12 +112,12 @@ namespace HMSphere.MVC.Controllers
 
                 if (authResult.IsAuthenticated)
                 {
-					HttpContext.Response.Cookies.Append("AuthToken", authResult.Token, new CookieOptions
-					{
-						HttpOnly = true,
-						Secure = true,
-						Expires = DateTime.Now.AddDays(30)
-					});
+					//HttpContext.Response.Cookies.Append("AuthToken", authResult.Token, new CookieOptions
+     //               {
+     //                   HttpOnly = true,
+     //                   Secure = true,
+     //                   Expires = DateTime.Now.AddDays(1)
+     //               });
                     foreach (var role in roleRedirects)
                     {
                         if (currentUser != null)

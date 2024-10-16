@@ -129,32 +129,35 @@
 						var user = await UserManager.GetUserAsync(User);
 						var role = user != null ? (await UserManager.GetRolesAsync(user)).FirstOrDefault() : "User";
 					}
-					@* <h5>Dr.@user?.FirstName</h5> *@
-                    <h5>Dr.Ahmed</h5>
+                    <h5>@user.FirstName @user.LastName</h5>
 					<span>@role</span>
 				</div>
 			</div> 
-			<a href="@Url.Action("Index", "Doctor",new {id="1"})">Dashboard</a>
-            <a asp-action="PatientHistory" asp-controller="Doctor">Patients</a>
-			@* <a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a> *@
-			<a href="@Url.Action("Appointments", "Doctor")">Appointments</a>
 
 
-			@* @if (User.IsInRole("Doctor"))
+			@if (User.IsInRole("Doctor"))
+            {
+                <a asp-action="Index" asp-controller="Doctor" asp-route-id="@user.Id")">Dashboard</a>
+                <a asp-action="PatientHistory" asp-controller="Doctor">Patients</a>
+                <a asp-action="Appointments" asp-controller="Doctor">Appointments</a>
+            }
+            @if (User.IsInRole("Patient"))
 			{
-			}
-			@if (User.IsInRole("Patient"))
-			{
-
+                <a asp-action="Index" asp-controller="Patient">Home</a>
+                <a asp-action="MedicalRecords" asp-controller="Patient">Medical Records</a>
+                <a asp-action="Appointments" asp-controller="Patient">Appointments</a>
 			}
 			@if (User.IsInRole("Staff"))
 			{
-
+                <a asp-action="Index" asp-controller="Staff">Home</a>
+                <a asp-action="ShiftsSchedule" asp-controller="Staff">Shifts Schedule</a>
 			}
 			@if (User.IsInRole("Admin"))
 			{
-
-			} *@
+                <a asp-action="Index" asp-controller="Admin" )">Dashboard</a>
+                <a asp-action="PatientHistory" asp-controller="Admin">Patients</a>
+                <a asp-action="Appointments" asp-controller="Admin">Appointments</a>
+			}
 		</div>
 		<div class="main-content w-80"> 
 			@RenderBody()

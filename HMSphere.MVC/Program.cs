@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HMSphere.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 namespace HMSphere.MVC
 {
 	public class Program
@@ -47,36 +48,43 @@ namespace HMSphere.MVC
 			builder.Services.AddScoped<StoredContextSeed>();
 			// builder.Services.AddScoped<IdentitySeed>();
 
-			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			#region jwt
+			//builder.Services.AddAuthentication(options =>
+			//{
+			//	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			//	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			//}).AddJwtBearer(options =>
+			//{
+			//	options.RequireHttpsMetadata = false;
+			//	options.SaveToken = true;
+			//	options.TokenValidationParameters = new TokenValidationParameters
+			//	{
+			//		ValidateIssuerSigningKey = true,
+			//		ValidateLifetime = true,
+			//		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+			//		ValidateIssuer = true,
+			//		ValidIssuer = builder.Configuration["JWT:issuer"],
+			//		ValidateAudience = true,
+			//		ValidAudience = builder.Configuration["JWT:audience"],
+			//		ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
+			//	};
+			//});
+			#endregion
+
+			#region cookies
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			})
 				.AddCookie(options =>
 				{
 					options.LoginPath = "/Account/Login";
 				});
+			#endregion
+			builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthorization();
 
-			builder.Services.AddAuthentication(options =>
-			{
-				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			}).AddJwtBearer(options =>
-			{
-				options.RequireHttpsMetadata = false;
-				options.SaveToken = true;
-				options.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuerSigningKey = true,
-					ValidateLifetime= true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-					ValidateIssuer = true,
-					ValidIssuer = builder.Configuration["JWT:issuer"],
-					ValidateAudience = true,
-					ValidAudience = builder.Configuration["JWT:audience"],
-					ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
-				};
-			});
-			builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-			builder.Services.AddAuthorization();
-
-			var app = builder.Build();
+            var app = builder.Build();
 			//For Seeding Data 
 			using (var scope = app.Services.CreateScope())
 			{
@@ -100,7 +108,8 @@ namespace HMSphere.MVC
 			app.UseStaticFiles();
 
 			app.UseRouting();
-			app.UseAuthentication();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseMiddleware<PerformanceMiddleware>();

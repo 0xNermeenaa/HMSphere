@@ -22,6 +22,8 @@ namespace HMSphere.MVC.AutoMapper
                 .ForMember(dest => dest.Specialization, o => o.MapFrom(src => src.Specialization))
                 .ForMember(dest => dest.Department, o => o.MapFrom(src => src.Department.Name))
                 .ReverseMap();
-        }
+            CreateMap<Appointment, AppointmentDto>().ReverseMap();
+            CreateMap<AppointmentDto, AppointmentsViewModel>().ReverseMap();
+		}
     }
 }
