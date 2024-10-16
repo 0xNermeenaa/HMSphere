@@ -1,6 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Home Dashboard";
-}
+﻿@model HMSphere.MVC.ViewModels.PatientAppointmentsViewModel
 
 <style>
     .profile-card {
@@ -106,7 +104,6 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Doctor Name</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
                         <th scope="col">Reason For Appointment</th>
@@ -114,56 +111,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Appointment Reason</button>
-                        </td>
-                        <td>4</td>
-                    </tr>
+                    @foreach (var appointment in Model.Appointments)
+                    {
+                        <tr class="table-active">
+                            <td>@appointment.Id</td>
+                            <td>@appointment.Date</td>
+                            <td>@appointment.Status</td>
+                            <td>@appointment.ReasonFor</td>
+                            <td>@appointment.Clinic</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
 
         </div>

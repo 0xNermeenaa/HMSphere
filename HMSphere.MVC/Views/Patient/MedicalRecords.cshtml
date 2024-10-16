@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HMSphere.MVC.ViewModels.PatientMedicalRecordsViewModel
+@{
     ViewData["Title"] = "Home Dashboard";
 }
 
@@ -105,7 +106,6 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Diagnosis</th>
                         <th scope="col">Medication</th>
@@ -115,83 +115,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>13-8-2024</td>
-                        <td>Anxiety</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Medications</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Treatment Plan</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Doctor Notes</button>
-                        </td>
-                        <td>13-8-2024 </td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>2</td>
-                        <td>13-8-2024</td>
-                        <td>Anxiety</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Medications</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Treatment Plan</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Doctor Notes</button>
-                        </td>
-                        <td>13-8-2024 </td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>3</td>
-                        <td>13-8-2024</td>
-                        <td>Anxiety</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Medications</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Treatment Plan</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Doctor Notes</button>
-                        </td>
-                        <td>13-8-2024 </td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>4</td>
-                        <td>13-8-2024</td>
-                        <td>Anxiety</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Medications</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Treatment Plan</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Doctor Notes</button>
-                        </td>
-                        <td>13-8-2024 </td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>5</td>
-                        <td>13-8-2024</td>
-                        <td>Anxiety</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Medications</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Treatment Plan</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark">Doctor Notes</button>
-                        </td>
-                        <td>13-8-2024 </td>
-                    </tr>
+                    @foreach (var MR in Model.MedicalRecords)
+                    {
+                        <tr class="table-active">
+                            <td>@MR.CreatedDate</td>
+                            <td>@MR.Diagnosis</td>
+                            <td>@MR.Medications</td>
+                            <td>@MR.TreatmentPlan</td>
+                            <td>@MR.DoctorNotes</td>
+                            <td>@MR.LastUpdated</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
-           
         </div>
     </div>
 
