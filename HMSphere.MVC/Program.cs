@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HMSphere.Infrastructure.Repositories;
+using HMSphere.Application.Mailing;
 
 namespace HMSphere.MVC
 {
@@ -36,15 +37,17 @@ namespace HMSphere.MVC
 
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            builder.Services.AddScoped<IMailingService, MailingService>();
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
 
 
 
-			//seeding Data
-			builder.Services.AddScoped<StoredContextSeed>();
+            //seeding Data
+            builder.Services.AddScoped<StoredContextSeed>();
            // builder.Services.AddScoped<IdentitySeed>();
 
 
