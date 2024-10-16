@@ -19,17 +19,21 @@ namespace HMSphere.Application.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IUserRoleFactory _userRoleFactory;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager)
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration,
+            IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
 		{
 			_userManager = userManager;
 			_configuration = configuration;
 			_userRoleFactory = userRoleFactory;
 			_roleManager = roleManager;
-		}
+            _signInManager = signInManager;
+
+        }
 
         public async Task<ApplicationUser> GetCurrentUser(string email)
         {
@@ -179,6 +183,33 @@ namespace HMSphere.Application.Services
             };
         }
 
+        public async Task<AuthDto> LogoutAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new AuthDto { IsAuthenticated = false, Message = "User not found." };
+            }
+
+            // Mark all refresh tokens as inactive by setting RevokedOn
+            var activeTokens = user.RefreshTokens.Where(t => t.IsActive).ToList();
+            foreach (var token in activeTokens)
+            {
+                token.RevokedOn = DateTime.UtcNow; // Setting RevokedOn marks the token as inactive.
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            // Sign out the user
+            await _signInManager.SignOutAsync();
+
+            return new AuthDto
+            {
+                IsAuthenticated = false,
+                Message = "User has been logged out successfully."
+            };
+        }
 
     }
 }

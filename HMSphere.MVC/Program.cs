@@ -87,7 +87,6 @@ namespace HMSphere.MVC
 				//await StoredContextSeed.SeedUserAsync(usermanager,context);
                 // await IdentitySeed.SeedUserAsync(usermanager);
             }
-
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
 			{
