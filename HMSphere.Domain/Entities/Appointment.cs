@@ -18,12 +18,11 @@ namespace HMSphere.Domain.Entities
         public string Clinic { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
-
         public string DoctorId { get; set; }
         public string PatientId { get; set; }
 
-        public virtual Doctor Doctor { get; set; } = new();
-        public virtual Patient Patient { get; set; }= new();
+        public virtual Doctor Doctor { get; set; }
+        public virtual Patient Patient { get; set; }
 
     }
 }

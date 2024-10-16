@@ -10,8 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HMSphere.Infrastructure.Repositories;
-using HMSphere.Application.Mailing;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 namespace HMSphere.MVC
 {
     public class Program
@@ -21,19 +20,18 @@ namespace HMSphere.MVC
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             //Add Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<HmsContext>();
+                .AddEntityFrameworkStores<HmsContext>().AddDefaultTokenProviders();
+            ;
 
             //Add DbContext
             builder.Services.AddDbContext<HmsContext>(options =>
             options.UseSqlServer(builder.Configuration
             .GetConnectionString("DefaultConnection")));
-
 
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
@@ -41,15 +39,44 @@ namespace HMSphere.MVC
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
 
 
             //seeding Data
             builder.Services.AddScoped<StoredContextSeed>();
-           // builder.Services.AddScoped<IdentitySeed>();
+            // builder.Services.AddScoped<IdentitySeed>();
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                });
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:audience"],
+                    ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
+                };
+            });
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
             //For Seeding Data 
@@ -59,27 +86,28 @@ namespace HMSphere.MVC
                 var context = services.GetRequiredService<HmsContext>();
                 var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 await StoredContextSeed.SeedAsync(context);
-               // await IdentitySeed.SeedUserAsync(usermanager);
+                //await StoredContextSeed.SeedUserAsync(usermanager,context);
+                // await IdentitySeed.SeedUserAsync(usermanager);
             }
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			// Configure the HTTP request pipeline.
+			if (!app.Environment.IsDevelopment())
+			{
+				app.UseExceptionHandler("/Home/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
-			app.UseMiddleware<PerformanceMiddleware>();
+            app.UseMiddleware<PerformanceMiddleware>();
 
-			app.MapControllerRoute(
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Register}/{id?}");
 
