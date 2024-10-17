@@ -17,44 +17,75 @@ namespace HMSphere.MVC.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IAppointmentService _appointmentService;
         private readonly IMapper _mapper;
+        private readonly IPatientService _patientService;
+
         private readonly UserManager<ApplicationUser> _userManager;
 
         public PatientController(IDoctorService doctorService,
                                 IDepartmentService departmentService,
                                 IAppointmentService appointmentService,
                                 IMapper mapper,
-                                UserManager<ApplicationUser> userManager)
+                                UserManager<ApplicationUser> userManager,
+                                IPatientService patientService)
         {
             _doctorService = doctorService;
             _departmentService = departmentService;
             _appointmentService = appointmentService;
             _mapper = mapper;
             _userManager = userManager;
+            _patientService = patientService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string id)
         {
+            var currentUser=await _userManager.GetUserAsync(User);
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(id);
+
+            var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(id);
+
             return View();
         }
-        public IActionResult Appointments()
+        public async Task<IActionResult> Appointments()
         {
-            return View();
+            List<PatientAppointmentsViewModel> models = new();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            var appointments = await _patientService.GetAllAppointmentsAsync(currentUser.Id);
+            foreach (var appointment in appointments)
+            {
+                var model=_mapper.Map<PatientAppointmentsViewModel>(appointment);
+                models.Add(model);
+            }
+            return View(models);
         }
-        public IActionResult MedicalRecords()
+        public async Task<IActionResult> MedicalRecords()
         {
-            return View();
+            List<PatientMedicalRecordsViewModel> models = new();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            var medicalrecords = await _patientService.GetAllMedicalRecordsAsync(currentUser.Id);
+            foreach (var record in medicalrecords)
+            {
+                var model=_mapper.Map<PatientMedicalRecordsViewModel>(record);
+                models.Add(model);
+            }
+            return View(models);
         }
 
         public async Task<IActionResult> CreateAppointment()
         {
-            //var userId = _userManager.GetUserId(User); // Get the current logged-in user's ID
-            //ViewBag.CurrentUserId = userId;
-
             ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
             ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(null), "Id", "User.UserName");
-            //ViewBag.StatusList = new SelectList(Enum.GetValues(typeof(Status))
-            //                    .Cast<Status>()
-            //                    .Select(s => new { Value = s.ToString(), Text = s.ToString() }),
-            //                    "Value", "Text");
+
 
             return View();
         }
@@ -76,7 +107,7 @@ namespace HMSphere.MVC.Controllers
                     return View("CreateAppointment",model);
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Appointments");
             }
             ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
             ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName");

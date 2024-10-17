@@ -6,8 +6,8 @@
     <thead>
         <tr>
             <th>Appointment Date</th>
-            <th>Reason</th>
-            <th>AppointmentTime</th>
+            <th>Doctor</th>
+            <th>Patient</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -17,22 +17,9 @@
         {
             <tr>
                 <td>@appointment.Date</td>
-                <td>@appointment.Reason</td>
-                <td>@appointment.AppointmentTime</td>
+                <td>@appointment.DoctorName</td>
+                <td>@appointment.PatientName</td>
                 <td>@appointment.Status</td>
-                <td>
-                    <form asp-action="ApproveAppointment" method="post">
-                        <input type="hidden" name="id" value="@appointment.Id" />
-                        <button type="submit" name="isApproved" value="true" class="btn btn-success">Approve</button>
-                        <button type="submit" name="isApproved" value="false" class="btn btn-danger">Disapprove</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>11/11/2024</td>
-                <td>hgfdfghjkl</td>
-                <td>11</td>
-                <td>pending</td>
                 <td>
                     <form asp-action="ApproveAppointment" method="post">
                         <input type="hidden" name="id" value="@appointment.Id" />

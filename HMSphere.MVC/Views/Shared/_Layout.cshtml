@@ -115,7 +115,18 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					
+					<div></div>
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item">
+							<form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+								@Html.AntiForgeryToken()
+								<button type="submit" class="btn btn-link p-0" style="display: flex; align-items: center;">
+									<img src="~/images/7.png" alt="Logout" style="width: 30px; height: 30px;" />
+								</button>
+							</form>
+
+						</li>
+					</ul>
 				</div>
 			</div>
 		</nav>
@@ -129,37 +140,38 @@
 						var user = await UserManager.GetUserAsync(User);
 						var role = user != null ? (await UserManager.GetRolesAsync(user)).FirstOrDefault() : "User";
 					}
-					@* <h5>Dr.@user?.FirstName</h5> *@
-                    <h5>Dr.Ahmed</h5>
+                    <h5>@user.FirstName @user.LastName</h5>
 					<span>@role</span>
 				</div>
 			</div> 
-			<a href="@Url.Action("Index", "Doctor",new {id="1"})">Dashboard</a>
-            <a asp-action="PatientHistory" asp-controller="Doctor">Patients</a>
-			@* <a href="@Url.Action("PatientHistory", "Doctor", new { doctorId = "1" })">Patients</a> *@
-			<a href="@Url.Action("Appointments", "Doctor")">Appointments</a>
 
-
-			@* @if (User.IsInRole("Doctor"))
-			{
-			}
+			@if (User.IsInRole("Doctor"))
+            {
+                <a asp-action="Index" asp-controller="Doctor" asp-route-id="@user.Id")">Dashboard</a>
+                <a asp-action="PatientHistory" asp-controller="Doctor">Patients</a>
+                <a asp-action="Appointments" asp-controller="Doctor">Appointments</a>
+            }
 			@if (User.IsInRole("Patient"))
 			{
-
+                <a asp-action="Index" asp-controller="Patient" asp-route-id="@user.Id">Home</a>
+                <a asp-action="MedicalRecords" asp-controller="Patient">Medical Records</a>
+                <a asp-action="Appointments" asp-controller="Patient">Appointments</a>
 			}
 			@if (User.IsInRole("Staff"))
 			{
-
+                <a asp-action="Index" asp-controller="Staff" asp-route-id="@user.Id">Home</a>
+                <a asp-action="ShiftsSchedule" asp-controller="Staff">Shifts Schedule</a>
 			}
 			@if (User.IsInRole("Admin"))
 			{
-
-			} *@
+                <a asp-action="Index" asp-controller="Admin" asp-route-id="@user.Id">Dashboard</a>
+                <a asp-action="PatientHistory" asp-controller="Admin">Patients</a>
+                <a asp-action="Appointments" asp-controller="Admin">Appointments</a>
+			}
 		</div>
-		<div class="main-content w-80"> 
+		<div class="main-content w-80">
 			@RenderBody()
 		</div>
-	</main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -28,12 +28,15 @@ namespace HMSphere.MVC.Controllers
 
             return RedirectToAction("Index");
         }
-        public IActionResult PendingAppointments()
+        public async Task<IActionResult> PendingAppointments()
         {
-            var pendingAppointments = _appointmentService.GetScheduledAppointments();
-            var x=_mapper.Map<List<AppointmentsViewModel>>(pendingAppointments);
-            return View(x);
+            var pendingAppointments = await _appointmentService.GetPendingAppointments();
+
+            var appointmentsViewModels = _mapper.Map<List<AppointmentViewModel>>(pendingAppointments);
+
+            return View(appointmentsViewModels);
         }
+
 
         public IActionResult Index()
         {

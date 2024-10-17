@@ -80,11 +80,25 @@ namespace HMSphere.Application.Services
 			return true;
 		}
 
-        public async Task<List<Doctor>> GetAllDoctorsAsync()
-        {
-			return  await _context.Doctors.ToListAsync();
-			
-        }
+		public async Task<int> GetNext7DaysAppointments(string id)
+		{
+			try
+			{
+				var appointments = await _context.Appointments.Where(a => a.DoctorId == id
+							&& a.Date >= DateTime.Now.AddDays(7)).ToListAsync();
+				if (!appointments.Any())
+				{
+					return 0;
+				}
+				var appoints = appointments.Count();
+				return appoints;
+			}
+			catch (Exception ex)
+			{
+				return 0;
+			}
+		}
+
         public async Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId)
         {
             if (departmentId == null)
@@ -99,9 +113,6 @@ namespace HMSphere.Application.Services
 
             return doctors;
         }
-
-
-
 
 
     }

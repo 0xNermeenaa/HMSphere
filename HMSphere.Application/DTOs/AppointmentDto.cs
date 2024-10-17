@@ -14,7 +14,7 @@ namespace HMSphere.Application.DTOs
         public int? Id { get; set; }
 
         public DateTime? Date { get; set; } = DateTime.Now;
-        public Status? Status { get; set; }
+        public Status? Status { get; set; } = Domain.Enums.Status.Pending;
         public string? ReasonFor { get; set; } = string.Empty;
         public string? Clinic { get; set; } = string.Empty;
         public string? PatientId { get; set; }
@@ -22,6 +22,8 @@ namespace HMSphere.Application.DTOs
         public TimeSpan? AppointmentTime { get; set; }
         public string? DoctorId { get; set; }
         public bool? IsApproved { get; set; }=false;
+        public string? PatientName { get; set; }
+        public string? DoctorName { get; set; }
         public string? ErrorMessage { get; set; }  
         public bool IsSuccessful { get; set; } = false; 
         

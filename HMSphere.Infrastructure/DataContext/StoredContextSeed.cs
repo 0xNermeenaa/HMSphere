@@ -12,21 +12,20 @@ namespace HMSphere.Infrastructure.DataContext
 {
     public class StoredContextSeed
     {
-        //public static async Task SeedAsync(HmsContext context)
-        //{
-        //    if (!context.Departments.Any())
-        //    {
-        //        var departmentsData = File.ReadAllText("../HMSphere.Infrastructure/SeedData/Departments.json");
-        //        var departments = JsonSerializer.Deserialize<List<Department>>(departmentsData);
-        //        foreach (var item in departments)
-        //        {
-        //            context.Departments.Add(item);
-        //        }
-        //        await context.SaveChangesAsync();
-        //    }
+        public static async Task SeedAsync(HmsContext context)
+        {
+            //if (!context.Departments.Any())
+            //{
+            //    var departmentsData = File.ReadAllText("../HMSphere.Infrastructure/SeedData/Departments.json");
+            //    var departments = JsonSerializer.Deserialize<List<Department>>(departmentsData);
+            //    foreach (var item in departments)
+            //    {
+            //        context.Departments.Add(item);
+            //    }
+            //    await context.SaveChangesAsync();
+            //}
 
-
-
+        }
       
         //public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, HmsContext context)
         //{

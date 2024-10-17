@@ -41,14 +41,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="Reason">Reason</label>
-                    <textarea class="form-control" asp-for="Reason" placeholder="Reason..."></textarea>
+                    <textarea class="form-control" asp-for="ReasonFor" placeholder="Reason..."></textarea>
                 </div>
             </div>
         </div>
 
-        <!-- Hidden field for PatientId -->
-@*         <input type="hidden" asp-for="PatientId" id="PatientId" />
- *@
         <div class="row">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -58,10 +55,6 @@
 </div>
 
 <script>
-    // var currentUserId = '@ViewBag.CurrentUserId';
-
-    // document.getElementById('PatientId').value = currentUserId;
-     
     //for dynamic loading 
     $(document).ready(function () {
         $('#DepartmentId').change(function () {

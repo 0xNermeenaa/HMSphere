@@ -13,6 +13,7 @@ namespace HMSphere.Application.Interfaces
         Task<ApplicationUser> GetCurrentUser(string email);
 		Task<AuthDto> RegisterAsync(RegisterDto model);
         Task<AuthDto> LoginAsync(LoginDto model);
+        Task<AuthDto> LogoutAsync(string email);
 
     }
 }

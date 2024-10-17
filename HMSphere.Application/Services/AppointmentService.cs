@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HMSphere.Application.DTOs;
 using HMSphere.Application.Interfaces;
+using HMSphere.Application.Mailing;
 using HMSphere.Domain.Entities;
 using HMSphere.Domain.Enums;
 using HMSphere.Infrastructure.DataContext;
@@ -21,16 +22,20 @@ namespace HMSphere.Application.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMailingService _emailService;
+
         public AppointmentService(HmsContext context, 
                                   UserManager<ApplicationUser> userManager,
                                   IHttpContextAccessor httpContextAccessor,
-                                  IMapper mapper
+                                  IMapper mapper,
+                                  IMailingService emailService
                                    )
         {
             _context = context;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<List<Appointment>> GetAllAppointmentsAsync()
@@ -48,16 +53,17 @@ namespace HMSphere.Application.Services
                     ErrorMessage = "Invalid date or time for the appointment."
                 };
             }
-            
-            var doctor = await _context.Doctors.FindAsync(appointmentDto.DoctorId);
+
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == appointmentDto.DoctorId);
             if (doctor == null)
             {
                 return new AppointmentDto
                 {
                     IsSuccessful = false,
                     ErrorMessage = "The selected doctor does not exist."
-                };  
+                };
             }
+
             var department = await _context.Departments.FindAsync(appointmentDto.DepartmentId);
             if (department == null)
             {
@@ -68,6 +74,7 @@ namespace HMSphere.Application.Services
                 };
             }
 
+            // Check for conflicting appointments
             var conflictingAppointment = await _context.Appointments
                 .AnyAsync(a => a.DoctorId == appointmentDto.DoctorId
                                && a.Date == appointmentDto.Date
@@ -83,49 +90,104 @@ namespace HMSphere.Application.Services
             }
 
             var appointment = _mapper.Map<Appointment>(appointmentDto);
+
             appointment.PatientId = await GetCurrentUserAsync();
+
+            appointment.DoctorId = doctor.Id;
+            appointment.Doctor = doctor;
+
+            var patient = await _context.Patients.FindAsync(appointment.PatientId);
+            if (patient == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Patient not found."
+                };
+            }
+            appointment.Patient = patient;
+            appointment.Status = Status.Pending;
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
-            appointmentDto.Status = Status.Scheduled;
+
+            appointmentDto.Status = Status.Pending;
             appointmentDto.IsApproved = null;
             appointmentDto.Id = appointment.Id;
-            appointmentDto.PatientId = await GetCurrentUserAsync();
+            appointmentDto.PatientId = appointment.PatientId;
             appointmentDto.IsSuccessful = true;
             appointmentDto.ErrorMessage = null;
+
             return appointmentDto;
         }
 
         public async Task<bool> ApproveAppointment(int appointmentId, bool isApproved)
         {
-            var appointment = await _context.Appointments.FindAsync(appointmentId);
+            var appointment = await _context.Appointments
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)  // Ensure User is included with Patient
+                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+
             if (appointment == null)
             {
-                return false; 
+                return false; // Appointment not found
             }
 
             appointment.IsApproved = isApproved;
             appointment.Status = isApproved ? Status.Completed : Status.Cancelled;
-            
 
             _context.Appointments.Update(appointment);
             await _context.SaveChangesAsync();
 
+            //// Check if Patient and User are not null before sending the email
+            //if (appointment.Patient != null && appointment.Patient.User != null)
+            //{
+            //    string subject = isApproved ? "Appointment Approved" : "Appointment Rejected";
+            //    string message = isApproved
+            //        ? $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been approved."
+            //        : $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been rejected.";
+
+            //    if (!string.IsNullOrEmpty(appointment.Patient.User.Email))
+            //    {
+            //        await _emailService.SendMailAsync(appointment.Patient.User.Email, subject, message);
+            //    }
+            //    else
+            //    {
+            //        string adminMessage = $"The email for user {appointment.Patient.User.UserName} (Appointment ID: {appointment.Id}) is missing.";
+            //        await _emailService.SendMailAsync("admin@example.com", "Missing Email for Appointment", adminMessage);
+            //    }
+            //}
+            //else
+            //{
+            //    string adminMessage = $"The Patient or User information for appointment {appointment.Id} is missing.";
+            //    await _emailService.SendMailAsync("admin@example.com", "Missing Patient/User Information for Appointment", adminMessage);
+            //}
+
             return true;
         }
 
-        public async Task<IEnumerable<AppointmentDto>> GetScheduledAppointments()
-        {
-            var scheduledAppointments = await _context.Appointments
-                .Where(a => a.Status == Status.Scheduled)
-                .Include(a => a.Patient)
-                .Include(a => a.Doctor)
-                .ToListAsync();
-            if(scheduledAppointments==null) return new List<AppointmentDto>();
 
-            return scheduledAppointments.Select(appointment => new AppointmentDto
+        public async Task<IEnumerable<AppointmentDto>> GetPendingAppointments()
+        {
+            var pendingAppointments = await _context.Appointments
+                .Where(a => a.Status == Status.Pending)
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User) // Ensure User is included with Patient
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User) // Ensure User is included with Doctor
+                .ToListAsync();
+
+            return pendingAppointments.Select(appointment => new AppointmentDto
             {
                 Id = appointment.Id,
                 Date = appointment.Date,
+                // Safely access Doctor and Doctor.User with null checks
+                DoctorName = appointment.Doctor != null && appointment.Doctor.User != null
+                    ? appointment.Doctor.User.UserName
+                    : "Unknown Doctor",
+                // Safely access Patient and Patient.User with null checks
+                PatientName = appointment.Patient != null && appointment.Patient.User != null
+                    ? appointment.Patient.User.UserName
+                    : "Unknown Patient",
                 Status = appointment.Status,
                 IsApproved = appointment.IsApproved,
             }).ToList();
