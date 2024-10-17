@@ -38,7 +38,11 @@ namespace HMSphere.MVC.Controllers
             {
                 var doctor = _mapper.Map<DoctorViewModel>(response.Model);
 				if (doctor != null)
-					return View(doctor);
+				{
+					var result = await _doctorService.GetNext7DaysAppointments(id);
+					doctor.UpcomingAppointmentsCount = result;
+                    return View(doctor);
+                }
                 return NotFound();
             }
             return NotFound();
@@ -59,7 +63,7 @@ namespace HMSphere.MVC.Controllers
 
 			var patients = await _doctorService.GetAllPatientAsync(currentUser.Id);
 
-			return View("PatientHistory");
+			return View();
 		}
 
 		public async Task<IActionResult> Appointments()
@@ -83,6 +87,18 @@ namespace HMSphere.MVC.Controllers
 			}
 			return View();
 		}
+
+		//[HttpGet]
+		//public async Task<IActionResult> Next7DaysAppointments(string id)
+		//{
+		//	var response=await _doctorService.GetNext7DaysAppointments(id);
+		//	if (response.IsSuccess)
+		//	{
+		//		return Ok(response.Model);
+		//	}
+		//	return BadRequest(response.Message);
+
+		//}
 
 	}
 }

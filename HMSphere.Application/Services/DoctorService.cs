@@ -80,6 +80,25 @@ namespace HMSphere.Application.Services
 			return true;
 		}
 
+		public async Task<int> GetNext7DaysAppointments(string id)
+		{
+			try
+			{
+				var appointments = await _context.Appointments.Where(a => a.DoctorId == id
+							&& a.Date >= DateTime.Now.AddDays(7)).ToListAsync();
+				if (!appointments.Any())
+				{
+					return 0;
+				}
+				var appoints=appointments.Count();
+				return appoints;
+			}
+			catch (Exception ex)
+			{
+				return 0;
+			}
+
+		}
 
 	}
 }

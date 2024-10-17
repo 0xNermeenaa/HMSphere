@@ -6,30 +6,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HMSphere.Application.Services
 {
     public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IUserRoleFactory _userRoleFactory;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager)
-		{
-			_userManager = userManager;
-			_configuration = configuration;
-			_userRoleFactory = userRoleFactory;
-			_roleManager = roleManager;
-		}
+        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
+        {
+            _userManager = userManager;
+            _configuration = configuration;
+            _userRoleFactory = userRoleFactory;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
+        }
 
         public async Task<ApplicationUser> GetCurrentUser(string email)
         {
@@ -94,13 +93,13 @@ namespace HMSphere.Application.Services
 
 			await _userRoleFactory.CreateUserEntity(model,user.Id);
 
-            var Token = await CreateToken(user);
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            //var Token = await CreateToken(user);
             return new AuthDto
             {
                 Email = user.Email,
                 IsAuthenticated = true,
                 Roles = new List<string> { model.Role },
-                Token = new JwtSecurityTokenHandler().WriteToken(Token),
                 UserName = user.UserName,
             };
         }
@@ -113,15 +112,18 @@ namespace HMSphere.Application.Services
                 authModel.Message = "Email or Password is incorrect";
                 return authModel;
             }
-            var Token = await CreateToken(user);
-            var roles = await _userManager.GetRolesAsync(user);
 
-            authModel.IsAuthenticated = true;
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(Token);
-            authModel.Email = user.Email;
-            authModel.UserName = user.UserName;
-            authModel.Roles = roles.ToList();
-           
+
+            //var Token = await CreateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            if (result.Succeeded)
+            {
+                authModel.IsAuthenticated = true;
+                authModel.Email = user.Email;
+                authModel.UserName = user.UserName;
+                authModel.Roles = roles.ToList();
+            }
 
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
@@ -139,6 +141,7 @@ namespace HMSphere.Application.Services
             }
             return authModel;
         }
+
         private async Task<JwtSecurityToken> CreateToken(ApplicationUser User)
         {
             var claims = new List<Claim>
@@ -156,16 +159,42 @@ namespace HMSphere.Application.Services
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
             SecurityKey Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
-            SigningCredentials signingCred = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials signingCred = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256Signature);
             var Token = new JwtSecurityToken(
                 issuer: _configuration["JWT:issuer"],
                 audience: _configuration["JWT:audience"],
                 claims: claims,
                 signingCredentials: signingCred,
-                expires: DateTime.Now.AddDays(30)
+                expires: DateTime.Now.AddDays(1)
                 );
             return Token;
         }
+
+        #region JwtToken with TokenHandler
+        //    private async Task<string> CreateToken(ApplicationUser User)
+        //    {
+        //        var tokenHandler=new JwtSecurityTokenHandler();
+        //        var tokenDescriptor = new SecurityTokenDescriptor
+        //        {
+        //            Subject = new ClaimsIdentity(new Claim[]
+        //            {
+        //                new Claim(ClaimTypes.Name, User.UserName),
+        //                new Claim(ClaimTypes.NameIdentifier, User.Id),
+        //	new Claim(JwtRegisteredClaimNames.Sub, User.UserName),
+        //	new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        //}),
+        //            Expires = DateTime.Now.AddHours(24),
+        //            Issuer = _configuration["issuer"],
+        //            Audience = _configuration["audience"],
+        //            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
+        //            , SecurityAlgorithms.HmacSha256Signature)
+        //        };
+
+        //        var token = tokenHandler.CreateToken(tokenDescriptor);
+        //        return tokenHandler.WriteToken(token);
+        //    } 
+        #endregion
+
         private RefreshToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
@@ -179,6 +208,33 @@ namespace HMSphere.Application.Services
             };
         }
 
+        public async Task<AuthDto> LogoutAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new AuthDto { IsAuthenticated = false, Message = "User not found." };
+            }
+
+            // Mark all refresh tokens as inactive by setting RevokedOn
+            var activeTokens = user.RefreshTokens.Where(t => t.IsActive).ToList();
+            foreach (var token in activeTokens)
+            {
+                token.RevokedOn = DateTime.UtcNow; // Setting RevokedOn marks the token as inactive.
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            // Sign out the user
+            await _signInManager.SignOutAsync();
+
+            return new AuthDto
+            {
+                IsAuthenticated = false,
+                Message = "User has been logged out successfully."
+            };
+        }
 
     }
 }

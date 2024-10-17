@@ -11,13 +11,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HMSphere.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using HMSphere.Application.Mailing;
 namespace HMSphere.MVC
 {
-	public class Program
-	{
-		public static async Task Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
 			builder.Services.AddHttpContextAccessor();
@@ -28,18 +30,20 @@ namespace HMSphere.MVC
 				.AddEntityFrameworkStores<HmsContext>().AddDefaultTokenProviders();
 ;
 
-			//Add DbContext
-			builder.Services.AddDbContext<HmsContext>(options =>
-			options.UseSqlServer(builder.Configuration
-			.GetConnectionString("DefaultConnection")));
+            //Add DbContext
+            builder.Services.AddDbContext<HmsContext>(options =>
+            options.UseSqlServer(builder.Configuration
+            .GetConnectionString("DefaultConnection")));
 
-			//configure  Services
-			builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
-			builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
-			builder.Services.AddScoped<IDoctorService, DoctorService>();
-			builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-			builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
-			builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            //configure  Services
+            builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            builder.Services.AddScoped<IMailingService, MailingService>();
+            builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
 
 
@@ -47,36 +51,43 @@ namespace HMSphere.MVC
 			builder.Services.AddScoped<StoredContextSeed>();
 			// builder.Services.AddScoped<IdentitySeed>();
 
-			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			#region jwt
+			//builder.Services.AddAuthentication(options =>
+			//{
+			//	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			//	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			//}).AddJwtBearer(options =>
+			//{
+			//	options.RequireHttpsMetadata = false;
+			//	options.SaveToken = true;
+			//	options.TokenValidationParameters = new TokenValidationParameters
+			//	{
+			//		ValidateIssuerSigningKey = true,
+			//		ValidateLifetime = true,
+			//		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+			//		ValidateIssuer = true,
+			//		ValidIssuer = builder.Configuration["JWT:issuer"],
+			//		ValidateAudience = true,
+			//		ValidAudience = builder.Configuration["JWT:audience"],
+			//		ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
+			//	};
+			//});
+			#endregion
+
+			#region cookies
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			})
 				.AddCookie(options =>
 				{
 					options.LoginPath = "/Account/Login";
 				});
+			#endregion
+			builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthorization();
 
-			builder.Services.AddAuthentication(options =>
-			{
-				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			}).AddJwtBearer(options =>
-			{
-				options.RequireHttpsMetadata = false;
-				options.SaveToken = true;
-				options.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuerSigningKey = true,
-					ValidateLifetime= true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-					ValidateIssuer = true,
-					ValidIssuer = builder.Configuration["JWT:issuer"],
-					ValidateAudience = true,
-					ValidAudience = builder.Configuration["JWT:audience"],
-					ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
-				};
-			});
-			builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-			builder.Services.AddAuthorization();
-
-			var app = builder.Build();
+            var app = builder.Build();
 			//For Seeding Data 
 			using (var scope = app.Services.CreateScope())
 			{
@@ -96,14 +107,15 @@ namespace HMSphere.MVC
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
 			app.UseRouting();
-			app.UseAuthentication();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseMiddleware<PerformanceMiddleware>();
+            app.UseMiddleware<PerformanceMiddleware>();
 
 			app.MapControllerRoute(
                 name: "default",
