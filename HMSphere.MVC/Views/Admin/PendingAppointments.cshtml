@@ -28,6 +28,19 @@
                     </form>
                 </td>
             </tr>
+            <tr>
+                <td>11/11/2024</td>
+                <td>hgfdfghjkl</td>
+                <td>11</td>
+                <td>pending</td>
+                <td>
+                    <form asp-action="ApproveAppointment" method="post">
+                        <input type="hidden" name="id" value="@appointment.Id" />
+                        <button type="submit" name="isApproved" value="true" class="btn btn-success">Approve</button>
+                        <button type="submit" name="isApproved" value="false" class="btn btn-danger">Disapprove</button>
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

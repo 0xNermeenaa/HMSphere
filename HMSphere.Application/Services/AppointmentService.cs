@@ -4,6 +4,8 @@ using HMSphere.Application.Interfaces;
 using HMSphere.Domain.Entities;
 using HMSphere.Domain.Enums;
 using HMSphere.Infrastructure.DataContext;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,25 @@ namespace HMSphere.Application.Services
     {
         private readonly HmsContext _context;
         private readonly IMapper _mapper;
-
-        public AppointmentService(HmsContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AppointmentService(HmsContext context, 
+                                  UserManager<ApplicationUser> userManager,
+                                  IHttpContextAccessor httpContextAccessor,
+                                  IMapper mapper
+                                   )
         {
             _context = context;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
+
+        public async Task<List<Appointment>> GetAllAppointmentsAsync()
+        {
+            return new List<Appointment> { new Appointment() };
+        }
+
         public async Task<AppointmentDto> CreateAppointment(AppointmentDto appointmentDto)
         {
             if (appointmentDto.Date == null || appointmentDto.AppointmentTime == null)
@@ -32,7 +48,7 @@ namespace HMSphere.Application.Services
                     ErrorMessage = "Invalid date or time for the appointment."
                 };
             }
-
+            
             var doctor = await _context.Doctors.FindAsync(appointmentDto.DoctorId);
             if (doctor == null)
             {
@@ -40,7 +56,7 @@ namespace HMSphere.Application.Services
                 {
                     IsSuccessful = false,
                     ErrorMessage = "The selected doctor does not exist."
-                };
+                };  
             }
             var department = await _context.Departments.FindAsync(appointmentDto.DepartmentId);
             if (department == null)
@@ -67,12 +83,13 @@ namespace HMSphere.Application.Services
             }
 
             var appointment = _mapper.Map<Appointment>(appointmentDto);
-
+            appointment.PatientId = await GetCurrentUserAsync();
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
             appointmentDto.Status = Status.Scheduled;
             appointmentDto.IsApproved = null;
             appointmentDto.Id = appointment.Id;
+            appointmentDto.PatientId = await GetCurrentUserAsync();
             appointmentDto.IsSuccessful = true;
             appointmentDto.ErrorMessage = null;
             return appointmentDto;
@@ -103,6 +120,7 @@ namespace HMSphere.Application.Services
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
                 .ToListAsync();
+            if(scheduledAppointments==null) return new List<AppointmentDto>();
 
             return scheduledAppointments.Select(appointment => new AppointmentDto
             {
@@ -112,6 +130,18 @@ namespace HMSphere.Application.Services
                 IsApproved = appointment.IsApproved,
             }).ToList();
         }
+
+
+        private async Task<string> GetCurrentUserAsync()
+        {
+            var userClaim = _httpContextAccessor.HttpContext!.User;
+
+            // Get the current user from claims
+            var user = await _userManager.GetUserAsync(userClaim);
+
+            return user.Id;
+        }
+
 
 
     }

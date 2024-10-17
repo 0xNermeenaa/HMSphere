@@ -47,8 +47,8 @@
         </div>
 
         <!-- Hidden field for PatientId -->
-        <input type="hidden" asp-for="PatientId" id="PatientId" />
-
+@*         <input type="hidden" asp-for="PatientId" id="PatientId" />
+ *@
         <div class="row">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -58,9 +58,9 @@
 </div>
 
 <script>
-    var currentUserId = '@ViewBag.CurrentUserId';
+    // var currentUserId = '@ViewBag.CurrentUserId';
 
-    document.getElementById('PatientId').value = currentUserId;
+    // document.getElementById('PatientId').value = currentUserId;
      
     //for dynamic loading 
     $(document).ready(function () {

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HMSphere.MVC.ViewModels.DoctorViewModel
+
+@{
     ViewData["Title"] = "Home Dashboard";
 }
 
@@ -92,10 +94,10 @@
     <div class="profile-card text-light">
         <img src="../wwwroot/images/WhatsApp Image 33_4cf47b67.jpg" alt="" class="profile-img">
         <div class="profile-text">
-            <p>Hello,</p>
-            <h2 class="text-light">Dr. Vinicus Junior</h2>
-            <p>General Surgery, Physician</p>
-            <p class="experience">16 Years Experience Overall</p>
+            <p>Hello,</p><br />
+            <h2 class="text-light">Dr. @Model.FirstName @Model.LastName</h2>
+            <p><b>@Model.Department</b></p>
+            <p>@Model.Specialization</p>
         </div>
     </div>
 </div>

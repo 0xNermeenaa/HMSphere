@@ -16,7 +16,7 @@ namespace HMSphere.Domain.Entities
 
         public virtual ApplicationUser User { get; set; }
         [ForeignKey("DepartmentId")]
-        public virtual Department? Department { get; set; } = new();
+        public virtual Department? Department { get; set; }
         public virtual ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
         public virtual ICollection<DoctorShift> DoctorShifts { get; set; } = new List<DoctorShift>();
         public virtual ICollection<MedicalRecord>? MedicalRecords { get; set; } = new List<MedicalRecord>();

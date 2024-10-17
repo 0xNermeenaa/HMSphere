@@ -46,8 +46,8 @@ namespace HMSphere.MVC.Controllers
 
         public async Task<IActionResult> CreateAppointment()
         {
-            var userId = _userManager.GetUserId(User); // Get the current logged-in user's ID
-            ViewBag.CurrentUserId = userId;
+            //var userId = _userManager.GetUserId(User); // Get the current logged-in user's ID
+            //ViewBag.CurrentUserId = userId;
 
             ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name");
             ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(null), "Id", "User.UserName");
