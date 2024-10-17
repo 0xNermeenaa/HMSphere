@@ -12,6 +12,7 @@ using System.Text;
 using HMSphere.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using HMSphere.Application.Mailing;
 namespace HMSphere.MVC
 {
 	public class Program
@@ -34,13 +35,15 @@ namespace HMSphere.MVC
 			options.UseSqlServer(builder.Configuration
 			.GetConnectionString("DefaultConnection")));
 
-			//configure  Services
-			builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
-			builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
-			builder.Services.AddScoped<IDoctorService, DoctorService>();
-			builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-			builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
-			builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            //configure  Services
+            builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            builder.Services.AddScoped<IMailingService, MailingService>();
+            builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
 
 

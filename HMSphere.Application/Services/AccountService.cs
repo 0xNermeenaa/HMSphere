@@ -6,13 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HMSphere.Application.Services
 {
@@ -145,12 +142,6 @@ namespace HMSphere.Application.Services
             return authModel;
         }
 
-        public async Task LogOut()
-        {
-            await _signInManager.SignOutAsync();
-
-        }
-
         private async Task<JwtSecurityToken> CreateToken(ApplicationUser User)
         {
             var claims = new List<Claim>
@@ -217,6 +208,33 @@ namespace HMSphere.Application.Services
             };
         }
 
+        public async Task<AuthDto> LogoutAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new AuthDto { IsAuthenticated = false, Message = "User not found." };
+            }
+
+            // Mark all refresh tokens as inactive by setting RevokedOn
+            var activeTokens = user.RefreshTokens.Where(t => t.IsActive).ToList();
+            foreach (var token in activeTokens)
+            {
+                token.RevokedOn = DateTime.UtcNow; // Setting RevokedOn marks the token as inactive.
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            // Sign out the user
+            await _signInManager.SignOutAsync();
+
+            return new AuthDto
+            {
+                IsAuthenticated = false,
+                Message = "User has been logged out successfully."
+            };
+        }
 
     }
 }

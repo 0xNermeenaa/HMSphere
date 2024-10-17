@@ -11,9 +11,7 @@ namespace HMSphere.Domain.Entities
     {
         public string Id { get; set; } // will be same as AppUser Id
         public string? Specialization { get; set; } 
-
         public int? DepartmentId { get; set; }
-
         public virtual ApplicationUser User { get; set; }
         [ForeignKey("DepartmentId")]
         public virtual Department? Department { get; set; }

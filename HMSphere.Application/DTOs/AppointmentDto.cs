@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Application.DTOs
 {
-	public class AppointmentDto
-	{
-		public DateTime Date { get; set; }
-		public Status Status { get; set; }
-		public string ReasonFor { get; set; }
-		public string Clinic { get; set; }
-		public DateTime CreatedDate { get; set; }
-		public bool IsDeleted { get; set; }
-		public string DoctorID { get; set; }
-		public string PatientID { get; set; }
-	}
+    public class AppointmentDto
+    {
+        public DateTime Date { get; set; }
+        public Status Status { get; set; }
+        public string ReasonFor { get; set; }
+        public string Clinic { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public bool IsDeleted { get; set; }
+        public string DoctorID { get; set; }
+        public string PatientID { get; set; }
+    }
 }

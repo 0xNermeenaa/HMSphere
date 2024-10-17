@@ -20,8 +20,9 @@ namespace HMSphere.MVC.Controllers
 		private readonly IMapper _mapper;
 		private readonly IUserRoleFactory _userRoleFactory;
 		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly SignInManager<ApplicationUser> _signInManager;
 
-		public AccountController(IAccountService accountService, IMapper mapper,
+		public AccountController(IAccountService accountService, IMapper mapper, SignInManager<ApplicationUser> signInManager,
 								   IDepartmentService departmentService, IUserRoleFactory userRoleFactory, UserManager<ApplicationUser> userManager)
 		{
 			_accountService = accountService;
@@ -29,6 +30,7 @@ namespace HMSphere.MVC.Controllers
 			_departmentService = departmentService;
 			_userRoleFactory = userRoleFactory;
 			_userManager = userManager;
+			_signInManager = signInManager;
 		}
 		public IActionResult Index()
 		{
@@ -60,12 +62,7 @@ namespace HMSphere.MVC.Controllers
 				var authResult = await _accountService.RegisterAsync(registerDto);
                 if (authResult.IsAuthenticated)
 				{
-                    HttpContext.Response.Cookies.Append("AuthToken", authResult.Token, new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Secure = true,
-                        Expires = DateTime.Now.AddDays(1)
-                    });
+                    await _signInManager.SignOutAsync();
                     return RedirectToAction("Login", "Account");
 				}
 				else
@@ -112,19 +109,19 @@ namespace HMSphere.MVC.Controllers
 
                 if (authResult.IsAuthenticated)
                 {
-					//HttpContext.Response.Cookies.Append("AuthToken", authResult.Token, new CookieOptions
-     //               {
-     //                   HttpOnly = true,
-     //                   Secure = true,
-     //                   Expires = DateTime.Now.AddDays(1)
-     //               });
+                    await _signInManager.SignOutAsync();
+
+                    // Sign in the new user
+                    var newUser = await _userManager.FindByEmailAsync(userViewModel.Email);
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+
                     foreach (var role in roleRedirects)
                     {
-                        if (currentUser != null)
+                        if (newUser != null)
                         {
-                            if (await _userManager.IsInRoleAsync(currentUser, role.Key))
+                            if (await _userManager.IsInRoleAsync(newUser, role.Key))
                             {
-                                return RedirectToAction(role.Value.action, role.Value.controller,new {id=currentUser.Id});
+                                return RedirectToAction(role.Value.action, role.Value.controller,new {id=newUser.Id});
                             }
                         }
                     }
@@ -137,5 +134,28 @@ namespace HMSphere.MVC.Controllers
 
 			return View("Login", userViewModel);
 		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Logout()
+		{
+			var email = User?.Identity?.Name;
+
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
+
+			var result = await _accountService.LogoutAsync(email);
+
+			// Optionally, you can add a message to be shown to the user.
+			if (!result.IsAuthenticated)
+			{
+				TempData["Message"] = result.Message;
+			}
+
+			return RedirectToAction("Login", "Account");
+		}
+
 	}
 }
