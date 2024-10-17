@@ -97,6 +97,11 @@
             width: 17%;
             box-shadow: 0px 2px 8px lightgray;
         }
+
+        .bi{
+            font-size=30px;
+        }
+
 	</style>
 </head>
 
@@ -121,7 +126,7 @@
 							<form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
 								@Html.AntiForgeryToken()
 								<button type="submit" class="btn btn-link p-0" style="display: flex; align-items: center;">
-									<img src="~/images/7.png" alt="Logout" style="width: 30px; height: 30px;" />
+                                    <i class="bi bi-box-arrow-right text-light" style="font-size: 30px;"></i>
 								</button>
 							</form>
 
