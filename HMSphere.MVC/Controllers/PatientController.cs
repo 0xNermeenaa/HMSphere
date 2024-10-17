@@ -64,5 +64,14 @@ namespace HMSphere.MVC.Controllers
             }
             return View(models);
         }
+        public IActionResult AppointmentDetails()
+        {
+            return View();
+        }
+
+        public IActionResult MedicalRecordDetails()
+        {
+            return View();
+        }
     }
 }
