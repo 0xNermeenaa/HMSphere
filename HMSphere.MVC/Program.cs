@@ -15,11 +15,11 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using HMSphere.Application.Mailing;
 namespace HMSphere.MVC
 {
-	public class Program
-	{
-		public static async Task Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
 			builder.Services.AddHttpContextAccessor();
@@ -30,10 +30,10 @@ namespace HMSphere.MVC
 				.AddEntityFrameworkStores<HmsContext>().AddDefaultTokenProviders();
 ;
 
-			//Add DbContext
-			builder.Services.AddDbContext<HmsContext>(options =>
-			options.UseSqlServer(builder.Configuration
-			.GetConnectionString("DefaultConnection")));
+            //Add DbContext
+            builder.Services.AddDbContext<HmsContext>(options =>
+            options.UseSqlServer(builder.Configuration
+            .GetConnectionString("DefaultConnection")));
 
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
@@ -107,15 +107,15 @@ namespace HMSphere.MVC
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
 			app.UseRouting();
             app.UseCookiePolicy();
             app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseMiddleware<PerformanceMiddleware>();
+            app.UseMiddleware<PerformanceMiddleware>();
 
 			app.MapControllerRoute(
                 name: "default",
