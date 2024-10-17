@@ -2,7 +2,8 @@
 {
     public class MedicalRecordDto
     {
-        public DateTime CreatedDate { get; set; }
+		public string PatientId { get; set; }
+		public DateTime CreatedDate { get; set; }
         public string Diagnosis { get; set; }
         public string? TreatmentPlan { get; set; }
         public string Medications { get; set; }

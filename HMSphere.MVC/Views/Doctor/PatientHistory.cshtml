@@ -54,24 +54,24 @@
 					<th>Blood Type</th>
 					<th>Phone No</th>
 					<th>Last Visit Date</th>
-					<th>Medical Report</th>
+					<th>Medical Record</th>
 				</tr>
 			</thead>
 			<tbody>
-				@for (int i = 0; i < 10; i++)
+				@foreach(var item in Model)
 				{
 					<tr>
-						<td>Nasser</td>
-						<td>Male</td>
-						<td>72</td>
-						<td>176</td>
-						<td>22</td>
-						<td>O-</td>
-						<td>01062276296</td>
-						<td>10-10-2024</td>
+						<td>@item.FirstName</td>
+						<td>@item.Gender</td>
+						<td>@item.Weight</td>
+						<td>@item.Height</td>
+						<td>@item.CalculateAgeFromNID(item.NID)</td>
+						<td>@item.Blood</td>
+						<td>@item.PhoneNumber</td>
+						<td>@item.GetLastVisitDate()</td>
 						<td>
-							<form asp-controller="Doctor" asp-action="MedicalRecords" method="get">
-								<input type="hidden" name="patientId" value="1" />
+							<form asp-controller="Doctor" asp-action="MedicalRecords" asp-route-data="@item.PatientId" method="get">
+								<input type="hidden" name="patientId" value="@item.PatientId" />
 								<button type="submit" class="btn btn-view">View</button>
 							</form>
 						</td>

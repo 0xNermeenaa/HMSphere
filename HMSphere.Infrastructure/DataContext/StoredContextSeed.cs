@@ -24,10 +24,22 @@ namespace HMSphere.Infrastructure.DataContext
             //    }
             //    await context.SaveChangesAsync();
             //}
-
-
-
         }
+
+        public static async Task AppointmentSeed(HmsContext context)
+        {
+            if (!context.Appointments.Any())
+            {
+                var data = File.ReadAllText("../HMSphere.Infrastructure/SeedData/Appointments.json");
+                var appoints=JsonSerializer.Deserialize<List<Appointment>>(data);
+                foreach(var item in appoints)
+                {
+                    context.Appointments.Add(item);
+                }
+                await context.SaveChangesAsync();
+            }
+        }
+
         //public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, HmsContext context)
         //{
         //    if (!userManager.Users.Any())

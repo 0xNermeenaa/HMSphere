@@ -10,6 +10,7 @@ namespace HMSphere.Application.DTOs
 {
     public class AppointmentDto
     {
+        public int Id { get; set; }
         public DateTime Date { get; set; }
         public Status Status { get; set; }
         public string ReasonFor { get; set; }
@@ -18,5 +19,6 @@ namespace HMSphere.Application.DTOs
         public bool IsDeleted { get; set; }
         public string DoctorID { get; set; }
         public string PatientID { get; set; }
+        public string PatientName { get; set; }
     }
 }

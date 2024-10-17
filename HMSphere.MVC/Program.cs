@@ -84,6 +84,7 @@ namespace HMSphere.MVC
 					options.LoginPath = "/Account/Login";
 				});
 			#endregion
+
 			builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
 
@@ -96,7 +97,8 @@ namespace HMSphere.MVC
 				var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
 				await StoredContextSeed.SeedAsync(context);
 				//await StoredContextSeed.SeedUserAsync(usermanager,context);
-                // await IdentitySeed.SeedUserAsync(usermanager);
+				// await IdentitySeed.SeedUserAsync(usermanager);
+				await StoredContextSeed.AppointmentSeed(context);
             }
 
 			// Configure the HTTP request pipeline.

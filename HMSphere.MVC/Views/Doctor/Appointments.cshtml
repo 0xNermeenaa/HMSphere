@@ -16,6 +16,10 @@
 		border-radius: 20px;
 		padding: 5px 15px;
 	}
+	.btn-view a{
+		text-decoration:none;
+		color:white;
+	}
 
 		.btn-view:hover {
 			background-color: #17a2b8;
@@ -49,10 +53,11 @@
 					<th>Clinic</th>
 					<th>CreatedDate</th>
 					<th>Patient Name</th>
+					<th>Details</th>
 				</tr>
 			</thead>
 			<tbody>
-				@* @foreach(var appointment in Model)
+				@foreach(var appointment in Model)
 				{
 					<tr>
 						<td>@appointment.Date.ToString("MM/dd/yyyy")</td>
@@ -61,8 +66,14 @@
 						<td>@appointment.Clinic</td>
 						<td>@appointment.CreatedDate.ToString("MM/dd/yyyy")</td>
 						<td>@appointment.PatientName</td>
+						<td>
+							<form asp-controller="Doctor" asp-action="AppointmentDetails" asp-route-data="@appointment.Id" method="get">
+								<input type="hidden" name="appointmentId" value="@appointment.Id" />
+								<button type="submit" class="btn btn-view">View</button>
+							</form>
+						</td>
 					</tr>
-				} *@
+				}
 			</tbody>
 		</table>
 	</div>
