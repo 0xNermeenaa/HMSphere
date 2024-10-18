@@ -51,7 +51,7 @@
 					<th>Status</th>
 					<th>ReasonFor</th>
 					<th>Clinic</th>
-					<th>CreatedDate</th>
+					<th>Time</th>
 					<th>Patient Name</th>
 					<th>Details</th>
 				</tr>
@@ -64,7 +64,7 @@
 						<td>@appointment.Status</td>
 						<td>@appointment.ReasonFor</td>
 						<td>@appointment.Clinic</td>
-						<td>@appointment.CreatedDate.ToString("MM/dd/yyyy")</td>
+						<td>@appointment.AppointmentTime</td>
 						<td>@appointment.PatientName</td>
 						<td>
 							<form asp-controller="Doctor" asp-action="AppointmentDetails" asp-route-data="@appointment.Id" method="get">

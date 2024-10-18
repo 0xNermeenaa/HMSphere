@@ -26,7 +26,7 @@ namespace HMSphere.Application.Mailing
             //throw new NotImplementedException();
             var email = new MimeMessage
             {
-                Sender = MailboxAddress.Parse(_mailSettings.From),
+                Sender = MailboxAddress.Parse(_mailSettings.Email),
                 Subject = subject
             };
             email.To.Add(MailboxAddress.Parse(mailTo));
@@ -49,12 +49,12 @@ namespace HMSphere.Application.Mailing
 
             builder.HtmlBody = body;
             email.Body = builder.ToMessageBody();
-            email.From.Add(new MailboxAddress(_mailSettings.Username, _mailSettings.From));
+            email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Email));
 
             using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.SmtpServer, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate(_mailSettings.Username, _mailSettings.Password);
-            await smtp.SendAsync(email);
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.DisplayName, _mailSettings.Password);
+            await smtp.SendAsync(email);    
 
             smtp.Disconnect(true);
         }
@@ -63,7 +63,7 @@ namespace HMSphere.Application.Mailing
         private MimeMessage CreateEmailMessage(MailMessage message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("HMS", _mailSettings.From));  // Changed "email" to "sender"
+            emailMessage.From.Add(new MailboxAddress("HMS", _mailSettings.Email));  // Changed "email" to "sender"
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
 
@@ -85,9 +85,9 @@ namespace HMSphere.Application.Mailing
             {
                 try
                 {
-                    client.Connect(_mailSettings.SmtpServer, _mailSettings.Port, true);
+                    client.Connect(_mailSettings.Host, _mailSettings.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_mailSettings.Username, _mailSettings.Password);
+                    client.Authenticate(_mailSettings.DisplayName, _mailSettings.Password);
                     client.Send(message);
                 }
                 finally

@@ -35,6 +35,9 @@ namespace HMSphere.MVC
             options.UseSqlServer(builder.Configuration
             .GetConnectionString("DefaultConnection")));
 
+			//email
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
+
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
             builder.Services.AddScoped<IMailingService, MailingService>();

@@ -166,19 +166,19 @@ namespace HMSphere.Application.Services
 			return recordDtos;
 		}
 
-  //      public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
-		//{
-		//	var appointments = await _context.Appointments
-		//		.Include(a=>a.Patient.User)
-		//		.Where(a => a.DoctorId == doctorId
-		//	&& !a.IsDeleted).ToListAsync();
-		//	if (!appointments.Any())
-		//	{
-		//		return new List<AppointmentDto>();
-		//	}
-		//	var appointmentDtos=appointments.Select(a=>_mapper.Map<AppointmentDto>(a)).ToList();
-		//	return appointmentDtos;
-  //      }
+		public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
+		{
+			var appointments = await _context.Appointments
+				.Include(a => a.Patient.User)
+				.Where(a => a.DoctorId == doctorId
+			&& !a.IsDeleted).ToListAsync();
+			if (!appointments.Any())
+			{
+				return new List<AppointmentDto>();
+			}
+			var appointmentDtos = appointments.Select(a => _mapper.Map<AppointmentDto>(a)).ToList();
+			return appointmentDtos;
+		}
 
 		public async Task<ResponseDTO> GetAppointmentDetails(int appointmentId)
 		{
@@ -229,9 +229,6 @@ namespace HMSphere.Application.Services
             return doctors;
         }
 
-        public Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
