@@ -9,6 +9,7 @@ namespace HMSphere.MVC.ViewModels
         public string LastName { get; set; }
         public string Specialization { get; set; }
         public string Department { get; set; }
+        public string PhoneNumber { get; set; }
         public int UpcomingAppointmentsCount { get; set; }
         public int NumberOfPatients {  get; set; }
         public int NumberOfMedicalRecords { get; set; }

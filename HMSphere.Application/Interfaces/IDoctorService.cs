@@ -11,7 +11,7 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IDoctorService
     {
-        //Task<List<Doctor>> GetAllDoctorsAsync();
+        Task<List<DoctorDto>> GetAll();
         public Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId);
         Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId);
         Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string pateintId);

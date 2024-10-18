@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HMSphere.MVC.ViewModels.PatientsHistoryViewModel>
+﻿@model IEnumerable<HMSphere.MVC.ViewModels.StaffViewModel>
 
 @{
 	ViewData["Title"] = "Patients";
@@ -37,22 +37,27 @@
 		</div>
 	</div>
 
-	@* <div class="table-responsive">
+	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Id</th>
-					<th>JobTitle</th>
-					<th>DepartmentId</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Department</th>
+					<th>Job Title</th>
+					<th>Phone No.</th>
+					<th>More</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach (var item in Model)
 				{
 					<tr>
-						<td>@item.Id</td>
-						<td>@item.GeJobTitlender</td>
-						<td>@item.DepartmentId</td>
+						<td>@item.FirstName</td>
+						<td>@item.LastName</td>
+						<td>@item.Department</td>
+						<td>@item.JobTitle</td>
+						<td>@item.PhoneNumber</td>
 						<td>
 							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
 								<input type="hidden" name="StaffId" value="@item.Id" />
@@ -64,6 +69,6 @@
 				}
 			</tbody>
 		</table>
-	</div> *@
+	</div>
 </div>
 

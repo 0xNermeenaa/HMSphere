@@ -274,29 +274,28 @@ namespace HMSphere.Application.Services
             _context.Appointments.Update(appointment);
             await _context.SaveChangesAsync();
 
-            //// Check if Patient and User are not null before sending the email
-            //if (appointment.Patient != null && appointment.Patient.User != null)
-            //{
-            //    string subject = isApproved ? "Appointment Approved" : "Appointment Rejected";
-            //    string message = isApproved
-            //        ? $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been approved."
-            //        : $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been rejected.";
+            // Check if Patient and User are not null before sending the email
+            if (appointment.Patient != null && appointment.Patient.User != null)
+            {
+                string subject = isApproved ? "Appointment Approved" : "Appointment Rejected";
+                string message = isApproved
+                    ? $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been approved."
+                    : $"Dear {appointment.Patient.User.UserName}, your appointment on {appointment.Date} has been rejected.";
 
-            //    if (!string.IsNullOrEmpty(appointment.Patient.User.Email))
-            //    {
-            //        await _emailService.SendMailAsync(appointment.Patient.User.Email, subject, message);
-            //    }
-            //    else
-            //    {
-            //        string adminMessage = $"The email for user {appointment.Patient.User.UserName} (Appointment ID: {appointment.Id}) is missing.";
-            //        await _emailService.SendMailAsync("admin@example.com", "Missing Email for Appointment", adminMessage);
-            //    }
-            //}
-            //else
-            //{
-            //    string adminMessage = $"The Patient or User information for appointment {appointment.Id} is missing.";
-            //    await _emailService.SendMailAsync("admin@example.com", "Missing Patient/User Information for Appointment", adminMessage);
-            //}
+                if (!string.IsNullOrEmpty(appointment.Patient.User.Email))
+                {
+                    await _emailService.SendMailAsync(appointment.Patient.User, subject, message);
+                }
+                else
+                {
+                    string adminMessage = $"The email for user {appointment.Patient.User.UserName} (Appointment ID: {appointment.Id}) is missing.";
+                    await _emailService.SendMailAsync(appointment.Patient.User, "Missing Email for Appointment", adminMessage);
+                }
+            }
+            else
+            {
+                return false;
+            }
 
             return true;
         }

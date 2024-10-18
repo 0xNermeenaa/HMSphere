@@ -12,7 +12,6 @@ namespace HMSphere.Application.DTOs
 	public class AppointmentDto
 	{
         public int? Id { get; set; }
-
         public DateTime? Date { get; set; } = DateTime.Now;
         public Status? Status { get; set; } = Domain.Enums.Status.Pending;
         public string? ReasonFor { get; set; } = string.Empty;

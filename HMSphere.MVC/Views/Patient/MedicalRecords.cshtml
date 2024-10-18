@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HMSphere.MVC.ViewModels.PatientMedicalRecordsViewModel>
+﻿@model IEnumerable<HMSphere.MVC.ViewModels.MedicalRecordViewModel>
 @{
     ViewData["Title"] = "Home Dashboard";
 }
@@ -106,6 +106,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th scope="col">Patient ID</th>
                         <th scope="col">Created Date</th>
                         <th scope="col">Diagnosis</th>
                         <th scope="col">Medication</th>
@@ -220,17 +221,30 @@
                         </td>
                         <td>13-8-2024 </td>
                     </tr>
-                    @foreach (var MR in Model)
-                    {
-                        @* <tr class="table-active">
-                            <td>@MR.CreatedDate</td>
-                            <td>@MR.Diagnosis</td>
-                            <td>@MR.Medications</td>
-                            <td>@MR.TreatmentPlan</td>
-                            <td>@MR.DoctorNotes</td>
-                            <td>@MR.LastUpdated</td>
-                        </tr> *@
-                    }
+                        @foreach (var mr in Model)
+                        {
+                    <tr class="table-active">
+                            <td>@mr.PatientId</td>
+                            <td>@mr.CreatedDate</td>
+                            <td>@mr.Diagnosis</td>
+                            <td>
+                                <button class="btn btn-outline-dark" id="Medications">
+                                    <a asp-controller="Patient" asp-action="MedicalRecordDetails">Medications</a>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-dark" id="Treatment Plan">
+                                    <a asp-controller="Patient" asp-action="MedicalRecordDetails">Treatment Plan</a>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-dark" id="Doctor Notes">
+                                    <a asp-controller="Patient" asp-action="MedicalRecordDetails">Doctor Notes</a>
+                                </button>
+                            </td>
+                            <td>@mr.LastUpdated</td>
+                    </tr>
+                        }
                 </tbody>
             </table>
         </div>

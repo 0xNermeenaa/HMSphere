@@ -1,4 +1,4 @@
-﻿@model List<HMSphere.MVC.ViewModels.AppointmentViewModel>
+@model List<HMSphere.MVC.ViewModels.AppointmentViewModel>
 
 <style>
     .profile-card {
@@ -122,14 +122,14 @@
                             <td>@appointment.Status</td>
                             <td>@appointment.ReasonFor</td>
 
- @*                            <td>
-                                <button class="btn btn-outline-dark"
-                                @(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "" : "disabled")>
-                                    <a asp-controller="Patient" asp-action="AppointmentDetails" asp-route-id="@appointment.Id">
-                                        Appointment Details
-                                    </a>
-                                </button>
-                            </td> *@
+                            @*                            <td>
+                        <button class="btn btn-outline-dark"
+                        @(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "" : "disabled")>
+                        <a asp-controller="Patient" asp-action="AppointmentDetails" asp-route-id="@appointment.Id">
+                        Appointment Details
+                        </a>
+                        </button>
+                        </td> *@
                             <td>
                                 <a asp-action="AppointmentDetails" asp-route-id="@appointment.Id" class="btn btn-outline-dark">View Details</a>
 

@@ -18,15 +18,38 @@ namespace HMSphere.Application.Services
 	{
 		private readonly HmsContext _context;
 		private readonly IMapper _mapper;
-		//private readonly IBaseRepository<MedicalRecord> _medicalRecord;
-		//private readonly DbSet<Patient> _dbSet;
-		public DoctorService(HmsContext context, IMapper mapper/* , IBaseRepository<MedicalRecord> medicalRecord*/)
+        //private readonly IBaseRepository<MedicalRecord> _medicalRecord;
+        private readonly IBaseRepository<Doctor> _doctorRepo;
+
+        public DoctorService(HmsContext context, IMapper mapper, IBaseRepository<Doctor> doctorRepo)
 		{
 			_context = context;
 			_mapper = mapper;
-			//_medicalRecord = medicalRecord;
-			//_dbSet = _context.Set<Patient>();
+			_doctorRepo = doctorRepo;
 		}
+
+        public async Task<List<DoctorDto>> GetAll()
+		{
+			try
+			{
+				//var doctors = await _doctorRepo.GetAllAsync();
+				var doctors=await _context.Doctors.Include(d=>d.User)
+					.Include(d=>d.Department).ToListAsync();
+				if (!doctors.Any())
+				{
+					return new List<DoctorDto>();
+				}
+
+				var dto = doctors.Select(d => _mapper.Map<DoctorDto>(d)).ToList();
+				return dto;
+			}
+			catch
+			{
+                return new List<DoctorDto>();
+
+            }
+        }
+
 
         public async Task<ResponseDTO> Profile(string id)
 		{
@@ -166,19 +189,19 @@ namespace HMSphere.Application.Services
 			return recordDtos;
 		}
 
-  //      public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
-		//{
-		//	var appointments = await _context.Appointments
-		//		.Include(a=>a.Patient.User)
-		//		.Where(a => a.DoctorId == doctorId
-		//	&& !a.IsDeleted).ToListAsync();
-		//	if (!appointments.Any())
-		//	{
-		//		return new List<AppointmentDto>();
-		//	}
-		//	var appointmentDtos=appointments.Select(a=>_mapper.Map<AppointmentDto>(a)).ToList();
-		//	return appointmentDtos;
-  //      }
+		public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
+		{
+			var appointments = await _context.Appointments
+				.Include(a => a.Patient.User)
+				.Where(a => a.DoctorId == doctorId
+			&& !a.IsDeleted).ToListAsync();
+			if (!appointments.Any())
+			{
+				return new List<AppointmentDto>();
+			}
+			var appointmentDtos = appointments.Select(a => _mapper.Map<AppointmentDto>(a)).ToList();
+			return appointmentDtos;
+		}
 
 		public async Task<ResponseDTO> GetAppointmentDetails(int appointmentId)
 		{
@@ -229,9 +252,6 @@ namespace HMSphere.Application.Services
             return doctors;
         }
 
-        public Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
