@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HMSphere.Application.Interfaces;
 using HMSphere.MVC.ViewModels;
+using HMSphere.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -15,6 +16,12 @@ namespace HMSphere.MVC.Controllers
             _appointmentService = appointmentService;
             _mapper = mapper;
         }
+        public IActionResult Index()
+        {
+            return View();
+           
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> ApproveAppointment(int id, bool isApproved)
@@ -36,12 +43,20 @@ namespace HMSphere.MVC.Controllers
 
             return View(appointmentsViewModels);
         }
-
-
-        public IActionResult Index()
+        public IActionResult Patients()
         {
             return View();
         }
 
+        public IActionResult Staff()
+        {
+            return View();
+        }
+        public IActionResult Doctors()
+        {
+            return View();
+        }
     }
+  
 }
+

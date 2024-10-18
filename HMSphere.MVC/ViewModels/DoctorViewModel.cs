@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HMSphere.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace HMSphere.MVC.ViewModels
 {
@@ -14,5 +15,6 @@ namespace HMSphere.MVC.ViewModels
 
         public List<MedicalRecordViewModel> LatestMedicalRecords { get; set; }
         public List<AppointmentsViewModel> LatestAppointments { get; set; }
+        public List<Doctor> Doctors { get; set; }
     }
 }

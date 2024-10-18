@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HMSphere.MVC.ViewModels.DoctorViewModel>
+
+@{
+	ViewData["Title"] = "Doctors";
+}
+
+<style>
+	.table td, .table th {
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	.btn-view {
+		background-color: #2a9fd9;
+		color: white;
+		border-radius: 20px;
+		padding: 5px 15px;
+	}
+
+		.btn-view:hover {
+			background-color: #17a2b8;
+		}
+</style>
+
+<div class="container mt-4">
+	<div class="d-flex justify-content-between mb-4">
+		<h2>Doctors</h2>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-md-3">
+			<input type="text" class="form-control" placeholder="Search by Name">
+		</div>
+		<div class="col-md-3">
+			<input type="text" class="form-control" placeholder="Search by Specialization">
+		</div>
+		<div class="col-md-3">
+			<button class="btn btn-primary w-100">Search</button>
+		</div>
+	</div>
+
+	@* <div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var doctor in Model)
+				{
+					<tr>
+						<td>@doctor.FirstName</td>
+						<td>@doctor.LastName</td>
+						<td>@doctor.Department</td>
+						<td>@doctor.Specialization</td>
+						<td>@doctor.NumberOfPatients</td>
+						<td>
+							<form asp-controller="Admin" asp-action="Doctors" asp-route-data="@doctor.Department" method="get">
+								<input type="hidden" name="Doctor" value="@doctor.Department" />
+								<button type="submit" class="btn btn-view">View</button>
+							</form>
+						</td>
+
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>  *@
+</div>
+

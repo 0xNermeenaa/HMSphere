@@ -169,9 +169,10 @@
 			}
 			@if (User.IsInRole("Admin"))
 			{
-                <a asp-action="Index" asp-controller="Admin" asp-route-id="@user.Id">Dashboard</a>
-                <a asp-action="PatientHistory" asp-controller="Admin">Patients</a>
-                <a asp-action="Appointments" asp-controller="Admin">Appointments</a>
+                <a asp-action="Index" asp-controller="Admin" asp-route-id="@user.Id">Appointments</a>
+                <a asp-action="Doctors" asp-controller="Admin">Doctors</a>
+                <a asp-action="Patients" asp-controller="Admin">Patients</a>
+                <a asp-action="Staff" asp-controller="Admin">Staff</a>
 			}
 		</div>
 		<div class="main-content w-80">
