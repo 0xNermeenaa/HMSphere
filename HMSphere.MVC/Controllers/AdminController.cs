@@ -96,7 +96,10 @@ namespace HMSphere.MVC.Controllers
             var model = medicalRecords.Select(m => _mapper.Map<MedicalRecordViewModel>(m)).ToList();
             return View(model);
         }
-
+        public IActionResult AddDoctor()
+        {
+            return View();
+        }
     }
 
 }
