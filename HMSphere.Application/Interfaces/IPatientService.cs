@@ -12,6 +12,8 @@ namespace HMSphere.Application.Interfaces
         Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string PateintID);
         Task<IEnumerable<AppointmentDto>> GetLast5AppointmentsAsync(string PatientID);
         Task<IEnumerable<MedicalRecordDto>> GetLast5MedicalRecordsAsync(string PatientID);
+        Task<ResponseDTO> Profile(string doctorId);
+        Task<NextAppointmentDto> GetNextAppointmentByPatientIdAsync(string patientId);
 
     }
 }

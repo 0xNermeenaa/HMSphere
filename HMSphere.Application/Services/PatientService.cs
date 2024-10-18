@@ -34,6 +34,8 @@ namespace HMSphere.Application.Services
         public async Task<IEnumerable<AppointmentDto>> GetLast5AppointmentsAsync(string patientId)
         {
             var Latest5Appointments = await _context.Appointments
+                                 .Include(a=>a.Doctor)
+                                 .ThenInclude(d=>d.User)
                                  .Where(a => a.PatientId == patientId)
                                  .OrderByDescending(a => a.Date)
                                  .Take(5)
@@ -49,5 +51,56 @@ namespace HMSphere.Application.Services
                                  .ToListAsync();
             return Latest5MedicalRecords.Select(mr => _mapper.Map<MedicalRecordDto>(mr)).ToList();
         }
+
+        public async Task<ResponseDTO> Profile(string id)
+        {
+            try
+            {
+                var patient = await _context.Patients.Include(d => d.User)
+                    .FirstOrDefaultAsync(d => d.Id == id);
+                if (patient != null)
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = true,
+                        StatusCode = 200,
+                        Model = patient
+                    };
+                }
+
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = 404,
+                    Message = "patient not found!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO { IsSuccess = false, Message = "An error occured, please try again", StatusCode = 500 };
+            }
+        }
+        public async Task<NextAppointmentDto> GetNextAppointmentByPatientIdAsync(string patientId)
+        {
+            if (string.IsNullOrEmpty(patientId))
+                throw new ArgumentException("Patient ID cannot be null or empty.");
+
+            var currentDate = DateTime.Now;
+
+            var nextAppointment = await _context.Appointments
+                .Where(a => a.PatientId == patientId && a.Date >= currentDate)
+                .OrderBy(a => a.Date)
+                .Select(a => new NextAppointmentDto
+                {
+                    DoctorName = a.Doctor.User.UserName,
+                    AppointmentDate = a.Date
+
+                    //AppointmentDate = a.Date.ToString("dddd, dd MMMM")
+                })
+                .FirstOrDefaultAsync();
+
+            return nextAppointment;
+        }
+
     }
 }

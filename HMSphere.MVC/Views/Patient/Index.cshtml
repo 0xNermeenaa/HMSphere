@@ -1,4 +1,10 @@
-﻿<style>
+﻿@model HMSphere.MVC.ViewModels.PatientsHistoryViewModel
+
+@{
+    ViewData["Title"] = "Home Dashboard";
+}
+
+<style>
     {
         box-sizing: border-box;
     }
@@ -135,8 +141,8 @@
         <img src="/images/AccountIcon.jpg" class="profile-img">
         <div class="profile-text">
             <p>Welcome,</p>
-            <h2 class="text-light">Kate Barker</h2>
-            <p>ID:453225</p>
+            <h2 class="text-light"> @Model.FirstName @Model.LastName </h2>
+            @* <p>@Model.</p> *@
         </div>
     </div>
 </div>
@@ -153,8 +159,8 @@
         <i class="bi bi-clipboard2-pulse"></i>
         <div class="mt-3">
             <h6><b>Next Appointment</b></h6>
-            <p>Thursday, 07 May</p>
-            <p>Dr. Izabella Sippial</p>
+            <p>@Model.NextAppointment?.AppointmentDate?.ToString("dddd, dd MMMM")</p>
+            <p>Dr.@Model.NextAppointment?.DoctorName</p>
         </div>
     </div>
     <div class="d-flex bg-light rounded-3 has-shadow m-3 p-3">
@@ -210,31 +216,21 @@
                 <thead class="table-header">
                     <tr>
                         <th scope="col">Doctor Name</th>
-                        <th scope="col">Clinic number</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Last Visit Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Dr. Ethan Preite</td>
-                        <td>1</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>7</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>7</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>4</td>
-                        <td>01-05-2024</td>
-                    </tr>
+                    @foreach (var item in Model.LatestAppointments)
+                    {
+                        <tr>
+                            <td>@item.DoctorName</td>
+                            <td>@item.Status</td>
+                            <td>@item.Date</td>
+
+                        </tr>
+                    }
+
                 </tbody>
             </table>
         </div>
@@ -244,34 +240,23 @@
             <table class="table table-bordered">
                 <thead class="table-header">
                     <tr>
-                        <th scope="col">Doctor Name</th>
                         <th scope="col">Diagnosis</th>
-                        <th scope="col">Last Visit Date</th>
+                        <th scope="col">CreatedDate</th>
+                        <th scope="col">Medications</th>
+                        <th scope="col">LastUpdated</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>Anxiety</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Ethan Preite</td>
-                        <td>Depression</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>Covid-19</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Dr. Izabella Sippial
-                        </td>
-                        <td> Alzheimer’s</td>
-                        <td>01-05-2024</td>
-                    </tr>
+                    @foreach (var item in Model.LatestMedicalRecords)
+                    {
+                        <tr>
+                            <td>@item.Diagnosis</td>
+                            <td>@item.CreatedDate</td>
+                            <td>@item.Medications</td>
+                            <td>@item.LastUpdated</td>
+
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

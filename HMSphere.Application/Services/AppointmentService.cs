@@ -170,6 +170,91 @@ namespace HMSphere.Application.Services
 
             return appointmentDto;
         }
+        public async Task<AppointmentDto> UpdateAppointment(AppointmentDto appointmentDto)
+        {
+            if (appointmentDto.Id == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Appointment ID is required for update."
+                };
+            }
+
+            var existingAppointment = await _context.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .FirstOrDefaultAsync(a => a.Id == appointmentDto.Id);
+
+            if (existingAppointment == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Appointment not found."
+                };
+            }
+
+            if (appointmentDto.Date == null || appointmentDto.AppointmentTime == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Invalid date or time for the appointment."
+                };
+            }
+
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == appointmentDto.DoctorId);
+            if (doctor == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "The selected doctor does not exist."
+                };
+            }
+
+            var department = await _context.Departments.FindAsync(appointmentDto.DepartmentId);
+            if (department == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "The selected department is invalid."
+                };
+            }
+
+            if (existingAppointment.DoctorId != appointmentDto.DoctorId || existingAppointment.Date != appointmentDto.Date || existingAppointment.AppointmentTime != appointmentDto.AppointmentTime)
+            {
+                var conflictingAppointment = await _context.Appointments
+                    .AnyAsync(a => a.DoctorId == appointmentDto.DoctorId
+                                   && a.Date == appointmentDto.Date
+                                   && a.AppointmentTime == appointmentDto.AppointmentTime
+                                   && a.Id != appointmentDto.Id); 
+
+                if (conflictingAppointment)
+                {
+                    return new AppointmentDto
+                    {
+                        IsSuccessful = false,
+                        ErrorMessage = "The selected doctor is not available at this time."
+                    };
+                }
+            }
+
+            // Map updated details
+            existingAppointment.DoctorId = doctor.Id;
+            existingAppointment.Date = appointmentDto.Date;
+            existingAppointment.AppointmentTime = appointmentDto.AppointmentTime;
+            existingAppointment.ReasonFor = appointmentDto.ReasonFor;
+
+            await _context.SaveChangesAsync();
+
+            appointmentDto.IsSuccessful = true;
+            appointmentDto.ErrorMessage = null;
+
+            return appointmentDto;
+        }
 
         public async Task<bool> ApproveAppointment(int appointmentId, bool isApproved)
         {
@@ -222,20 +307,18 @@ namespace HMSphere.Application.Services
             var pendingAppointments = await _context.Appointments
                 .Where(a => a.Status == Status.Pending)
                 .Include(a => a.Patient)
-                    .ThenInclude(p => p.User) // Ensure User is included with Patient
+                    .ThenInclude(p => p.User) 
                 .Include(a => a.Doctor)
-                    .ThenInclude(d => d.User) // Ensure User is included with Doctor
+                    .ThenInclude(d => d.User) 
                 .ToListAsync();
 
             return pendingAppointments.Select(appointment => new AppointmentDto
             {
                 Id = appointment.Id,
                 Date = appointment.Date,
-                // Safely access Doctor and Doctor.User with null checks
                 DoctorName = appointment.Doctor != null && appointment.Doctor.User != null
                     ? appointment.Doctor.User.UserName
                     : "Unknown Doctor",
-                // Safely access Patient and Patient.User with null checks
                 PatientName = appointment.Patient != null && appointment.Patient.User != null
                     ? appointment.Patient.User.UserName
                     : "Unknown Patient",
