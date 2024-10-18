@@ -74,10 +74,10 @@ namespace HMSphere.MVC.Controllers
 
             var appointmentDtos = await _appointmentService.GetAllAppointmentsByPatientIdAsync(userId);
 
-            if (appointmentDtos == null || !appointmentDtos.Any())
+           /* if (appointmentDtos == null || !appointmentDtos.Any())
             {
                 return View();
-            }
+            }*/
 
             var appointmentViewModels = appointmentDtos.Select(dto => new AppointmentViewModel
             {
@@ -98,7 +98,7 @@ namespace HMSphere.MVC.Controllers
         }
         public async Task<IActionResult> MedicalRecords()
         {
-            List<PatientMedicalRecordsViewModel> models = new();
+            List<MedicalRecordViewModel> models = new();
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
@@ -107,7 +107,7 @@ namespace HMSphere.MVC.Controllers
             var medicalrecords = await _patientService.GetAllMedicalRecordsAsync(currentUser.Id);
             foreach (var record in medicalrecords)
             {
-                var model=_mapper.Map<PatientMedicalRecordsViewModel>(record);
+                var model=_mapper.Map<MedicalRecordViewModel>(record);
                 models.Add(model);
             }
             return View(models);
@@ -142,9 +142,6 @@ namespace HMSphere.MVC.Controllers
             ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName");
            
             return View("CreateAppointment", model);
-
-
-
         }
 
 

@@ -17,8 +17,13 @@ namespace HMSphere.MVC.Controllers
 		private readonly IDoctorService _doctorService;
 		private readonly IStaffService _staffService;
 		private readonly IBaseRepository<Shift> _shiftRepo;
+		private readonly IBaseRepository<Staff> _staffRepo;
+		private readonly IBaseRepository<Doctor> _doctorRepo;
+		private readonly IBaseRepository<Patient> _patientRepo;
+
 
 		public AdminController(IAppointmentService appointmentService, IMapper mapper, IBaseRepository<Shift> shiftRepo,
+			IBaseRepository<Staff> staffRepo, IBaseRepository<Doctor> docotrRepo, IBaseRepository<Patient> patientRepo,
 			IPatientService patientService, IDoctorService doctorService, IStaffService staffService)
 		{
 			_appointmentService = appointmentService;
@@ -27,6 +32,9 @@ namespace HMSphere.MVC.Controllers
 			_doctorService = doctorService;
 			_staffService = staffService;
 			_shiftRepo = shiftRepo;
+			_doctorRepo = docotrRepo;
+			_staffRepo = staffRepo;
+			_patientRepo = patientRepo;
 		}
 
 		public IActionResult Index()
@@ -119,6 +127,47 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteStaff(int id)
+		{
+			var staff = await _staffRepo.GetByIdAsync(id);
+			if (staff == null)
+			{
+				return NotFound();
+			}
+			await _staffRepo.DeleteAsync(staff);  
+			TempData["Message"] = "Staff deleted successfully.";
+
+			return RedirectToAction("Staff");
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteDoctor(int id)
+		{
+			var doctor = await _doctorRepo.GetByIdAsync(id);
+			if (doctor == null)
+			{
+				return NotFound();
+			}
+			await _doctorRepo.DeleteAsync(doctor);
+			TempData["Message"] = "Doctor deleted successfully.";
+
+			return RedirectToAction("Doctors");
+		}
+		[HttpPost]
+		public async Task<IActionResult> DeletePatient(int id)
+		{
+			var patient = await _patientRepo.GetByIdAsync(id);
+			if (patient == null)
+			{
+				return NotFound();
+			}
+			await _patientRepo.DeleteAsync(patient);
+			TempData["Message"] = "Patient deleted successfully.";
+
+			return RedirectToAction("Patients");
+		}
 		[HttpPost]
 		public async Task<IActionResult> AddShift(ShiftDto newShift)
 		{
