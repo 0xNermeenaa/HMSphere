@@ -23,6 +23,26 @@ namespace HMSphere.Application.Services
             _context = context;
             _mapper = mapper;
         }
+
+        public async Task<IEnumerable<PatientDto>> GetAll()
+        {
+            try
+            {
+                var patients = await _context.Patients.Include(p => p.User)
+                    .ToListAsync();
+                if (!patients.Any())
+                {
+                    return new List<PatientDto>();
+                }
+                var dto = patients.Select(p => _mapper.Map<PatientDto>(p)).ToList();
+                return dto;
+            }
+            catch
+            {
+                return new List<PatientDto>();
+            }
+        }
+
         public async Task<IEnumerable<AppointmentDto>> GetAllAppointmentsAsync(string patientId)
         {
             var appointments = await _context.Appointments

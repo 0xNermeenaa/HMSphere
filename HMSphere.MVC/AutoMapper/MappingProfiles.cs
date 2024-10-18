@@ -17,9 +17,23 @@ namespace HMSphere.MVC.AutoMapper
                 .ForMember(dest=>dest.FirstName,p=>p.MapFrom(src=>src.User.FirstName))
 				.ForMember(dest=>dest.LastName,p=>p.MapFrom(src=>src.User.LastName))
                 .ForMember(dest=>dest.Gender,p=>p.MapFrom(src=>src.User.Gender))
+                .ForMember(dest=>dest.PhoneNumber,p=>p.MapFrom(src=>src.User.PhoneNumber))
 				.ReverseMap();   
+            CreateMap<Doctor , DoctorDto>()
+                .ForMember(dest=>dest.FirstName,d=>d.MapFrom(d=>d.User.FirstName))
+                .ForMember(dest=>dest.LastName,d=>d.MapFrom(d=>d.User.LastName))
+                .ForMember(dest=>dest.PhoneNumber,d=>d.MapFrom(d=>d.User.PhoneNumber))
+                .ForMember(dest=>dest.Department,d=>d.MapFrom(d=>d.Department.Name))
+				.ReverseMap();
+            CreateMap<DoctorDto , DoctorViewModel>().ReverseMap();
             CreateMap<PatientDto , PatientsHistoryViewModel>().ReverseMap();
-			CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
+            CreateMap<Staff, StaffDto>()
+                .ForMember(dest=>dest.FirstName,s=>s.MapFrom(src=>src.User.FirstName))
+                .ForMember(dest=>dest.LastName,s=>s.MapFrom(src=>src.User.LastName))
+                .ForMember(dest=>dest.PhoneNumber,s=>s.MapFrom(src=>src.User.PhoneNumber))
+                .ForMember(dest=>dest.Department,s=>s.MapFrom(src=>src.Department.Name))
+				.ReverseMap();
+            CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
 			CreateMap<MedicalRecordDto , MedicalRecordViewModel>().ReverseMap();
 			CreateMap<Doctor , DoctorViewModel>()
                 .ForMember(dest=>dest.FirstName,o=>o.MapFrom(src=>src.User.FirstName))

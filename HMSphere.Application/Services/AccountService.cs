@@ -62,7 +62,7 @@ namespace HMSphere.Application.Services
                 NID=model.NID,
                 Gender=model.Gender,
                 Address=model.Address,
-                
+                PhoneNumber=model.PhoneNumber,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

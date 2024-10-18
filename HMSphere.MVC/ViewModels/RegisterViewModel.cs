@@ -18,6 +18,7 @@ namespace HMSphere.MVC.ViewModels
 
 		[Required(ErrorMessage = "Phone number is required")]
 		[Phone(ErrorMessage = "Invalid phone number")]
+		[RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be a 11-digit number")]
 		public string PhoneNumber { get; set; }
 
 		[Required(ErrorMessage = "Gender is required")]

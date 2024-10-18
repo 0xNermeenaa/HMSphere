@@ -10,7 +10,5 @@ namespace HMSphere.Domain.Enums
     {
         OtherStaff,
         Admin,
-        Doctor,
-        Patient
     }
 }

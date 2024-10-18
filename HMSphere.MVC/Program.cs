@@ -43,7 +43,8 @@ namespace HMSphere.MVC
             builder.Services.AddScoped<IMailingService, MailingService>();
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
+			builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<IPatientService, PatientService>();
