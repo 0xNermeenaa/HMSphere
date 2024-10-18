@@ -20,17 +20,27 @@ namespace HMSphere.MVC.Controllers
             _userManager = userManager;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index()
         {
-            if(id == null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
-                return BadRequest("PatientID is missing.");
+                return NotFound();
             }
-            var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(id);
+            else
+            {
+                var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(currentUser.Id);
 
-            var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(id);
+                var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(currentUser.Id);
 
-            return View();
+                var patientViewModel = new PatientViewModel
+                {
+                    Last5Appointments = (List<AppointmentsViewModel>)lastFiveAppointments,
+                    Last5MedicalRecords = (List<MedicalRecordViewModel>)lastFiveMedicalRecords
+                };
+
+                return View(patientViewModel);
+            }
         }
         public async Task<IActionResult> Appointments()
         {

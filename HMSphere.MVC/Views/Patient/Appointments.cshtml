@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HMSphere.MVC.ViewModels.PatientAppointmentsViewModel>
+﻿@model IEnumerable<HMSphere.MVC.ViewModels.AppointmentsViewModel>
 
 <style>
     .profile-card {
@@ -171,16 +171,22 @@
                         </td>
                         <td>4</td>
                     </tr>
-                    @foreach (var appointment in Model)
-                    {
-                        @* <tr class="table-active">
-                            <td>@appointment.Id</td>
-                            <td>@appointment.Date</td>
-                            <td>@appointment.Status</td>
-                            <td>@appointment.ReasonFor</td>
-                            <td>@appointment.Clinic</td>
-                        </tr> *@
-                    }
+                    <tr class="table-active">
+                        @foreach(var appointment in Model)
+                        {
+                        <td>@appointment.PatientID</td>
+                        <td>@appointment.DoctorID</td>
+                        <td>@appointment.Date</td>
+                        <td>@appointment.Status</td>
+                        <td>
+                            <button class="btn btn-outline-dark" id="Appointment Reason">
+                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
+                            </button>
+                        </td>
+                        <td>@appointment.Clinic</td>
+                        }
+                    </tr>
+
                 </tbody>
             </table>
 
