@@ -20,6 +20,11 @@
 		.btn-view:hover {
 			background-color: #17a2b8;
 		}
+
+	a {
+		text-decoration: none;
+		color: white;
+	}
 </style>
 
 <div class="container mt-4">
@@ -56,6 +61,7 @@
 					<th>Phone No</th>
 					<th>Last Visit Date</th>
 					<th>Medical Record</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -74,13 +80,32 @@
 						<td>
 							<form asp-controller="Admin" asp-action="MedicalRecords" asp-route-data="@item.PatientId" method="get">
 								<input type="hidden" name="patientId" value="@item.PatientId" />
-								@* <button type="submit" class="btn btn-view">View</button> *@
-								<button class="btn btn-outline-dark" id="UpdatePatient">
+								<button class="btn btn-dark" id="UpdatePatient">
 									<a asp-controller="Admin" asp-action="UpdatePatient">View</a>
 								</button>
 							</form>
 						</td>
+						<td class="d-flex" style="gap:2px">
+							<form asp-controller="Admin" asp-action="Patient" asp-route-data="@item.PatientId" method="get">
+								<input type="hidden" name="StaffId" value="@item.PatientId" />
+								<button class="btn btn-success" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="UpdatePatients">Edit</a>
+								</button>
+							</form>
+							<form asp-controller="Admin" asp-action="Patient" asp-route-data="@item.PatientId" method="get">
+								<input type="hidden" name="StaffId" value="@item.PatientId" />
+								<button class="btn btn-primary" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="PatientDetails">Detials</a>
+								</button>
+							</form>
+							<form asp-controller="Admin" asp-action="Patient" asp-route-data="@item.PatientId" method="get">
+								<input type="hidden" name="StaffId" value="@item.PatientId" />
+								<button class="btn btn-danger" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="DeletePatient">Delete</a>
+								</button>
+							</form>
 
+						</td>
 					</tr>
 				}
 			</tbody>
