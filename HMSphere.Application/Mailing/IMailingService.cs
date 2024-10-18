@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 
 namespace HMSphere.Application.Mailing
-
 {
     public interface IMailingService
     {

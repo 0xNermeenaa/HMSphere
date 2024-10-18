@@ -60,7 +60,7 @@ namespace HMSphere.MVC.Controllers
 
             if (appointmentDtos == null || !appointmentDtos.Any())
             {
-                return NotFound("No appointments found for this patient.");
+                return View();
             }
 
             var appointmentViewModels = appointmentDtos.Select(dto => new AppointmentViewModel
@@ -106,14 +106,11 @@ namespace HMSphere.MVC.Controllers
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> CreateAppointment(AppointmentViewModel model)
         {
-
             if (ModelState.IsValid)
             {
-
                 var appointmentDto = _mapper.Map<AppointmentDto>(model);
 
                 var result = await _appointmentService.CreateAppointment(appointmentDto);

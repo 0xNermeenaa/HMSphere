@@ -1,4 +1,5 @@
 ﻿using HMSphere.Application.DTOs;
+using HMSphere.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace HMSphere.Application.Interfaces
 {
 	public interface IStaffService
 	{
+        Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId);
 		Task<List<StaffDto>> GetAllAsync();
 	}
 }
