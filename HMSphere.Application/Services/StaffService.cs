@@ -39,16 +39,20 @@ namespace HMSphere.Application.Services
             var ShiftsResult = StaffShifts.Select(p => _mapper.Map<ShiftDto>(p)).ToList();
             return ShiftsResult;
 		}
-
+		public async Task<IEnumerable<StaffDto>> GetAllAsync()
+		{
+			var staff = await _context.Staff.Include(d => d.User)
+					.Include(d => d.Department).ToListAsync();
 			if (!staff.Any())
 			{
 				return new List<StaffDto>();
 			}
-
 			var dto = staff.Select(s => _mapper.Map<StaffDto>(s)).ToList();
 			return dto;
 		}
-        public async Task<bool> AssignStaffToShiftAsync(int shiftId , string staffId)
+
+
+		public async Task<bool> AssignStaffToShiftAsync(int shiftId , string staffId)
         {
             var StaffShift = new StaffShift { ShiftId = shiftId, StaffId = staffId};
             await _dbSet.AddAsync(StaffShift);

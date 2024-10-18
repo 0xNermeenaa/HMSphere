@@ -81,6 +81,10 @@ namespace HMSphere.MVC.Controllers
 		public async Task<IActionResult> Staff()
 		{
 			var staff = await _staffService.GetAllAsync();
+			if (!staff.Any())
+			{
+				return View();
+			}
 			var model = staff.Select(s => _mapper.Map<StaffViewModel>(s)).ToList();
 			return View(model);
 		}
@@ -91,8 +95,6 @@ namespace HMSphere.MVC.Controllers
             {
                 return BadRequest("Patient ID is required.");
             }
-
-<<<<<<< HEAD
             var medicalRecords = await _doctorService.GetAllMedicalRecordsAsync(patientId);
             if (medicalRecords == null || !medicalRecords.Any())
             {
@@ -117,17 +119,6 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
-    }
-=======
-			var medicalRecords = await _doctorService.GetAllMedicalRecordsAsync(patientId);
-			if (medicalRecords == null || !medicalRecords.Any())
-			{
-				return NotFound("No medical records found for the provided patient ID.");
-			}
-			var model = medicalRecords.Select(m => _mapper.Map<MedicalRecordViewModel>(m)).ToList();
-			return View(model);
-		}
-
 		[HttpPost]
 		public async Task<IActionResult> AddShift(ShiftDto newShift)
 		{
@@ -189,10 +180,5 @@ namespace HMSphere.MVC.Controllers
 
 			return RedirectToAction("Shifts"); // Redirect after deletion
 		}
-
-
-
 	}
->>>>>>> 67a82c39f0b36b1af251b4b5eb3b979f41c0798c
-
 }
