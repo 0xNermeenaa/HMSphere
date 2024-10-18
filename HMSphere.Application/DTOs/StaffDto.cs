@@ -15,6 +15,6 @@ namespace HMSphere.Application.DTOs
 		public string JobTitle { get; set; }
         public DateOnly? HireDate { get; set; }
         public string StaffShift { get; set; }
-        public object PhoneNumber { get; set; }
-    }
+		public string PhoneNumber { get; set; }
+	}
 }

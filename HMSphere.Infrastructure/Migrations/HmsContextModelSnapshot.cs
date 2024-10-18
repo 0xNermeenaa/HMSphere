@@ -139,7 +139,7 @@ namespace HMSphere.Infrastructure.Migrations
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("PatientId")

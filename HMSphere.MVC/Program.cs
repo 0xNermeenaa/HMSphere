@@ -132,7 +132,6 @@ namespace HMSphere.MVC
 				var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
 				//await StoredContextSeed.SeedUserAsync(usermanager,context);
 				// await IdentitySeed.SeedUserAsync(usermanager);
-			//	await StoredContextSeed.AppointmentSeed(context);
             }
 
 
