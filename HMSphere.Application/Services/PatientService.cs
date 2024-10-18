@@ -130,5 +130,12 @@ namespace HMSphere.Application.Services
             return nextAppointment;
         }
 
+        public async Task<List<Patient>> GetPatients()
+        {
+           
+                return await _context.Patients.Include(d => d.User).ToListAsync();
+          
+        }
+
     }
 }
