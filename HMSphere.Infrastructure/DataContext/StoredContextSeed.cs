@@ -36,7 +36,7 @@ namespace HMSphere.Infrastructure.DataContext
                 {
                     context.Appointments.Add(item);
                 }
-                await context.SaveChangesAsync();
+                //await context.SaveChangesAsync();
             }
         }
 
