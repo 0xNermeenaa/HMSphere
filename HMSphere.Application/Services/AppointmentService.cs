@@ -170,6 +170,85 @@ namespace HMSphere.Application.Services
 
             return appointmentDto;
         }
+        public async Task<AppointmentDto> CreateAppointmentByAdmin(AppointmentDto appointmentDto)
+        {
+            if (appointmentDto.Date == null || appointmentDto.AppointmentTime == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Invalid date or time for the appointment."
+                };
+            }
+
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == appointmentDto.DoctorId);
+            if (doctor == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "The selected doctor does not exist."
+                };
+            }
+
+            var patient = await _context.Patients.FindAsync(appointmentDto.PatientId);
+            if (patient == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "The selected Patient is invalid."
+                };
+            }
+
+            // Check for conflicting appointments
+            var conflictingAppointment = await _context.Appointments
+                .AnyAsync(a => a.DoctorId == appointmentDto.DoctorId
+                               && a.Date == appointmentDto.Date
+                               && a.AppointmentTime == appointmentDto.AppointmentTime);
+
+            if (conflictingAppointment)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "The selected doctor is not available at this time."
+                };
+            }
+
+            var appointment = _mapper.Map<Appointment>(appointmentDto);
+
+            
+
+            appointment.DoctorId = doctor.Id;
+            appointment.Doctor = doctor;
+
+         
+            if (patient == null)
+            {
+                return new AppointmentDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Patient not found."
+                };
+            }
+            
+            appointment.Patient = patient;
+            appointment.PatientId = patient.Id;
+            appointment.Status = Status.Pending;
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            appointmentDto.Status = Status.Pending;
+            appointmentDto.IsApproved = null;
+            appointmentDto.Id = appointment.Id;
+            appointmentDto.PatientId = appointment.PatientId;
+            appointmentDto.IsSuccessful = true;
+            appointmentDto.ErrorMessage = null;
+
+            return appointmentDto;
+        }
+
         public async Task<AppointmentDto> UpdateAppointment(AppointmentDto appointmentDto)
         {
             if (appointmentDto.Id == null)

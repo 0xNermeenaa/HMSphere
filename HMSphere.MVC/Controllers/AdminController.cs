@@ -4,6 +4,9 @@ using HMSphere.MVC.ViewModels;
 using HMSphere.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using HMSphere.Application.DTOs;
+using HMSphere.Application.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HMSphere.MVC.Controllers
 {
@@ -14,15 +17,16 @@ namespace HMSphere.MVC.Controllers
         private readonly IPatientService _patientService;
         private readonly IDoctorService _doctorService;
         private readonly IStaffService _staffService;
-
+        private readonly IDepartmentService _departmentService;
         public AdminController(IAppointmentService appointmentService, IMapper mapper,
-            IPatientService patientService, IDoctorService doctorService, IStaffService staffService)
+            IPatientService patientService, IDoctorService doctorService, IStaffService staffService, IDepartmentService departmentService)
         {
             _appointmentService = appointmentService;
             _mapper = mapper;
             _patientService = patientService;
             _doctorService = doctorService;
             _staffService = staffService;
+            _departmentService = departmentService;
         }
 
         public IActionResult Index()
@@ -99,6 +103,40 @@ namespace HMSphere.MVC.Controllers
         public IActionResult AddDoctor()
         {
             return View();
+        }
+        public async Task<IActionResult> CreateAppointment()
+        {
+            ViewData["Patients"] = new SelectList(await _patientService.GetPatients(), "Id", "User.UserName");
+
+            ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(null), "Id", "User.UserName");
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment(AppointmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var appointmentDto = _mapper.Map<AppointmentDto>(model);
+
+                var result = await _appointmentService.CreateAppointmentByAdmin(appointmentDto);
+                if (!result.IsSuccessful)
+                {
+                    ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                    return View("CreateAppointment", model);
+                }
+
+                return RedirectToAction("Appointments");
+            }
+            ViewData["Patients"] = new SelectList(await _patientService.GetAll(), "Id", "User.UserName");
+            ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName");
+
+            return View("CreateAppointment", model);
+
+
+
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using HMSphere.Application.DTOs;
+using HMSphere.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace HMSphere.Application.Interfaces
         Task<NextAppointmentDto> GetNextAppointmentByPatientIdAsync(string patientId);
 
         Task<IEnumerable<PatientDto>> GetAll();
+        Task<List<Patient>> GetPatients();
     }
 }

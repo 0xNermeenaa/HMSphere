@@ -48,13 +48,13 @@ namespace HMSphere.MVC.Controllers
             {
                 var patient = _mapper.Map<PatientsHistoryViewModel>(response.Model);
                 var latestRecords = await GetLatestMedicalRecords(id);
-                var latestAppointments = await GetLatestAppointmentsModel(id);
+                //var latestAppointments = await GetLatestAppointmentsModel(id);
                 if (patient != null)
                 {
                     var nextappointment=await _patientService.GetNextAppointmentByPatientIdAsync(id);
 
                     patient.NextAppointment=_mapper.Map<NextAppointmentViewModel>(nextappointment);
-                    patient.LatestAppointments = latestAppointments;
+                    //patient.LatestAppointments = latestAppointments;
                     patient.LatestMedicalRecords = latestRecords;
                     return View(patient);
                 }
@@ -236,16 +236,16 @@ namespace HMSphere.MVC.Controllers
             }
             return models;
         }
-        private async Task<List<AppointmentViewModel>> GetLatestAppointmentsModel(string id)
-        {
-            var models = new List<AppointmentViewModel>();
-            var latestAppointmentsModels = await _patientService.GetLast5AppointmentsAsync(id);
-            foreach (var model in latestAppointmentsModels)
-            {
-                var latestAppointment = _mapper.Map<AppointmentViewModel>(model);
-                models.Add(latestAppointment);
-            }
-            return models;
-        }
+        //private async Task<List<AppointmentViewModel>> GetLatestAppointmentsModel(string id)
+        //{
+        //    var models = new List<AppointmentViewModel>();
+        //    var latestAppointmentsModels = await _patientService.GetLast5AppointmentsAsync(id);
+        //    foreach (var model in latestAppointmentsModels)
+        //    {
+        //        var latestAppointment = _mapper.Map<AppointmentViewModel>(model);
+        //        models.Add(latestAppointment);
+        //    }
+        //    return models;
+        //}
     }
 }
