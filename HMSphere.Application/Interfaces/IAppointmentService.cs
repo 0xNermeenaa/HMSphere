@@ -10,7 +10,11 @@ namespace HMSphere.Application.Interfaces
 {
 	public interface IAppointmentService
 	{
+        Task<List<AppointmentDto>> GetAllAppointmentsByPatientIdAsync(string patientId);
+        Task<AppointmentDto> GetAppointmentByIdAsync(int id);
+
         Task<AppointmentDto> CreateAppointment(AppointmentDto appointmentDto);
+
         Task<bool> ApproveAppointment(int appointmentId, bool isApproved);
         Task<IEnumerable<AppointmentDto>> GetPendingAppointments();
 	}

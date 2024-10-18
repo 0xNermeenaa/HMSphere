@@ -23,14 +23,6 @@ namespace HMSphere.Application.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<AppointmentDto>> GetAllAppointmentsAsync(string patientId)
-        {
-            var appointments = await _context.Appointments
-               .Where(a => a.PatientId == patientId)
-               .OrderByDescending(a => a.Date)
-               .ToListAsync();
-            return appointments.Select(a => _mapper.Map<AppointmentDto>(a)).ToList();
-        }
         public async Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string patientId)
         {
             var medicalrecords = await _context.MedicalRecords
