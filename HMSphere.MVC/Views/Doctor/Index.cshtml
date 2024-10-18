@@ -137,7 +137,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Created Date</th>
+                        <th scope="col">Time</th>
                         <th scope="col">Details</th>
                     </tr>
                 </thead>
@@ -146,9 +146,9 @@
                     {
                         <tr>
                             <td>@item.PatientName</td>
-                            <td>@item.Date</td>
+                            <td>@item.Date.Date</td>
                             <td>@item.Status</td>
-                            <td>@item.CreatedDate</td>
+                            <td>@item.AppointmentTime</td>
                             <td>
                                 <form asp-controller="Doctor" asp-action="AppointmentDetails" asp-route-data="@item.Id" method="get">
                                     <input type="hidden" name="appointmentId" value="@item.Id" />

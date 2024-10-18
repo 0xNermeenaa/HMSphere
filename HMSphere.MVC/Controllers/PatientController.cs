@@ -59,19 +59,35 @@ namespace HMSphere.MVC.Controllers
         }
         public async Task<IActionResult> Appointments()
         {
-            List<PatientAppointmentsViewModel> models = new();
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound();
+                return BadRequest("User is not authenticated.");
             }
-            var appointments = await _patientService.GetAllAppointmentsAsync(currentUser.Id);
-            foreach (var appointment in appointments)
+
+            var appointmentDtos = await _appointmentService.GetAllAppointmentsByPatientIdAsync(userId);
+
+            if (appointmentDtos == null || !appointmentDtos.Any())
             {
-                var model=_mapper.Map<PatientAppointmentsViewModel>(appointment);
-                models.Add(model);
+                return NotFound("No appointments found for this patient.");
             }
-            return View(models);
+
+            var appointmentViewModels = appointmentDtos.Select(dto => new AppointmentViewModel
+            {
+                Id = dto.Id,
+                Date = dto.Date,
+                Status = dto.Status,
+                ReasonFor = dto.ReasonFor,
+                Clinic = dto.Clinic,
+                PatientId = dto.PatientId,
+                DepartmentId = dto.DepartmentId,
+                AppointmentTime = dto.AppointmentTime,
+                DoctorId = dto.DoctorId,
+                PatientName = dto.PatientName,
+                DoctorName = dto.DoctorName
+            }).ToList();
+
+            return View(appointmentViewModels);
         }
         public async Task<IActionResult> MedicalRecords()
         {
@@ -134,10 +150,33 @@ namespace HMSphere.MVC.Controllers
             var doctors = await _doctorService.GetDoctorsByDepartmentIdAsync(departmentId);
             return Json(new SelectList(doctors, "Id", "User.UserName"));
         }
-        public IActionResult AppointmentDetails()
+        public async Task<IActionResult> AppointmentDetails(int id)
         {
-            return View();
+            if (id == 0)
+            {
+                return BadRequest("Invalid appointment ID.");
+            }
+
+            var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
+
+            if (appointment == null)
+            {
+                return NotFound("Appointment not found.");
+            }
+
+            var viewModel = new AppointmentViewModel
+            {
+                Id = appointment.Id,
+                Date = appointment.Date,
+                AppointmentTime = appointment.AppointmentTime,
+                PatientName = appointment.PatientName,
+                DoctorName = appointment.DoctorName,
+                ReasonFor = appointment.ReasonFor,
+            };
+
+            return View(viewModel);
         }
+
 
         public IActionResult MedicalRecordDetails()
         {

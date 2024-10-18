@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HMSphere.MVC.ViewModels.AppointmentsViewModel>
+@model List<HMSphere.MVC.ViewModels.AppointmentViewModel>
 
 <style>
     .profile-card {
@@ -105,88 +105,44 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Time</th>
                         <th scope="col">Status</th>
                         <th scope="col">Reason For Appointment</th>
-                        <th scope="col">Clinic</th>
+                        <th scope="col">Details</th>
+                        <th scope="col">Update</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                    <tr class="table-active">
-                        <td>1</td>
-                        <td>Dr. Izabella Sippial</td>
-                        <td>13-8-2024</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>4</td>
-                    </tr>
-                        @foreach(var appointment in Model)
-                        {
-                    <tr class="table-active">
-                        <td>@appointment.PatientID</td>
-                        <td>@appointment.DoctorID</td>
-                        <td>@appointment.Date</td>
-                        <td>@appointment.Status</td>
-                        <td>
-                            <button class="btn btn-outline-dark" id="Appointment Reason">
-                                <a asp-controller="Patient" asp-action="AppointmentDetails">Appointment Reason</a>
-                            </button>
-                        </td>
-                        <td>@appointment.Clinic</td>
-                    </tr>
-                        }
+                    @foreach (var appointment in Model)
+                    {
+                        <tr class="@(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "table-success" : "table-active")">
+                            <td>@appointment.Id</td>
+                            <td>@appointment.Date?.ToString("dd-MM-yyyy")</td>
+                            <td>@appointment.AppointmentTime?.ToString(@"hh\:mm")</td>
+                            <td>@appointment.Status</td>
+                            <td>@appointment.ReasonFor</td>
 
+                            @*                            <td>
+                        <button class="btn btn-outline-dark"
+                        @(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "" : "disabled")>
+                        <a asp-controller="Patient" asp-action="AppointmentDetails" asp-route-id="@appointment.Id">
+                        Appointment Details
+                        </a>
+                        </button>
+                        </td> *@
+                            <td>
+                                <a asp-action="AppointmentDetails" asp-route-id="@appointment.Id" class="btn btn-outline-dark">View Details</a>
+
+                            </td>
+
+                            <td>
+                                <button class="btn btn-outline-primary"
+                                @(appointment.Status != HMSphere.Domain.Enums.Status.Pending ? "disabled" : "")>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
