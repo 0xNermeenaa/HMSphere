@@ -12,17 +12,21 @@ namespace HMSphere.Domain.Entities
     public class Appointment
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }= DateTime.Now;
-        public Status Status { get; set; } = Status.Scheduled;
-        public string ReasonFor { get; set; } = string.Empty;
-        public string Clinic { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public bool IsDeleted { get; set; } = false;
-        public string DoctorId { get; set; }
-        public string PatientId { get; set; }
+        public DateTime? Date { get; set; }
+        public Status? Status { get; set; } 
+        public string? ReasonFor { get; set; }
+        public string? Clinic { get; set; } 
+        public TimeSpan? AppointmentTime { get; set; }
 
-        public virtual Doctor Doctor { get; set; }
-        public virtual Patient Patient { get; set; }
+        public bool? IsApproved { get; set; }
+        public bool IsDeleted { get; set; }
+
+
+        public string? DoctorId { get; set; }
+        public string? PatientId { get; set; }
+
+        public virtual Doctor? Doctor { get; set; } = new();
+        public virtual Patient? Patient { get; set; }= new();
 
     }
 }

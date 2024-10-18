@@ -6,7 +6,8 @@ namespace HMSphere.MVC.ViewModels
 {
 	public class AppointmentsViewModel
 	{
-		[Required]
+        public int Id { get; set; }
+        [Required]
 		public DateTime Date { get; set; }
 		[Required]
 		public Status Status { get; set; }
@@ -15,8 +16,8 @@ namespace HMSphere.MVC.ViewModels
 		[Required]
 		public string Clinic { get; set; }
 		[Required]
-		public DateTime CreatedDate { get; set; }
-		[Required]
+        public TimeSpan? AppointmentTime { get; set; }
+        [Required]
 		public bool IsDeleted { get; set; }
 		[Required]
 		public string DoctorID { get; set; }

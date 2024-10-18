@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Application.Interfaces
 {
-    public interface IStaffService
-    {
+	public interface IStaffService
+	{
         Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId);
 
-    }
+	}
 }

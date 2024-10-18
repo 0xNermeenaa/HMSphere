@@ -18,8 +18,9 @@ namespace HMSphere.Application.DTOs
         public string? Gender { get; set; }
         public string? Address { get; set; }
         public string? Role {  get; set; }
+        public string? PhoneNumber {  get; set; }
 
-        //for doctor
+		//for doctor
 		public string? Specialization { get; set; }
         public int? DepartmentId { get; set; }
 

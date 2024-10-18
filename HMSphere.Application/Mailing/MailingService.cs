@@ -19,12 +19,51 @@ namespace HMSphere.Application.Mailing
 			Send(emailMessage);
 		}
 
-		private MimeMessage CreateEmailMessage(MailMessage message)
-		{
-			var emailMessage = new MimeMessage();
-			emailMessage.From.Add(new MailboxAddress("HMS", _mailSettings.From));  // Changed "email" to "sender"
-			emailMessage.To.AddRange(message.To);
-			emailMessage.Subject = message.Subject;
+        public async Task SendMailAsync(string mailTo, string subject, string body, IList<IFormFile> attachments = null)
+        {
+            //throw new NotImplementedException();
+            var email = new MimeMessage
+            {
+                Sender = MailboxAddress.Parse(_mailSettings.Email),
+                Subject = subject
+            };
+            email.To.Add(MailboxAddress.Parse(mailTo));
+            var builder = new BodyBuilder();
+            if (attachments != null) 
+             {
+                byte[] fileBytes;
+                foreach (var file in attachments)
+                { 
+                  if (file.Length > 0)
+                    {
+                        using var ms = new MemoryStream();
+                        file.CopyTo(ms);
+                        fileBytes = ms.ToArray();
+
+                        builder.Attachments.Add(file.FileName,fileBytes, ContentType.Parse(file.ContentType));
+                    }
+                }
+             }
+
+            builder.HtmlBody = body;
+            email.Body = builder.ToMessageBody();
+            email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Email));
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.DisplayName, _mailSettings.Password);
+            await smtp.SendAsync(email);    
+
+            smtp.Disconnect(true);
+        }
+
+
+        private MimeMessage CreateEmailMessage(MailMessage message)
+        {
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("HMS", _mailSettings.Email));  // Changed "email" to "sender"
+            emailMessage.To.AddRange(message.To);
+            emailMessage.Subject = message.Subject;
 
 			var bodyBuilder = new BodyBuilder
 			{
@@ -36,24 +75,24 @@ namespace HMSphere.Application.Mailing
 			return emailMessage;
 		}
 
-		private void Send(MimeMessage message)
-		{
-			using (var client = new SmtpClient())
-			{
-				try
-				{
-					client.Connect(_mailSettings.SmtpServer, _mailSettings.Port, true);
-					client.AuthenticationMechanisms.Remove("XOAUTH2");
-					client.Send(message);
-					client.Authenticate(_mailSettings.Username, _mailSettings.Password);
-				}
-				finally
-				{
-					client.Disconnect(true);
-				}
-			}
-		}
-	}
+        private void Send(MimeMessage message)
+        {
+            using (var client = new SmtpClient())
+            {
+                try
+                {
+                    client.Connect(_mailSettings.Host, _mailSettings.Port, true);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.Authenticate(_mailSettings.DisplayName, _mailSettings.Password);
+                    client.Send(message);
+                }
+                finally
+                {
+                    client.Disconnect(true);
+                }
+            }
+        }
+    }
 
 
 

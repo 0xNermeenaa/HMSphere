@@ -5,7 +5,8 @@ namespace HMSphere.MVC.ViewModels
 {
 	public class PatientsHistoryViewModel
 	{
-		[Required]
+        public  string PatientId { get; set; }
+        [Required]
 		public string FirstName { get; set; }
 
 		[Required]

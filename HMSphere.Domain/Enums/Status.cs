@@ -8,7 +8,7 @@ namespace HMSphere.Domain.Enums
 {
     public enum Status
     {
-        Scheduled,
+        Pending,
         Completed,
         Cancelled
     }

@@ -63,13 +63,17 @@ namespace HMSphere.MVC
             options.UseSqlServer(builder.Configuration
             .GetConnectionString("DefaultConnection")));
 
+			//email
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
+
             //configure  Services
             builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
             builder.Services.AddScoped<IMailingService, MailingService>();
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddScoped<IAppointmentService, AppointmentsService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
+			builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<IPatientService, PatientService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
@@ -105,29 +109,30 @@ namespace HMSphere.MVC
             //});
             #endregion
 
-            #region cookies
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Account/Login";
-                });
-            #endregion
-            builder.Services.AddControllersWithViews();
+			#region cookies
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			})
+				.AddCookie(options =>
+				{
+					options.LoginPath = "/Account/Login";
+				});
+			#endregion
+
+			builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
-            //For Seeding Data 
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<HmsContext>();
-                var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                await StoredContextSeed.SeedAsync(context);
-                //await StoredContextSeed.SeedUserAsync(usermanager,context);
-                // await IdentitySeed.SeedUserAsync(usermanager);
+			//For Seeding Data 
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				var context = services.GetRequiredService<HmsContext>();
+				var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
+				//await StoredContextSeed.SeedUserAsync(usermanager,context);
+				// await IdentitySeed.SeedUserAsync(usermanager);
+				await StoredContextSeed.AppointmentSeed(context);
             }
 
 

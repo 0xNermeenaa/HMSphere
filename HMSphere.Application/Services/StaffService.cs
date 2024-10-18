@@ -13,16 +13,17 @@ using System.Threading.Tasks;
 namespace HMSphere.Application.Services
 {
     public class StaffService : IStaffService
-    {
-        private readonly HmsContext _context;
-        private readonly IMapper _mapper;
-        public StaffService(HmsContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+	{
+		private readonly HmsContext _context;
+		private readonly IMapper _mapper;
+
+		public StaffService(HmsContext context, IMapper mapper)
+		{
+			_context = context;
+			_mapper = mapper;
+		}
         public async Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId)
-        {
+		{
             var StaffShifts = await _context.StaffShifts
                 .Where(m => m.StaffId == StaffId && !m.IsDeleted)
                 .Select(m => m.Shift)
@@ -30,6 +31,6 @@ namespace HMSphere.Application.Services
                 .ToListAsync();
             var ShiftsResult = StaffShifts.Select(p => _mapper.Map<ShiftDto>(p)).ToList();
             return ShiftsResult;
-        }
-    }
+		}
+	}
 }
