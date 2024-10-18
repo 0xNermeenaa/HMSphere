@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Numerics;
+using System.Security.Claims;
 
 namespace HMSphere.MVC.Controllers
 {
@@ -37,21 +38,22 @@ namespace HMSphere.MVC.Controllers
             _patientService = patientService;
         }
        
-        public async Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(id))
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
             {
                 return NotFound();
             }
-            var response = await _patientService.Profile(id);
+            var response = await _patientService.Profile(userId);
             if (response.IsSuccess)
             {
                 var patient = _mapper.Map<PatientsHistoryViewModel>(response.Model);
-                var latestRecords = await GetLatestMedicalRecords(id);
-                var latestAppointments = await GetLatestAppointmentsModel(id);
+                var latestRecords = await GetLatestMedicalRecords(userId);
+                var latestAppointments = await GetLatestAppointmentsModel(userId);
                 if (patient != null)
                 {
-                    var nextappointment=await _patientService.GetNextAppointmentByPatientIdAsync(id);
+                    var nextappointment=await _patientService.GetNextAppointmentByPatientIdAsync(userId);
 
                     patient.NextAppointment=_mapper.Map<NextAppointmentViewModel>(nextappointment);
                     patient.LatestAppointments = latestAppointments;

@@ -6,6 +6,7 @@ using HMSphere.Infrastructure.Repositories;
 using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HMSphere.MVC.Controllers
 {
@@ -27,23 +28,24 @@ namespace HMSphere.MVC.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(id))
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
             {
                 return NotFound();
             }
-            var response = await _doctorService.Profile(id);
+            var response = await _doctorService.Profile(userId);
             if (response.IsSuccess)
             {
                 var doctor = _mapper.Map<DoctorViewModel>(response.Model);
-				var latestAppointments= await GetLatestAppointmentsModel(id);
-				var latestRecords = await GetLatestMedicalRecords(id);
+				var latestAppointments= await GetLatestAppointmentsModel(userId);
+				var latestRecords = await GetLatestMedicalRecords(userId);
                 if (doctor != null)
 				{
-					var appoints = await _doctorService.GetNext7DaysAppointments(id);
-					var patients=await _doctorService.GetNumberOfPatients(id);
-					var records=await _doctorService.GetNumberOfMedicalRecords(id);
+					var appoints = await _doctorService.GetNext7DaysAppointments(userId);
+					var patients=await _doctorService.GetNumberOfPatients(userId);
+					var records=await _doctorService.GetNumberOfMedicalRecords(userId);
 
                     doctor.NumberOfPatients = patients;
 					doctor.UpcomingAppointmentsCount = appoints;
