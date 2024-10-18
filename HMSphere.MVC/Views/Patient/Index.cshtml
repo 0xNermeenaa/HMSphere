@@ -1,4 +1,5 @@
-﻿<style>
+﻿@model HMSphere.MVC.ViewModels.PatientViewModel
+<style>
     {
         box-sizing: border-box;
     }
@@ -209,34 +210,42 @@
             <table class="table table-bordered">
                 <thead class="table-header">
                     <tr>
-                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Patient Name</th>
                         <th scope="col">Clinic number</th>
                         <th scope="col">Last Visit Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Dr. Ethan Preite</td>
+                        <td>Ethan Preite</td>
                         <td>1</td>
                         <td>01-05-2024</td>
                     </tr>
                     <tr>
-                        <td>Dr. Sara Littrell</td>
+                        <td>Sara Littrell</td>
                         <td>7</td>
                         <td>01-05-2024</td>
                     </tr>
                     <tr>
-                        <td>Dr. Sara Littrell</td>
+                        <td>Sara Littrell</td>
                         <td>7</td>
                         <td>01-05-2024</td>
                     </tr>
                     <tr>
-                        <td>Dr. Izabella Sippial</td>
+                        <td>Izabella Sippial</td>
                         <td>4</td>
                         <td>01-05-2024</td>
                     </tr>
+                      <tr>
+                          @foreach(var app in Model.Last5Appointments){
+                        <td>@app.PatientName</td>
+                        <td>@app.Clinic</td>
+                        <td>@app.Date</td>
+                          }
+                    </tr>
                 </tbody>
             </table>
+
         </div>
 
         <div class="table-width m-2">
@@ -244,33 +253,19 @@
             <table class="table table-bordered">
                 <thead class="table-header">
                     <tr>
-                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Created Date</th>
                         <th scope="col">Diagnosis</th>
-                        <th scope="col">Last Visit Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>Anxiety</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Ethan Preite</td>
-                        <td>Depression</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>Dr. Sara Littrell</td>
-                        <td>Covid-19</td>
-                        <td>01-05-2024</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Dr. Izabella Sippial
-                        </td>
-                        <td> Alzheimer’s</td>
-                        <td>01-05-2024</td>
+                        @foreach(var mr in Model.Last5MedicalRecords)
+                        {
+                        <td> @mr.PatientId</td>
+                        <td>@mr.CreatedDate</td>
+                        <td>@mr.Diagnosis</td>
+                        }
                     </tr>
                 </tbody>
             </table>
