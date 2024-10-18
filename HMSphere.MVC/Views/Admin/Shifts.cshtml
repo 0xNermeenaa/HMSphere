@@ -1,0 +1,82 @@
+﻿@model HMSphere.MVC.ViewModels.ShiftManagementViewModel
+
+<h2>Shift Management</h2>
+
+<form asp-action="AddShift" method="post">
+	<div class="form-group row">
+		<div class="col-md-4">
+			<label asp-for="NewShift.Type">Shift Type</label>
+			<select asp-for="NewShift.Type" class="form-control">
+				<option value="">Select Shift Type</option>
+				<option value="Morning">Morning</option>
+				<option value="Evening">Evening</option>
+				<option value="Overnight">Overnight</option>
+			</select>
+		</div>
+		<div class="col-md-4">
+			<label asp-for="NewShift.StartTime">Start Time</label>
+			<input asp-for="NewShift.StartTime" type="time" class="form-control" required />
+		</div>
+		<div class="col-md-4">
+			<label asp-for="NewShift.EndTime">End Time</label>
+			<input asp-for="NewShift.EndTime" type="time" class="form-control" required />
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<div class="col-md-12">
+			<label asp-for="NewShift.Notes">Notes</label>
+			<textarea asp-for="NewShift.Notes" rows="1" class="form-control"></textarea>
+		</div>
+	</div>
+	</br>
+	<button type="submit" class="btn btn-primary">Add New Shift</button>
+</form>
+</br>
+<h3>Current Shifts</h3>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Shift Type</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+			<th>Notes</th>
+			<th>Status</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var shift in Model.Shifts)
+		{
+			<tr>
+				<td>@shift.Type</td>
+				<td>@shift.StartTime</td>
+				<td>@shift.EndTime</td>
+				<td>@shift.Notes</td>
+				<td>@(shift.IsActive ? "Active" : "Inactive")</td>
+				<td class="d-flex" style="gap:2px">
+					<form asp-action="AssignStaffToShift" method="post">
+						@Html.AntiForgeryToken()
+						<button type="submit" class="btn btn-primary">Assign Staff</button>
+					</form>
+					<form asp-action="AssignDoctorToShift" method="post">
+						@Html.AntiForgeryToken()
+						<button type="submit" class="btn btn-success">Assign Doctor</button>
+					</form>
+
+					<form asp-action="DeleteShift" method="post" style="display:inline;">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="id" value="@shift.Id" />
+						<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this shift?');">Delete Shift</button>
+					</form>
+				</td>
+			</tr>
+		}
+
+		@if (TempData["Message"] != null)
+		{
+			<div class="alert alert-success">@TempData["Message"]</div>
+		}
+	</tbody>
+</table>

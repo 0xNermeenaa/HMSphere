@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<HMSphere.MVC.ViewModels.ShiftViewModel>
+@using System.Globalization
 
 @{
 	ViewData["Title"] = "Staff Shift Schedule";
@@ -43,8 +44,8 @@
 				{
 					<tr>
 						<td>@shift.Type</td>
-						<td>@shift.StartTime.ToString("hh:mm tt")</td>
-						<td>@shift.EndTime.ToString("hh:mm tt")</td>
+						<td>@shift.StartTime.ToString("hh:mm tt", CultureInfo.InvariantCulture)</td>
+						<td>@shift.EndTime.ToString("hh:mm tt", CultureInfo.InvariantCulture)</td>
 						<td>@shift.Notes</td>
 						<td>@(shift.IsActive ? "Yes" : "No")</td>
 					</tr>

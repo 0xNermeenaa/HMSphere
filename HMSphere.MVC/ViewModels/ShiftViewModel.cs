@@ -4,6 +4,7 @@ namespace HMSphere.MVC.ViewModels
 {
 	public class ShiftViewModel
 	{
+        public int Id { get; set; }
 		public ShiftType Type { get; set; }
 		public TimeOnly StartTime { get; set; }
 		public TimeOnly EndTime { get; set; }
