@@ -50,8 +50,8 @@ namespace HMSphere.MVC.Controllers
 
                 var patientViewModel = new PatientViewModel
                 {
-                    Last5Appointments = (List<AppointmentsViewModel>)lastFiveAppointments,
-                    Last5MedicalRecords = (List<MedicalRecordViewModel>)lastFiveMedicalRecords
+                    Last5Appointments = lastFiveAppointments.Select(a => _mapper.Map<AppointmentsViewModel>(a)).ToList(),
+                    Last5MedicalRecords = lastFiveMedicalRecords.Select(a => _mapper.Map<MedicalRecordViewModel>(a)).ToList()
                 };
 
                 return View(patientViewModel);
