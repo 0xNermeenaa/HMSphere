@@ -125,5 +125,14 @@ namespace HMSphere.MVC.Controllers
             var doctors = await _doctorService.GetDoctorsByDepartmentIdAsync(departmentId);
             return Json(new SelectList(doctors, "Id", "User.UserName"));
         }
+        public IActionResult AppointmentDetails()
+        {
+            return View();
+        }
+
+        public IActionResult MedicalRecordDetails()
+        {
+            return View();
+        }
     }
 }

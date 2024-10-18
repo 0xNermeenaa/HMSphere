@@ -18,7 +18,9 @@ namespace HMSphere.Domain.Entities
         public string? Clinic { get; set; } 
         public TimeSpan? AppointmentTime { get; set; }
 
-        public bool? IsApproved { get; set; } 
+        public bool? IsApproved { get; set; }
+        public bool? IsDeleted { get; set; }
+
 
         public string? DoctorId { get; set; }
         public string? PatientId { get; set; }

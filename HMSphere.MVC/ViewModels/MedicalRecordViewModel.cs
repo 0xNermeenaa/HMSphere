@@ -4,7 +4,9 @@ namespace HMSphere.MVC.ViewModels
 {
     public class MedicalRecordViewModel
     {
-        [Required]
+		public string PatientId { get; set; }
+
+		[Required]
         public DateTime CreatedDate { get; set; }
 
         [Required]
