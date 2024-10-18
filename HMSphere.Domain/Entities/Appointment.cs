@@ -17,7 +17,6 @@ namespace HMSphere.Domain.Entities
         public string? ReasonFor { get; set; }
         public string? Clinic { get; set; } 
         public TimeSpan? AppointmentTime { get; set; }
-
         public bool? IsApproved { get; set; }
         public bool IsDeleted { get; set; }
 

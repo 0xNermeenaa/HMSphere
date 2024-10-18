@@ -11,6 +11,6 @@ namespace HMSphere.Application.Interfaces
 	public interface IStaffService
 	{
         Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId);
-
+		Task<List<StaffDto>> GetAllAsync();
 	}
 }

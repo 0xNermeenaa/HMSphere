@@ -12,5 +12,6 @@ namespace HMSphere.MVC.ViewModels
 		public string JobTitle { get; set; }
 		public DateOnly? HireDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 		public string StaffShift { get; set; }
+		public string PhoneNumber { get; set; }
 	}
 }
