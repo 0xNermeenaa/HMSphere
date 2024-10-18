@@ -20,6 +20,11 @@
 		.btn-view:hover {
 			background-color: #17a2b8;
 		}
+
+	a {
+		text-decoration: none;
+		color: white;
+	}
 </style>
 
 <div class="container mt-4">
@@ -31,7 +36,7 @@
 		<div class="col-md-3">
 			<input type="text" class="form-control" placeholder="Search by Name">
 		</div>
-		
+
 		<div class="col-md-3">
 			<button class="btn btn-primary w-100">Search</button>
 		</div>
@@ -46,6 +51,7 @@
 					<th>Department</th>
 					<th>Job Title</th>
 					<th>Phone No.</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -57,12 +63,29 @@
 						<td>@item.Department</td>
 						<td>@item.JobTitle</td>
 						<td>@item.PhoneNumber</td>
-						<td>
+						<td class="d-flex" style="gap:2px">
 							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
 								<input type="hidden" name="StaffId" value="@item.Id" />
-								@* <button type="submit" class="btn btn-view">View</button> *@
-								<button class="btn btn-outline-dark" id="UpdateStaff">
-										<a asp-controller="Admin" asp-action="UpdateStaff">View</a>
+								<button class="btn btn-dark" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="UpdateStaff">Edit</a>
+								</button>
+							</form>
+							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
+								<input type="hidden" name="StaffId" value="@item.Id" />
+								<button class="btn btn-primary" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="StaffDetails">Detials</a>
+								</button>
+							</form>
+							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
+								<input type="hidden" name="StaffId" value="@item.Id" />
+								<button class="btn btn-danger" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="DeleteStaff">Delete</a>
+								</button>
+							</form>
+							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
+								<input type="hidden" name="StaffId" value="@item.Id" />
+								<button class="btn btn-success" id="UpdateStaff">
+									<a asp-controller="Admin" asp-action="DeleteStaff">Assign To Shift</a>
 								</button>
 							</form>
 						</td>
