@@ -37,6 +37,57 @@ namespace HMSphere.Application.Services
             _mapper = mapper;
             _emailService = emailService;
         }
+        public async Task<List<AppointmentDto>> GetAllAppointmentsByPatientIdAsync(string patientId)
+        {
+            var appointments = await _context.Appointments
+                .Where(a => a.PatientId == patientId)
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .ToListAsync();
+
+            var appointmentDtos = appointments.Select(a => new AppointmentDto
+            {
+                Id = a.Id,
+                Date = a.Date,
+                Status = a.Status,
+                ReasonFor = a.ReasonFor ?? string.Empty,  // Check for null
+                AppointmentTime = a.AppointmentTime,
+                IsApproved = a.IsApproved ?? false,           // Null-safe access for bool?
+            }).ToList();
+
+
+            return appointmentDtos;
+        }
+        public async Task<AppointmentDto> GetAppointmentByIdAsync(int id)
+        {
+            var appointment = await _context.Appointments
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (appointment == null)
+            {
+              return null; 
+            }
+
+            var appointmentDto = new AppointmentDto
+            {
+                Id = appointment.Id,
+                Date = appointment.Date,
+                Status = appointment.Status,
+                ReasonFor = appointment.ReasonFor ?? string.Empty,  // Check for null
+                PatientId = appointment.PatientId,
+                AppointmentTime = appointment.AppointmentTime,
+                DoctorId = appointment.DoctorId,
+                PatientName = appointment.Patient?.User?.UserName ?? "Unknown",   // Null-safe access
+                DoctorName = appointment.Doctor?.User?.UserName ?? "Unknown",     // Null-safe access
+                IsApproved = appointment.IsApproved ?? false,           // Null-safe access for bool?
+            };
+
+            return appointmentDto;
+        }
 
         public async Task<List<Appointment>> GetAllAppointmentsAsync()
         {
@@ -204,8 +255,7 @@ namespace HMSphere.Application.Services
             return user.Id;
         }
 
-
-
+       
     }
 
 }

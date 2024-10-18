@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HMSphere.Application.Interfaces;
 using HMSphere.MVC.ViewModels;
+using HMSphere.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -99,3 +100,4 @@ namespace HMSphere.MVC.Controllers
 	}
   
 }
+

@@ -9,7 +9,6 @@ namespace HMSphere.Application.Interfaces
 {
     public interface IPatientService
     {
-        Task<IEnumerable<AppointmentDto>> GetAllAppointmentsAsync(string PatientID);
         Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string PateintID);
         Task<IEnumerable<AppointmentDto>> GetLast5AppointmentsAsync(string PatientID);
         Task<IEnumerable<MedicalRecordDto>> GetLast5MedicalRecordsAsync(string PatientID);
