@@ -1,4 +1,5 @@
 ﻿
+using HMSphere.Domain.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -21,39 +22,55 @@ namespace HMSphere.Application.Mailing
             Send(emailMessage);
         }
 
-        public async Task SendMailAsync(string mailTo, string subject, string body, IList<IFormFile> attachments = null)
+		private string RegisterBodyGenerator(string userName)
+		{
+			string body = "<div>";
+			body += "<h2>Hello "+userName+",</h2>";
+			body += "<h4>Now you are a member of our family <b>HMSphere</b></h4>";
+			body += "<br><h5>Have a nice day,</h5>";
+			body += "<h6>HMSphere Support Team.</h6>";
+			body += "</div>";
+			return body;
+		}
+
+		private string AppointmentBodyGenerator(string message)
+		{
+			string body = "<div>";
+            body += "<h2>" + message + "</h2>";
+			body += "</div>";
+			return body;
+		}
+
+		public async Task SendMailAsync(ApplicationUser user, string subject,string message)
         {
-            //throw new NotImplementedException();
             var email = new MimeMessage
             {
                 Sender = MailboxAddress.Parse(_mailSettings.Email),
                 Subject = subject
             };
-            email.To.Add(MailboxAddress.Parse(mailTo));
+            if (user.Email == null)
+            {
+                return;
+            }
+
+            email.To.Add(MailboxAddress.Parse(user.Email));
             var builder = new BodyBuilder();
-            if (attachments != null) 
-             {
-                byte[] fileBytes;
-                foreach (var file in attachments)
-                { 
-                  if (file.Length > 0)
-                    {
-                        using var ms = new MemoryStream();
-                        file.CopyTo(ms);
-                        fileBytes = ms.ToArray();
 
-                        builder.Attachments.Add(file.FileName,fileBytes, ContentType.Parse(file.ContentType));
-                    }
-                }
-             }
+            if(subject=="Registeration Completed")
+            {
+                builder.HtmlBody = RegisterBodyGenerator(user.FirstName);
+            }
+            else
+            {
+                builder.HtmlBody = AppointmentBodyGenerator(message);
+			}
 
-            builder.HtmlBody = body;
             email.Body = builder.ToMessageBody();
             email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Email));
 
             using var smtp = new SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate(_mailSettings.DisplayName, _mailSettings.Password);
+            smtp.Authenticate(_mailSettings.Email, _mailSettings.Password);
             await smtp.SendAsync(email);    
 
             smtp.Disconnect(true);

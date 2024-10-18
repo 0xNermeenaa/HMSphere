@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Domain.Entities;
 using HMSphere.Application.DTOs;
 using HMSphere.Application.Interfaces;
+using HMSphere.Application.Mailing;
 using HMSphere.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,17 +21,19 @@ namespace HMSphere.Application.Services
         private readonly IConfiguration _configuration;
         private readonly IUserRoleFactory _userRoleFactory;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMailingService _mailingService;
 
-        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
-        {
-            _userManager = userManager;
-            _configuration = configuration;
-            _userRoleFactory = userRoleFactory;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
-        }
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IMailingService mailingService)
+		{
+			_userManager = userManager;
+			_configuration = configuration;
+			_userRoleFactory = userRoleFactory;
+			_roleManager = roleManager;
+			_signInManager = signInManager;
+			_mailingService = mailingService;
+		}
 
-        public async Task<ApplicationUser> GetCurrentUser(string email)
+		public async Task<ApplicationUser> GetCurrentUser(string email)
         {
             var currentUser= await _userManager.FindByEmailAsync(email);
             if(currentUser != null)
@@ -95,6 +98,7 @@ namespace HMSphere.Application.Services
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             //var Token = await CreateToken(user);
+            await _mailingService.SendMailAsync(user, "Registeration Completed", "");
             return new AuthDto
             {
                 Email = user.Email,

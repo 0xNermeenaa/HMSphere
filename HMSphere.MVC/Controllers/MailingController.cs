@@ -15,11 +15,11 @@ namespace HMSphere.MVC.Controllers
             _mailingService = mailingService;
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendMail([FromForm] MailRequestViewModel mailRequest)
-        {
-            await _mailingService.SendMailAsync(mailRequest.ToEmail, mailRequest.Subject, mailRequest.Body, mailRequest.Attachments);
-            return Ok();
-        }
+        //[HttpPost("send")]
+        //public async Task<IActionResult> SendMail([FromForm] MailRequestViewModel mailRequest)
+        //{
+        //    await _mailingService.SendMailAsync(mailRequest.ToEmail, mailRequest.Subject, mailRequest.Body, mailRequest.Attachments);
+        //    return Ok();
+        //}
     }
 }
