@@ -8,6 +8,7 @@ using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Numerics;
 
 namespace HMSphere.MVC.Controllers
 {
@@ -35,27 +36,31 @@ namespace HMSphere.MVC.Controllers
             _userManager = userManager;
             _patientService = patientService;
         }
-        public async Task<IActionResult> Index()
+       
+        public async Task<IActionResult> Index(string id)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
-            else
+            var response = await _patientService.Profile(id);
+            if (response.IsSuccess)
             {
-                var lastFiveAppointments = await _patientService.GetLast5AppointmentsAsync(currentUser.Id);
-
-                var lastFiveMedicalRecords = await _patientService.GetLast5MedicalRecordsAsync(currentUser.Id);
-
-                var patientViewModel = new PatientViewModel
+                var patient = _mapper.Map<PatientsHistoryViewModel>(response.Model);
+                var latestRecords = await GetLatestMedicalRecords(id);
+                var latestAppointments = await GetLatestAppointmentsModel(id);
+                if (patient != null)
                 {
-                    Last5Appointments = lastFiveAppointments.Select(a => _mapper.Map<AppointmentsViewModel>(a)).ToList(),
-                    Last5MedicalRecords = lastFiveMedicalRecords.Select(a => _mapper.Map<MedicalRecordViewModel>(a)).ToList()
-                };
+                    var nextappointment=await _patientService.GetNextAppointmentByPatientIdAsync(id);
 
-                return View(patientViewModel);
+                    patient.NextAppointment=_mapper.Map<NextAppointmentViewModel>(nextappointment);
+                    patient.LatestAppointments = latestAppointments;
+                    patient.LatestMedicalRecords = latestRecords;
+                    return View(patient);
+                }
+                return NotFound();
             }
+            return NotFound();
         }
         public async Task<IActionResult> Appointments()
         {
@@ -67,10 +72,10 @@ namespace HMSphere.MVC.Controllers
 
             var appointmentDtos = await _appointmentService.GetAllAppointmentsByPatientIdAsync(userId);
 
-            if (appointmentDtos == null || !appointmentDtos.Any())
+           /* if (appointmentDtos == null || !appointmentDtos.Any())
             {
                 return View();
-            }
+            }*/
 
             var appointmentViewModels = appointmentDtos.Select(dto => new AppointmentViewModel
             {
@@ -91,7 +96,7 @@ namespace HMSphere.MVC.Controllers
         }
         public async Task<IActionResult> MedicalRecords()
         {
-            List<PatientMedicalRecordsViewModel> models = new();
+            List<MedicalRecordViewModel> models = new();
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
@@ -100,7 +105,7 @@ namespace HMSphere.MVC.Controllers
             var medicalrecords = await _patientService.GetAllMedicalRecordsAsync(currentUser.Id);
             foreach (var record in medicalrecords)
             {
-                var model=_mapper.Map<PatientMedicalRecordsViewModel>(record);
+                var model=_mapper.Map<MedicalRecordViewModel>(record);
                 models.Add(model);
             }
             return View(models);
@@ -135,12 +140,49 @@ namespace HMSphere.MVC.Controllers
             ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName");
            
             return View("CreateAppointment", model);
-
-
-
         }
 
 
+        public async Task<IActionResult> UpdateAppointment(int id)
+        {
+            var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            var model = _mapper.Map<AppointmentViewModel>(appointment);
+
+            ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name", model.DepartmentId);
+            ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName", model.DoctorId);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAppointment(AppointmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var appointmentDto = _mapper.Map<AppointmentDto>(model);
+                var result = await _appointmentService.UpdateAppointment(appointmentDto);
+
+                if (!result.IsSuccessful)
+                {
+                    ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                    ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name", model.DepartmentId);
+                    ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName", model.DoctorId);
+                    return View(model);
+                }
+
+                return RedirectToAction("Appointments");
+            }
+
+            ViewData["Departments"] = new SelectList(await _departmentService.GetDepartments(), "Id", "Name", model.DepartmentId);
+            ViewData["Doctors"] = new SelectList(await _doctorService.GetDoctorsByDepartmentIdAsync(model.DepartmentId), "Id", "User.UserName", model.DoctorId);
+
+            return View(model);
+        }
 
         public async Task<JsonResult> GetDoctorsByDepartment(int? departmentId)
         {
@@ -178,6 +220,29 @@ namespace HMSphere.MVC.Controllers
         public IActionResult MedicalRecordDetails()
         {
             return View();
+        }
+
+        private async Task<List<MedicalRecordViewModel>> GetLatestMedicalRecords(string id)
+        {
+            var models = new List<MedicalRecordViewModel>();
+            var latestMedicalRecordsModels = await _patientService.GetLast5MedicalRecordsAsync(id);
+            foreach (var model in latestMedicalRecordsModels)
+            {
+                var latestRecord = _mapper.Map<MedicalRecordViewModel>(model);
+                models.Add(latestRecord);
+            }
+            return models;
+        }
+        private async Task<List<AppointmentViewModel>> GetLatestAppointmentsModel(string id)
+        {
+            var models = new List<AppointmentViewModel>();
+            var latestAppointmentsModels = await _patientService.GetLast5AppointmentsAsync(id);
+            foreach (var model in latestAppointmentsModels)
+            {
+                var latestAppointment = _mapper.Map<AppointmentViewModel>(model);
+                models.Add(latestAppointment);
+            }
+            return models;
         }
     }
 }
