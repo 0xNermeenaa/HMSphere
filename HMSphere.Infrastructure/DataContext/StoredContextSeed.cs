@@ -40,6 +40,8 @@ namespace HMSphere.Infrastructure.DataContext
             //}
         //}
 
+        }
+      
         //public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, HmsContext context)
         //{
         //    if (!userManager.Users.Any())
@@ -67,5 +69,5 @@ namespace HMSphere.Infrastructure.DataContext
         //    }
 
         //}
-    }
 }
+

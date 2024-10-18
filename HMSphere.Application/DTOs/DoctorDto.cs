@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMSphere.Domain.Enums
+namespace HMSphere.Application.DTOs
 {
-    public enum Status
+    public class DoctorDto
     {
-        Pending,
-        Completed,
-        Cancelled
     }
 }

@@ -92,15 +92,16 @@ namespace HMSphere.Application.Services
 				{
 					return 0;
 				}
-				var appoints=appointments.Count();
+				var appoints = appointments.Count();
 				return appoints;
 			}
 			catch (Exception ex)
 			{
 				return 0;
 			}
-
 		}
+
+		
 
         public async Task<int> GetNumberOfPatients(string id)
 		{
@@ -165,19 +166,19 @@ namespace HMSphere.Application.Services
 			return recordDtos;
 		}
 
-        public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
-		{
-			var appointments = await _context.Appointments
-				.Include(a=>a.Patient.User)
-				.Where(a => a.DoctorId == doctorId
-			&& !a.IsDeleted).ToListAsync();
-			if (!appointments.Any())
-			{
-				return new List<AppointmentDto>();
-			}
-			var appointmentDtos=appointments.Select(a=>_mapper.Map<AppointmentDto>(a)).ToList();
-			return appointmentDtos;
-        }
+  //      public async Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
+		//{
+		//	var appointments = await _context.Appointments
+		//		.Include(a=>a.Patient.User)
+		//		.Where(a => a.DoctorId == doctorId
+		//	&& !a.IsDeleted).ToListAsync();
+		//	if (!appointments.Any())
+		//	{
+		//		return new List<AppointmentDto>();
+		//	}
+		//	var appointmentDtos=appointments.Select(a=>_mapper.Map<AppointmentDto>(a)).ToList();
+		//	return appointmentDtos;
+  //      }
 
 		public async Task<ResponseDTO> GetAppointmentDetails(int appointmentId)
 		{
@@ -213,6 +214,24 @@ namespace HMSphere.Application.Services
 				};
 			}
 		}
+        public async Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId)
+        {
+            if (departmentId == null)
+            {
+                return await _context.Doctors.Include(d => d.User).ToListAsync();
+            }
 
-	}
+            var doctors = await _context.Doctors
+                .Where(d => d.DepartmentId == departmentId)
+                .Include(d => d.User)
+                .ToListAsync();
+
+            return doctors;
+        }
+
+        public Task<List<AppointmentDto>> GetAllAppointments(string doctorId)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

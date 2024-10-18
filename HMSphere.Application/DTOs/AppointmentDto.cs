@@ -1,4 +1,5 @@
-﻿using HMSphere.Domain.Enums;
+﻿using HMSphere.Domain.Entities;
+using HMSphere.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,17 +9,27 @@ using System.Threading.Tasks;
 
 namespace HMSphere.Application.DTOs
 {
-    public class AppointmentDto
-    {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public Status Status { get; set; }
-        public string ReasonFor { get; set; }
-        public string Clinic { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public bool IsDeleted { get; set; }
-        public string DoctorID { get; set; }
-        public string PatientID { get; set; }
-        public string PatientName { get; set; }
-    }
+	public class AppointmentDto
+	{
+        public int? Id { get; set; }
+
+        public DateTime? Date { get; set; } = DateTime.Now;
+        public Status? Status { get; set; } = Domain.Enums.Status.Pending;
+        public string? ReasonFor { get; set; } = string.Empty;
+        public string? Clinic { get; set; } = string.Empty;
+        public string? PatientId { get; set; }
+        public int? DepartmentId { get; set; }
+        public TimeSpan? AppointmentTime { get; set; }
+        public string? DoctorId { get; set; }
+        public bool? IsApproved { get; set; }=false;
+        public string? PatientName { get; set; }
+        public string? DoctorName { get; set; }
+        public string? ErrorMessage { get; set; }  
+        public bool IsSuccessful { get; set; } = false; 
+        
+
+       
+
+	}
 }
+
