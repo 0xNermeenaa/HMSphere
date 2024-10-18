@@ -10,7 +10,11 @@ namespace HMSphere.Application.Interfaces
 {
 	public interface IStaffService
 	{
-        Task<IEnumerable<object>> GetAllAsync();
+        //Task<IEnumerable<object>> GetAllAsync();
         Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId);
+		Task<IEnumerable<StaffDto>> GetAllAsync();
+        Task<bool> AssignStaffToShiftAsync(int shiftId, string staffId);
+		Task<bool> AssignDoctorToShiftAsync(int shiftId, string doctorId);
+
 	}
 }

@@ -65,7 +65,10 @@
 						<td>
 							<form asp-controller="Admin" asp-action="Doctors" asp-route-data="@doctor.Department" method="get">
 								<input type="hidden" name="Doctor" value="@doctor.Department" />
-								<button type="submit" class="btn btn-view">View</button>
+								@* <button type="submit" class="btn btn-view">View</button> *@
+								<button class="btn btn-outline-dark" id="UpdateDoctor">
+									<a asp-controller="Admin" asp-action="UpdateDoctor">View</a>
+								</button>
 							</form>
 						</td>
 					</tr>
