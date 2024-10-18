@@ -33,6 +33,7 @@ namespace HMSphere.MVC.AutoMapper
                 .ForMember(dest=>dest.PhoneNumber,s=>s.MapFrom(src=>src.User.PhoneNumber))
                 .ForMember(dest=>dest.Department,s=>s.MapFrom(src=>src.Department.Name))
 				.ReverseMap();
+            CreateMap<StaffDto , StaffViewModel>().ReverseMap();
             CreateMap<MedicalRecord, MedicalRecordDto>().ReverseMap();
 			CreateMap<MedicalRecordDto , MedicalRecordViewModel>().ReverseMap();
 			CreateMap<Doctor , DoctorViewModel>()
@@ -41,6 +42,7 @@ namespace HMSphere.MVC.AutoMapper
                 .ForMember(dest => dest.Specialization, o => o.MapFrom(src => src.Specialization))
                 .ForMember(dest => dest.Department, o => o.MapFrom(src => src.Department.Name))
                 .ReverseMap();
+
             CreateMap<Patient, PatientsHistoryViewModel>()
             .ForMember(dest => dest.FirstName, o => o.MapFrom(src => src.User.FirstName))
             .ForMember(dest => dest.LastName, o => o.MapFrom(src => src.User.LastName))
@@ -54,7 +56,6 @@ namespace HMSphere.MVC.AutoMapper
             CreateMap<AppointmentDto, AppointmentViewModel>().ReverseMap();
             CreateMap<MedicalRecordDto, PatientMedicalRecordsViewModel>().ReverseMap();
             CreateMap<AppointmentDto, PatientAppointmentsViewModel>().ReverseMap();
-			CreateMap<StaffViewModel, StaffDto>().ReverseMap();
 			CreateMap<ShiftViewModel, ShiftDto>().ReverseMap();
 			CreateMap<ShiftDto, Shift>().ReverseMap();
 		
