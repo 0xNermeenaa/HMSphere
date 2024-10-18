@@ -171,9 +171,9 @@
                         </td>
                         <td>4</td>
                     </tr>
-                    <tr class="table-active">
                         @foreach(var appointment in Model)
                         {
+                    <tr class="table-active">
                         <td>@appointment.PatientID</td>
                         <td>@appointment.DoctorID</td>
                         <td>@appointment.Date</td>
@@ -184,8 +184,8 @@
                             </button>
                         </td>
                         <td>@appointment.Clinic</td>
-                        }
                     </tr>
+                        }
 
                 </tbody>
             </table>

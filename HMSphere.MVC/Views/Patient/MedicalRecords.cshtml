@@ -221,9 +221,9 @@
                         </td>
                         <td>13-8-2024 </td>
                     </tr>
-                    <tr class="table-active">
                         @foreach (var mr in Model)
                         {
+                    <tr class="table-active">
                             <td>@mr.PatientId</td>
                             <td>@mr.CreatedDate</td>
                             <td>@mr.Diagnosis</td>
@@ -243,8 +243,8 @@
                                 </button>
                             </td>
                             <td>@mr.LastUpdated</td>
-                        }
                     </tr>
+                        }
                 </tbody>
             </table>
         </div>

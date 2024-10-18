@@ -236,13 +236,13 @@
                         <td>4</td>
                         <td>01-05-2024</td>
                     </tr>
-                      <tr>
                           @foreach(var app in Model.Last5Appointments){
+                      <tr>
                         <td>@app.PatientName</td>
                         <td>@app.Clinic</td>
                         <td>@app.Date</td>
-                          }
                     </tr>
+                          }
                 </tbody>
             </table>
 
@@ -259,14 +259,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
                         @foreach(var mr in Model.Last5MedicalRecords)
                         {
-                        <td> @mr.PatientId</td>
+                    <tr>
+                        <td>@mr.PatientId</td>
                         <td>@mr.CreatedDate</td>
                         <td>@mr.Diagnosis</td>
-                        }
                     </tr>
+                        }
                 </tbody>
             </table>
         </div>

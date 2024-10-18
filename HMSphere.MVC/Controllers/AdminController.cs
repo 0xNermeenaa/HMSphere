@@ -37,7 +37,6 @@ namespace HMSphere.MVC.Controllers
             return View(appointmentsViewModels);
         }
 
-
         public IActionResult Index()
         {
             return View();
