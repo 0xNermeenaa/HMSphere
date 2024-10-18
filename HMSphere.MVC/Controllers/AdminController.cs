@@ -100,6 +100,18 @@ namespace HMSphere.MVC.Controllers
         {
             return View();
         }
+        public IActionResult UpdateDoctor()
+        {
+            return View();
+        }
+        public IActionResult UpdatePatient()
+        {
+            return View();
+        }
+        public IActionResult UpdateStaff()
+        {
+            return View();
+        }
     }
 
 }

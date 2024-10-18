@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<HMSphere.MVC.ViewModels.StaffViewModel>
 
 @{
-	ViewData["Title"] = "Patients";
+	ViewData["Title"] = "Staff";
 }
 
 <style>
@@ -61,7 +61,10 @@
 						<td>
 							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@item.Id" method="get">
 								<input type="hidden" name="StaffId" value="@item.Id" />
-								<button type="submit" class="btn btn-view">View</button>
+								@* <button type="submit" class="btn btn-view">View</button> *@
+								<button class="btn btn-outline-dark" id="UpdateStaff">
+										<a asp-controller="Admin" asp-action="UpdateStaff">View</a>
+								</button>
 							</form>
 						</td>
 
