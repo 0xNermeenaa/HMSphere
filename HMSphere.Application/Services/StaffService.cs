@@ -39,10 +39,6 @@ namespace HMSphere.Application.Services
             var ShiftsResult = StaffShifts.Select(p => _mapper.Map<ShiftDto>(p)).ToList();
             return ShiftsResult;
 		}
-		public async Task<List<StaffDto>> GetAllAsync()
-		{
-			var staff = await _context.Staff.Include(s => s.User)
-				.Include(s => s.Department).ToListAsync();
 
 			if (!staff.Any())
 			{

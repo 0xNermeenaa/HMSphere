@@ -85,12 +85,12 @@ namespace HMSphere.MVC.Controllers
 			return View(model);
 		}
 
-		public async Task<IActionResult> MedicalRecords(string? patientId)
-		{
-			if (string.IsNullOrEmpty(patientId))
-			{
-				return BadRequest("Patient ID is required.");
-			}
+        public async Task<IActionResult> MedicalRecords(string? patientId)
+        {
+            if (string.IsNullOrEmpty(patientId))
+            {
+                return BadRequest("Patient ID is required.");
+            }
 
 			var medicalRecords = await _doctorService.GetAllMedicalRecordsAsync(patientId);
 			if (medicalRecords == null || !medicalRecords.Any())
@@ -168,4 +168,3 @@ namespace HMSphere.MVC.Controllers
 	}
 
 }
-

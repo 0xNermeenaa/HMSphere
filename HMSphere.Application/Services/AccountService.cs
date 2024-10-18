@@ -18,23 +18,22 @@ namespace HMSphere.Application.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMailingService _mailingService;
         private readonly IConfiguration _configuration;
         private readonly IUserRoleFactory _userRoleFactory;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMailingService _mailingService;
 
-        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration,IMailingService mailingService,
-            IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
-        {
-            _userManager = userManager;
-            _configuration = configuration;
-            _userRoleFactory = userRoleFactory;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
-            _mailingService = mailingService;
-        }
+		public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRoleFactory userRoleFactory, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IMailingService mailingService)
+		{
+			_userManager = userManager;
+			_configuration = configuration;
+			_userRoleFactory = userRoleFactory;
+			_roleManager = roleManager;
+			_signInManager = signInManager;
+			_mailingService = mailingService;
+		}
 
-        public async Task<ApplicationUser> GetCurrentUser(string email)
+		public async Task<ApplicationUser> GetCurrentUser(string email)
         {
             var currentUser= await _userManager.FindByEmailAsync(email);
             if(currentUser != null)
@@ -80,17 +79,7 @@ namespace HMSphere.Application.Services
                 return new AuthDto { Message = errors };
             }
 
-            //if (result.Succeeded)
-            //{
-            //    user.EmailConfirmed = true;
-            //    await _userManager.UpdateAsync(user);
-
-            //    var message = new MailMessage(new string[] { user.Email }, "register", $"Hi {user.FirstName}, You have been Registered Successfully In CMS(Control Management System)");
-            //    _mailingService.SendMail(message);
-            //}
-
-
-            if (!await _roleManager.RoleExistsAsync(model.Role))
+			if (!await _roleManager.RoleExistsAsync(model.Role))
 			{
 				var roleResult = await _roleManager.CreateAsync(new IdentityRole(model.Role));
 				if (!roleResult.Succeeded)
@@ -109,6 +98,7 @@ namespace HMSphere.Application.Services
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             //var Token = await CreateToken(user);
+            await _mailingService.SendMailAsync(user, "Registeration Completed", "");
             return new AuthDto
             {
                 Email = user.Email,

@@ -29,7 +29,10 @@ namespace HMSphere.MVC.ViewModels
 
 		[Required]
 		public string Gender { get; set; }
-		public ICollection<Appointment>? Appointments { get; set; }
+		public NextAppointmentViewModel? NextAppointment { get; set; }
+        public List<MedicalRecordViewModel>? LatestMedicalRecords { get; set; }
+        public List<AppointmentViewModel>? LatestAppointments { get; set; }
+        public ICollection<Appointment>? Appointments { get; set; }
 
 		public int CalculateAgeFromNID(string nationalId)
 		{

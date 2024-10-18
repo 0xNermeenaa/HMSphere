@@ -6,7 +6,7 @@ using HMSphere.Domain.Entities;
 using HMSphere.MVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using HMSphere.Application.Interfaces;
 namespace HMSphere.MVC.Controllers
 {
     public class StaffController : Controller
