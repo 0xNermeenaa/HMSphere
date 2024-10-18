@@ -136,10 +136,10 @@
                             </td>
 
                             <td>
-                                <button class="btn btn-outline-primary"
-                                @(appointment.Status != HMSphere.Domain.Enums.Status.Pending ? "disabled" : "")>
+                                <a asp-action="UpdateAppointment" asp-route-id="@appointment.Id"
+                                   class="btn btn-outline-primary @(appointment.Status != HMSphere.Domain.Enums.Status.Pending ? "disabled" : "")">
                                     Update
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     }

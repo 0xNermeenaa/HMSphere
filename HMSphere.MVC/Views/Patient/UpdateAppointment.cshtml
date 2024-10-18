@@ -1,8 +1,9 @@
 ﻿@model HMSphere.MVC.ViewModels.AppointmentViewModel
 
 <div class="container mt-5">
-    <h2>Appointment</h2>
-    <form asp-action="CreateAppointment" method="post">
+    <h2>Update Appointment</h2>
+    <form asp-action="UpdateAppointment" method="post">
+        <!-- Department and Doctor Fields -->
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -22,11 +23,12 @@
             </div>
         </div>
 
+        <!-- Date and Time Fields -->
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="Date">Date</label>
-                    <input type="date" class="form-control" asp-for="@Model.Date" />
+                    <input type="date" class="form-control" asp-for="Date" />
                 </div>
             </div>
             <div class="col-md-6">
@@ -36,16 +38,25 @@
                 </div>
             </div>
         </div>
-
+        <div class="form-group">
+            <label for="Status">Status</label>
+            <select class="form-control" asp-for="Status">
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="Canceled">Canceled</option>
+            </select>
+        </div>
+        <!-- Reason for Appointment -->
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="Reason">Reason</label>
-                    <textarea class="form-control" asp-for="ReasonFor" placeholder="Reason..."></textarea>
+                    <textarea class="form-control" asp-for="ReasonFor"></textarea>
                 </div>
             </div>
         </div>
 
+        <!-- Submit Button -->
         <div class="row">
             <div class="col-md-12 mt-5">
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -53,24 +64,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    //for dynamic loading 
-    $(document).ready(function () {
-        $('#DepartmentId').change(function () {
-            var departmentId = $(this).val();
-
-            $.ajax({
-                url: '@Url.Action("GetDoctorsByDepartment", "Patient")',
-                data: { departmentId: departmentId },
-                success: function (data) {
-                    $('#DoctorId').empty();
-                    $('#DoctorId').append('<option value="">Select Doctor</option>');
-                    $.each(data, function (index, doctor) {
-                        $('#DoctorId').append('<option value="' + doctor.value + '">' + doctor.text + '</option>');
-                    });
-                }
-            });
-        });
-    });
-</script>
