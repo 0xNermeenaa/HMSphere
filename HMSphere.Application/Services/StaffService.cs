@@ -29,7 +29,21 @@ namespace HMSphere.Application.Services
 			_dbSet2 = _context.Set<DoctorShift>();
 
         }
-        public async Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId)
+
+		public async Task<StaffDto> GetById(string id)
+		{
+			var staff = await _context.Staff.Include(s => s.User)
+				.FirstOrDefaultAsync(s => s.Id == id);
+
+			if (staff != null)
+			{
+				var dto=_mapper.Map<StaffDto>(staff);
+				return dto;
+			}
+			return new StaffDto();
+		}
+
+		public async Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId)
 		{
             var StaffShifts = await _context.StaffShifts
                 .Where(m => m.StaffId == StaffId && !m.IsDeleted)

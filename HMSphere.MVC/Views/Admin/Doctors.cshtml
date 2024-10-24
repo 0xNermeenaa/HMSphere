@@ -23,8 +23,16 @@
 
 	a {
 		text-decoration: none;
-		color: white;
 	}
+
+	.btn{
+		margin-right:10px;
+	}
+
+	.btn:hover{
+		color:white;
+	}
+
 </style>
 
 <div class="container mt-4">
@@ -67,30 +75,39 @@
 						<td>@doctor.Department</td>
 						<td>@doctor.Specialization</td>
 						<td>@doctor.PhoneNumber</td>
-						<td class="d-flex" style="gap:2px">
+						<td class="d-flex justify-content-center" style="gap:2px">
+
+							<!-- Doctor Edit Button -->
 							<form asp-controller="Admin" asp-action="Doctors" asp-route-data="@doctor.Department" method="get">
 								<input type="hidden" name="Doctor" value="@doctor.Department" />
 								@* <button type="submit" class="btn btn-view">View</button> *@
-								<button class="btn btn-dark" id="UpdateDoctor">
-									<a asp-controller="Admin" asp-action="UpdateDoctor">View</a>
+								<button type="submit" asp-controller="Admin" asp-action="UpdateDoctor" class="btn btn-outline-dark">
+									@* <a asp-controller="Admin" asp-action="UpdateDoctor" class="text-dark">Edit</a> *@
+									Edit
 								</button>
 							</form>
-							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@doctor.Id" method="get">
+
+							<!-- Doctor Details Button -->
+							<form asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="@doctor.Id" method="get">
 								<input type="hidden" name="StaffId" value="@doctor.Id" />
-								<button class="btn btn-primary" id="UpdateStaff">
-									<a asp-controller="Admin" asp-action="StaffDetails">Detials</a>
+								<button type="submit" class="btn btn-outline-primary">
+									Details
 								</button>
 							</form>
-							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@doctor.Id" method="get">
+
+							<!-- Delete Doctor Button -->
+							<form asp-controller="Admin" asp-action="DeleteDoctor" asp-route-id="@doctor.Id" method="get">
 								<input type="hidden" name="StaffId" value="@doctor.Id" />
-								<button class="btn btn-danger" id="UpdateStaff">
-									<a asp-controller="Admin" asp-action="DeleteStaff">Delete</a>
+								<button type="submit" class="btn btn-outline-danger">
+									Delete
 								</button>
 							</form>
-							<form asp-controller="Admin" asp-action="Staff" asp-route-data="@doctor.Id" method="get">
+
+							<!-- Assign Doctor to Shift Button -->
+							<form asp-controller="Admin" asp-action="AssignDoctorToShift" asp-route-id="@doctor.Id" method="get">
 								<input type="hidden" name="StaffId" value="@doctor.Id" />
-								<button class="btn btn-success" id="UpdateStaff">
-									<a asp-controller="Admin" asp-action="DeleteStaff">Assign To Shift</a>
+								<button type="submit" class="btn btn-outline-success">
+									Assign to Shift
 								</button>
 							</form>
 						</td>

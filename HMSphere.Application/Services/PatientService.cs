@@ -68,6 +68,10 @@ namespace HMSphere.Application.Services
                                  .OrderByDescending(a => a.Date)
                                  .Take(5)
                                  .ToListAsync();
+            if (Latest5Appointments.Count()<=0)
+            {
+                return new List<AppointmentDto>();
+            }
             return Latest5Appointments.Select(a => _mapper.Map<AppointmentDto>(a)).ToList();
         }
         public async Task<IEnumerable<MedicalRecordDto>> GetLast5MedicalRecordsAsync(string patientId)
@@ -77,6 +81,10 @@ namespace HMSphere.Application.Services
                                  .OrderByDescending(mr => mr.CreatedDate)
                                  .Take(5)
                                  .ToListAsync();
+            if (Latest5MedicalRecords.Count()<=0)
+            {
+                return new List<MedicalRecordDto>();
+            }
             return Latest5MedicalRecords.Select(mr => _mapper.Map<MedicalRecordDto>(mr)).ToList();
         }
 

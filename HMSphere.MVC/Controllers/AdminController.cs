@@ -39,9 +39,16 @@ namespace HMSphere.MVC.Controllers
 			_patientRepo = patientRepo;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return NotFound();
+			}
+			var dto=await _staffService.GetById(userId);
+			var model=_mapper.Map<StaffViewModel>(dto);
+			return View(model);
 		}
 
 		[HttpPost]

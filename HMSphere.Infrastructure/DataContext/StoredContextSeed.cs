@@ -1,4 +1,5 @@
 ﻿using HMSphere.Domain.Entities;
+using HMSphere.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,40 @@ namespace HMSphere.Infrastructure.DataContext
             }
         }
 
+        //public static async Task AdminSeed(HmsContext context,
+        //    UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        //{
+        //    if (!context.Staff.Any(s => s.Role == Role.Admin))
+        //    {
+        //        var admin = new ApplicationUser
+        //        {
+        //            FirstName = "Mohamed",
+        //            LastName = "Ali",
+        //            Email = "admin@gmail.com",
+        //            UserName = "mohdali",
+        //            Address = "Egypt-Qena",
+        //            NID = "12345678912345",
+        //            Gender = "Male",
+        //        };
+
+        //        await userManager.CreateAsync(admin, "Admin@123");
+        //        if (!await roleManager.RoleExistsAsync("Admin"))
+        //        {
+        //            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        //        }
+        //        await userManager.AddToRoleAsync(admin, "Admin");
+
+        //        //var staff = new Staff
+        //        //{
+        //        //    Id= "5748ac57-5864-4f58-b54b-3bc953095424",
+        //        //    Role = Role.Admin,
+        //        //    JobTitle = "Department Manager",
+        //        //    DepartmentId = 6,
+        //        //};
+        //        //await context.Staff.AddAsync(staff);
+        //        //await context.SaveChangesAsync();
+        //    }
+        //}
 
 
     //    public static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, HmsContext context)

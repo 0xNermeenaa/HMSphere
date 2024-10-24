@@ -15,6 +15,6 @@ namespace HMSphere.Application.Interfaces
 		Task<IEnumerable<StaffDto>> GetAllAsync();
         Task<bool> AssignStaffToShiftAsync(int shiftId, string staffId);
 		Task<bool> AssignDoctorToShiftAsync(int shiftId, string doctorId);
-
+		Task<StaffDto> GetById(string id);
 	}
 }

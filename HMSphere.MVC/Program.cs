@@ -130,7 +130,7 @@ namespace HMSphere.MVC
 				var services = scope.ServiceProvider;
 				var context = services.GetRequiredService<HmsContext>();
 				var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
-				//await StoredContextSeed.SeedUserAsync(usermanager,context);
+                //await StoredContextSeed.SeedUserAsync(usermanager,context);
 				// await IdentitySeed.SeedUserAsync(usermanager);
             }
 
