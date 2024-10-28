@@ -51,18 +51,5 @@ namespace HMSphere.Application.Services
 			return dto;
 		}
 
-
-		public async Task<bool> AssignStaffToShiftAsync(int shiftId , string staffId)
-        {
-            var StaffShift = new StaffShift { ShiftId = shiftId, StaffId = staffId};
-            await _dbSet.AddAsync(StaffShift);
-            return await _context.SaveChangesAsync() >0;
-        }
-		public async Task<bool> AssignDoctorToShiftAsync(int shiftId, string doctorId)
-		{
-			var DoctorShift = new DoctorShift { ShiftId = shiftId, DoctorId = doctorId };
-			await _dbSet2.AddAsync(DoctorShift);
-			return await _context.SaveChangesAsync() > 0;
-		}
 	}
 }

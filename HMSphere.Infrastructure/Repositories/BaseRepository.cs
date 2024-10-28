@@ -19,12 +19,19 @@ namespace HMSphere.Infrastructure.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(string id)
         {
             return await _dbSet.FindAsync(id);
         }
-
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<T> GetByIntIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+		public async Task<T> GetByNameAsync(string name)
+		{
+			return await _dbSet.FindAsync(name);
+		}
+		public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }

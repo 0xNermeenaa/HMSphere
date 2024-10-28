@@ -63,7 +63,8 @@ namespace HMSphere.Application.Services
 				{
 					Id = userId,
 					Role=Role.OtherStaff,
-					JobTitle=dto.JobTitle
+					JobTitle=dto.JobTitle,
+					DepartmentId = dto.DepartmentId
 				};
 				await _context.Staff.AddAsync(staff);
 			}

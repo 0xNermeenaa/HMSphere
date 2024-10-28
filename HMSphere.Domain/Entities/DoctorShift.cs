@@ -16,8 +16,8 @@ namespace HMSphere.Domain.Entities
         public string DoctorId { get; set; }
         public int ShiftId { get; set; }
 
-        public virtual Doctor Doctor { get; set; } = new();
-        public virtual Shift Shift { get; set; } = new();
+        public virtual Doctor Doctor { get; set; }
+        public virtual Shift Shift { get; set; }
 
     }
 }

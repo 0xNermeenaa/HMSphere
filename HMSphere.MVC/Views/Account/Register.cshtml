@@ -70,7 +70,7 @@
 						<option value="other">Other</option>
 					</select>
 					<span asp-validation-for="Gender" class="text-danger"></span>
-				</div>zx
+				</div>
 			</div>
 
 			<!-- Address and Role selection in a single row -->
@@ -103,7 +103,7 @@
 					</div>
 					<div class="form-group">
 						<label asp-for="DepartmentId" class="control-label">Departments</label>
-						<select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
+						<select asp-for="DepartmentId" class="form-control" asp-items="@Model.Departments">
 							<option value="">Select your department</option>
 						</select>
 						<span asp-validation-for="DepartmentId" class="text-danger"></span>
@@ -155,7 +155,7 @@
 					</div>
 					<div class="form-group">
 						<label asp-for="DepartmentId" class="control-label">Departments</label>
-						<select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
+						<select asp-for="DepartmentId" class="form-control" asp-items="@Model.Departments">
 							<option value="">Select your department</option>
 						</select>
 						<span asp-validation-for="DepartmentId" class="text-danger"></span>
