@@ -43,6 +43,7 @@ namespace HMSphere.Application.Services
                 .Where(a => a.PatientId == patientId)
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
+                .ThenInclude(d=>d.User)
                 .ToListAsync();
 
             var appointmentDtos = appointments.Select(a => new AppointmentDto
@@ -53,10 +54,10 @@ namespace HMSphere.Application.Services
                 ReasonFor = a.ReasonFor ?? string.Empty,  // Check for null
                 AppointmentTime = a.AppointmentTime,
                 IsApproved = a.IsApproved ?? false,           // Null-safe access for bool?
+                DoctorName = a.Doctor.User.UserName
             }).ToList();
 
-
-            return appointmentDtos;
+               return appointmentDtos;
         }
         public async Task<AppointmentDto> GetAppointmentByIdAsync(int id)
         {
@@ -416,7 +417,26 @@ namespace HMSphere.Application.Services
             return user.Id;
         }
 
-       
+        public async Task<bool> CancelAppointment(int appointmentId)
+        {
+            var appointment = await _context.Appointments.FindAsync(appointmentId);
+            if (appointment == null)
+            {
+                return false;
+            }
+
+            if (appointment.Status != HMSphere.Domain.Enums.Status.Pending)
+            {
+                return false;
+            }
+
+            appointment.Status = HMSphere.Domain.Enums.Status.Cancelled;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 
 }

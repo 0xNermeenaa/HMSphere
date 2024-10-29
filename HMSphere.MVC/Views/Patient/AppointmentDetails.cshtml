@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Appointment Details";
 }
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-body">
@@ -32,11 +39,14 @@
 
 
             <div class="d-flex justify-content-start mt-3">
-                @if (Model.Status == HMSphere.Domain.Enums.Status.Pending) 
+                @if (Model.Status == HMSphere.Domain.Enums.Status.Pending)
                 {
-                    <button class="btn btn-outline-dark" type="button" onclick="cancelAppointment(@Model.Id)">
-                        Cancel Appointment
-                    </button>
+                    <form action="/Patient/CancelAppointment" method="post" style="display: inline;">
+                        <input type="hidden" name="appointmentId" value="@Model.Id" />
+                        <button class="btn btn-outline-dark" type="submit">
+                            Cancel Appointment
+                        </button>
+                    </form>
                 }
                 else
                 {
@@ -48,3 +58,29 @@
         </div>
     </div>
 </div>
+<script>
+    function cancelAppointment(appointmentId) {
+        if (confirm("Are you sure you want to cancel this appointment?")) {
+            fetch(`/Patient/CancelAppointment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ appointmentId: appointmentId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    window.location.reload(); // Optionally, reload the page or redirect as needed
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while canceling the appointment.");
+            });
+        }
+    }
+</script>

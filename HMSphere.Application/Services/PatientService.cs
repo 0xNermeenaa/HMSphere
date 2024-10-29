@@ -145,5 +145,35 @@ namespace HMSphere.Application.Services
           
         }
 
+        public async Task<MedicalRecordDto> GetMedicalRecordAsync(int id)
+        {
+            var medicalRecord = await _context.MedicalRecords
+                                      .Include(a => a.Patient)
+                                          .ThenInclude(p => p.User)
+                                      .Include(a => a.Doctor)
+                                          .ThenInclude(d => d.User)
+                                      .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (medicalRecord == null)
+            {
+                return null;
+            }
+
+            var medicalRecordDto = new MedicalRecordDto
+            {
+               Id= medicalRecord.Id,
+               PatientId = medicalRecord.PatientId,
+               DoctorId = medicalRecord.DoctorId,
+               DoctorNotes = medicalRecord.DoctorNotes,
+               CreatedDate=medicalRecord.CreatedDate,
+               Diagnosis=medicalRecord.Diagnosis,
+               TreatmentPlan=medicalRecord.TreatmentPlan,
+               Medications=medicalRecord.Medications,   
+
+
+            };
+
+            return medicalRecordDto;
+        }
     }
 }

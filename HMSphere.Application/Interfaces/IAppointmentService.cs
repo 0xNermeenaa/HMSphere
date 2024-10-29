@@ -17,6 +17,7 @@ namespace HMSphere.Application.Interfaces
         Task<AppointmentDto> CreateAppointmentByAdmin(AppointmentDto appointmentDto);
         Task<AppointmentDto> UpdateAppointment(AppointmentDto appointmentDto);
         Task<bool> ApproveAppointment(int appointmentId, bool isApproved);
+        Task<bool> CancelAppointment(int appointmentId);
         Task<IEnumerable<AppointmentDto>> GetPendingAppointments();
 	}
 }

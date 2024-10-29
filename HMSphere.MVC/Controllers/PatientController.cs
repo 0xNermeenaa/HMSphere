@@ -212,6 +212,7 @@ namespace HMSphere.MVC.Controllers
                 AppointmentTime = appointment.AppointmentTime,
                 PatientName = appointment.PatientName,
                 DoctorName = appointment.DoctorName,
+                Status = appointment.Status,
                 ReasonFor = appointment.ReasonFor,
             };
 
@@ -219,9 +220,52 @@ namespace HMSphere.MVC.Controllers
         }
 
 
-        public IActionResult MedicalRecordDetails()
+        [HttpPost]
+        public async Task<IActionResult> CancelAppointment(int appointmentId)
         {
-            return View();
+            var result = await _appointmentService.CancelAppointment(appointmentId);
+
+            if (!result)
+            {
+                TempData["ErrorMessage"] = "Failed to cancel the appointment.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Appointment canceled successfully.";
+            }
+
+            // Redirect to the Appointment Details page, or wherever you'd like to redirect the user
+            return RedirectToAction("AppointmentDetails", new { id = appointmentId });
+        }
+
+
+        public async Task<IActionResult> MedicalRecordDetails(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Invalid medicalRecord ID.");
+            }
+
+            var medicalRecord = await _patientService.GetMedicalRecordAsync(id);
+
+            if (medicalRecord == null)
+            {
+                return NotFound("medicalRecord not found.");
+            }
+
+            var viewModel = new MedicalRecordViewModel
+            {
+                Id = medicalRecord.Id,
+                PatientId = medicalRecord.PatientId,
+                DoctorId=medicalRecord.DoctorId,
+                Diagnosis=medicalRecord.Diagnosis,
+                Medications = medicalRecord.Medications,
+                TreatmentPlan=medicalRecord.TreatmentPlan,
+                DoctorNotes=medicalRecord.DoctorNotes,
+
+            };
+
+            return View(viewModel);
         }
 
         private async Task<List<MedicalRecordViewModel>> GetLatestMedicalRecords(string id)
