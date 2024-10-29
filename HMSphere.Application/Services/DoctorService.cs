@@ -237,6 +237,7 @@ namespace HMSphere.Application.Services
 				};
 			}
 		}
+
         public async Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId)
         {
             if (departmentId == null)
@@ -252,6 +253,40 @@ namespace HMSphere.Application.Services
             return doctors;
         }
 
-        
+        public async Task<ResponseDTO> GetMedicalRecordDetails(int recordId)
+		{
+			try
+			{
+				var record = await _context.MedicalRecords.Include(m => m.Patient.User)
+					.Include(m => m.Doctor.User).FirstOrDefaultAsync(m => m.Id == recordId);
+				if(record != null)
+				{
+					var dto = _mapper.Map<MedicalRecordDto>(record);
+                    return new ResponseDTO
+                    {
+                        IsSuccess = true,
+                        StatusCode = 200,
+                        Model = dto
+                    };
+                }
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = 404,
+                    Message = "Not found"
+                };
+            }
+			catch (Exception ex)
+			{
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                };
+            }
+		}
+
+
     }
 }

@@ -137,17 +137,17 @@ namespace HMSphere.MVC.Controllers
 			return View(model);
 		}
 
-		//[HttpGet]
-		//public async Task<IActionResult> Next7DaysAppointments(string id)
-		//{
-		//	var response=await _doctorService.GetNext7DaysAppointments(id);
-		//	if (response.IsSuccess)
-		//	{
-		//		return Ok(response.Model);
-		//	}
-		//	return BadRequest(response.Message);
+		public async Task<IActionResult> MedicalRecordDetails(int recordId)
+		{
+			var record = await _doctorService.GetMedicalRecordDetails(recordId);
+			if (record.IsSuccess)
+			{
+				var model=_mapper.Map<MedicalRecordViewModel>(record.Model);
+				return View(model);
+			}
+			return NotFound();
+		}
 
-		//}
 
-	}
+    }
 }

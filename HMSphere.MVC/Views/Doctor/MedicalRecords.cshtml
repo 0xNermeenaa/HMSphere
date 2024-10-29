@@ -11,15 +11,8 @@
         vertical-align: middle;
     }
 
-    .btn-view {
-        background-color: #2a9fd9;
-        color: white;
-        border-radius: 20px;
-        padding: 5px 15px;
-    }
-
-        .btn-view:hover {
-            background-color: #17a2b8;
+        .btn:hover {
+            color:white;
         }
 
     .table-row-selectable {
@@ -33,26 +26,19 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between mb-4">
-        <h2>Nasser's Medical Record</h2>
+        <h2>@Model.FirstOrDefault().PatientFirstName's Medical Record</h2>
     </div>
 
     <form asp-action="SaveCreate" asp-controller="Doctor">
         <div class="row">
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label asp-for="@newRecord.CreatedDate"></label>
-                    <input asp-for="@newRecord.CreatedDate" type="date" class="form-control" id="createdDate" />
-                    <span class="text-danger" asp-validation-for="@newRecord.CreatedDate"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label asp-for="@newRecord.Diagnosis"></label>
                     <input asp-for="@newRecord.Diagnosis" class="form-control" id="diagnosis" />
                     <span class="text-danger" asp-validation-for="@newRecord.Diagnosis"></span>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label asp-for="@newRecord.TreatmentPlan"></label>
                     <input asp-for="@newRecord.TreatmentPlan" class="form-control" id="treatmentPlan" />
@@ -62,25 +48,18 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label asp-for="@newRecord.Medications"></label>
                     <input asp-for="@newRecord.Medications" class="form-control" id="medications" />
                     <span class="text-danger" asp-validation-for="@newRecord.Medications"></span>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label asp-for="@newRecord.DoctorNotes"></label>
                     <input asp-for="@newRecord.DoctorNotes" class="form-control" id="doctorNotes" />
                     <span class="text-danger" asp-validation-for="@newRecord.DoctorNotes"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label asp-for="@newRecord.LastUpdated"></label>
-                    <input asp-for="@newRecord.LastUpdated" type="date" class="form-control" id="lastUpdated" />
-                    <span class="text-danger" asp-validation-for="@newRecord.LastUpdated"></span>
                 </div>
             </div>
         </div>
@@ -88,7 +67,7 @@
         <div class="row">
             <div class="col-md-12 text-end">
                 <button type="submit" class="btn btn-success">Add New Medical Record</button>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-warning">Update</button>
             </div>
         </div>
     </form>
@@ -98,26 +77,38 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>CreatedDate</th>
                     <th>Diagnosis</th>
-                    <th>TreatmentPlan</th>
+                    <th>Treatment Plan</th>
                     <th>Medications</th>
                     <th>Doctor's Name</th>
                     <th>Doctor's Note</th>
-                    <th>LastUpdated</th>
+                    <th>Last Updated</th>
+                    <th>Details</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach(var item in Model)
                 {
-                    <tr class="table-row-selectable">
-                        <td>@item.CreatedDate</td>
+                    <tr class="table-row-selectable" id="@item.Id">
                         <td>@item.Diagnosis</td>
                         <td>@item.TreatmentPlan</td>
                         <td>@item.Medications</td>
                         <td>@item.DoctorNotes</td>
                         <td>@item.DoctorNotes</td>
                         <td>@item.LastUpdated</td>
+                        <td>
+                            <form asp-controller="Doctor" asp-action="MedicalRecordDetails" asp-route-data="@item.Id" method="get">
+                                <input type="hidden" name="recordId" value="@item.Id" />
+                                <button type="submit" class="btn btn-outline-primary">View</button>
+                            </form>
+                        </td>
+                        <td>
+                           @*  <form asp-controller="Doctor" asp-action="MedicalRecords" asp-route-data="@item.Id" method="get">
+                                <input type="hidden" name="recordId" value="@item.Id" />
+                            </form> *@
+                            <button type="button" class="btn btn-outline-warning" onclick="AddRecordToCells(@item.Id)">Edit</button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -126,16 +117,24 @@
 </div>
 
 <script>
-    document.querySelectorAll('.table-row-selectable').forEach(row => {
-        row.addEventListener('click', function () {
-            // Extract data from each cell
-            const cells = this.querySelectorAll('td');
-            document.getElementById('createdDate').value = cells[0].innerText.trim();
-            document.getElementById('diagnosis').value = cells[1].innerText.trim();
-            document.getElementById('treatmentPlan').value = cells[2].innerText.trim();
-            document.getElementById('medications').value = cells[3].innerText.trim();
-            document.getElementById('doctorNotes').value = cells[5].innerText.trim();
-            document.getElementById('lastUpdated').value = cells[6].innerText.trim();
-        });
-    });
+    // document.querySelectorAll('.table-row-selectable').forEach(row => {
+    //     row.addEventListener('click', function () {
+    //         // Extract data from each cell
+    //         const cells = this.querySelectorAll('td');
+    //         // document.getElementById('createdDate').value = cells[0].innerText.trim();
+    //         document.getElementById('diagnosis').value = cells[1].innerText.trim();
+    //         document.getElementById('treatmentPlan').value = cells[2].innerText.trim();
+    //         document.getElementById('medications').value = cells[3].innerText.trim();
+    //         document.getElementById('doctorNotes').value = cells[5].innerText.trim();
+    //         // document.getElementById('lastUpdated').value = cells[6].innerText.trim();
+    //     });
+    // });
+
+    function AddRecordToCells(Id) {
+        let cells = document.getElementById(Id).getElementsByTagName('td');
+        document.getElementById('diagnosis').value = cells[0].innerText.trim();
+        document.getElementById('treatmentPlan').value = cells[1].innerText.trim();
+        document.getElementById('medications').value = cells[2].innerText.trim();
+        document.getElementById('doctorNotes').value = cells[4].innerText.trim();
+    }
 </script>

@@ -24,5 +24,6 @@ namespace HMSphere.Application.Interfaces
         Task<List<MedicalRecordDto>> GetLatestMedicalRecords(string doctorId);
         Task<List<AppointmentDto>> GetAllAppointments(string doctorId);
         Task<ResponseDTO> GetAppointmentDetails(int appointmentId);
+        Task<ResponseDTO> GetMedicalRecordDetails(int recordId);
 	}
 }
