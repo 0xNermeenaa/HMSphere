@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HMSphere.Application.DTOs;
 using HMSphere.Application.Interfaces;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
@@ -46,6 +47,39 @@ namespace HMSphere.Application.Services
             var DoctorShift = new DoctorShift { ShiftId = shiftId, DoctorId = doctorId };
             await _dbSet2.AddAsync(DoctorShift);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<ShiftMembersDto> GetShiftMembersAsync(int shiftId)
+        {
+            var doctors = await _context.DoctorShifts
+                .Where(ds => ds.ShiftId == shiftId)
+                .Include(ds => ds.Doctor)
+                .Select(ds => new DoctorDto
+                {
+                    Id = ds.Doctor.Id,
+                    FirstName = ds.Doctor.User.FirstName,
+                    LastName = ds.Doctor.User.LastName,
+                    Specialization = ds.Doctor.Specialization
+                })
+                .ToListAsync();
+
+            var staff = await _context.StaffShifts
+                .Where(ss => ss.ShiftId == shiftId)
+                .Include(ss => ss.Staff)
+                .Select(ss => new StaffDto
+                {
+                    Id = ss.Staff.Id,
+                    FirstName = ss.Staff.User.FirstName,
+                    LastName = ss.Staff.User.LastName,
+                    JobTitle = ss.Staff.JobTitle
+                })
+                .ToListAsync();
+
+            return new ShiftMembersDto
+            {
+                Doctors = doctors,
+                Staff = staff
+            };
         }
     }
 }

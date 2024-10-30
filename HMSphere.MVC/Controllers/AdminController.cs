@@ -383,7 +383,6 @@ namespace HMSphere.MVC.Controllers
 			return View("Staff");
 		}
 
-
 		public async Task<IActionResult> DetailsStaff(string? id)
 		{
 			if (id == null)
@@ -444,6 +443,8 @@ namespace HMSphere.MVC.Controllers
 			TempData["Message"] = "Staff and associated user deleted successfully.";
 			return RedirectToAction("Staff");
 		} 
+
+
         public IActionResult UpdatePatient()
         {
             return View();
@@ -462,6 +463,8 @@ namespace HMSphere.MVC.Controllers
 
             return RedirectToAction("Patients");
         }
+
+        // -------------------------------- Shift Management -------------------------------------------- \\
 
         [HttpPost]
         public async Task<IActionResult> AddShift(ShiftDto newShift)
@@ -485,12 +488,10 @@ namespace HMSphere.MVC.Controllers
                 return RedirectToAction("Shifts");
             }
 
-            // Attempt to assign the doctor to the shift
             bool result = await _shiftService.AssignStaffToShiftAsync(shiftId, staffId);
 
             if (!result)
             {
-                // Doctor is already assigned to this shift; show a message to the admin
                 TempData["Message"] = "The selected Staff is Already assigned to this Shift.";
                 return RedirectToAction("Shifts");
             }
@@ -573,15 +574,39 @@ namespace HMSphere.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteShift(int id)
         {
-            var shift = await _shiftRepo.GetByIntIdAsync(id); // Fetch by ID
+            var shift = await _shiftRepo.GetByIntIdAsync(id); 
             if (shift == null)
             {
-                return NotFound(); // Handle not found
+                return NotFound(); 
             }
-            await _shiftRepo.DeleteAsync(shift); // Delete the shift    
+            await _shiftRepo.DeleteAsync(shift);  
             TempData["Message"] = "Shift deleted successfully.";
 
-            return RedirectToAction("Shifts"); // Redirect after deletion
+            return RedirectToAction("Shifts");
         }
-    }
+
+        public async Task<IActionResult> ShiftMembers(int shiftId)
+        {
+			var shiftMembers = await _shiftService.GetShiftMembersAsync(shiftId);
+
+			return Json(new
+			{
+				doctors = shiftMembers.Doctors, 
+				staff = shiftMembers.Staff
+			});
+		}
+
+		//public async Task<IActionResult> ShiftMembers(int shiftId)
+		//{
+		//	var shiftMembers = await _shiftService.GetShiftMembersAsync(shiftId);
+
+		//	var result = _mapper.Map<ShiftManagementViewModel>(shiftMembers);
+		//	return Json(new
+		//	{
+		//		doctors = result.Doctors,
+		//		staff = result.Staff
+		//	});
+		//}
+
+	}
 }
