@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HMSphere.MVC.ViewModels.StaffViewModel
+
+@{
     ViewData["Title"] = "Appointments";
 }
 <style>
@@ -132,8 +134,9 @@
         <img src="~/images/user.png" class="profile-img">
         <div class="profile-text">
             <p>Welcome,</p>
-            <h2 class="text-light">Kyle Thomas</h2>
-            <p>ID:249376</p>
+            <h2 class="text-light">@Model.FirstName @Model.LastName</h2>
+            <p><b>@Model.JobTitle</b></p>
+            <p>@Model.Department</p>
         </div>
     </div>
 </div>
@@ -185,8 +188,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="id" class="form-label">Patient ID</label>
-                            <input type="text" class="form-control" id="patientID" placeholder="Enter your ID">
+                            <label for="id" class="form-label">Patient NID</label>
+                            <input type="text" class="form-control" id="patientID" placeholder="Enter NID">
                         </div>
 
                         <div class="mb-3">

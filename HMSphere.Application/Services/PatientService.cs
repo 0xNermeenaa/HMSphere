@@ -68,6 +68,10 @@ namespace HMSphere.Application.Services
                                  .OrderByDescending(a => a.Date)
                                  .Take(5)
                                  .ToListAsync();
+            if (Latest5Appointments.Count()<=0)
+            {
+                return new List<AppointmentDto>();
+            }
             return Latest5Appointments.Select(a => _mapper.Map<AppointmentDto>(a)).ToList();
         }
         public async Task<IEnumerable<MedicalRecordDto>> GetLast5MedicalRecordsAsync(string patientId)
@@ -77,6 +81,10 @@ namespace HMSphere.Application.Services
                                  .OrderByDescending(mr => mr.CreatedDate)
                                  .Take(5)
                                  .ToListAsync();
+            if (Latest5MedicalRecords.Count()<=0)
+            {
+                return new List<MedicalRecordDto>();
+            }
             return Latest5MedicalRecords.Select(mr => _mapper.Map<MedicalRecordDto>(mr)).ToList();
         }
 
@@ -137,5 +145,35 @@ namespace HMSphere.Application.Services
           
         }
 
+        public async Task<MedicalRecordDto> GetMedicalRecordAsync(int id)
+        {
+            var medicalRecord = await _context.MedicalRecords
+                                      .Include(a => a.Patient)
+                                          .ThenInclude(p => p.User)
+                                      .Include(a => a.Doctor)
+                                          .ThenInclude(d => d.User)
+                                      .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (medicalRecord == null)
+            {
+                return null;
+            }
+
+            var medicalRecordDto = new MedicalRecordDto
+            {
+               Id= medicalRecord.Id,
+               PatientId = medicalRecord.PatientId,
+               DoctorId = medicalRecord.DoctorId,
+               DoctorNotes = medicalRecord.DoctorNotes,
+               CreatedDate=medicalRecord.CreatedDate,
+               Diagnosis=medicalRecord.Diagnosis,
+               TreatmentPlan=medicalRecord.TreatmentPlan,
+               Medications=medicalRecord.Medications,   
+
+
+            };
+
+            return medicalRecordDto;
+        }
     }
 }
