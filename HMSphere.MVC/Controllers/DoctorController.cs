@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HMSphere.Application.DTOs;
 using HMSphere.Application.Interfaces;
 using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
@@ -13,19 +14,21 @@ namespace HMSphere.MVC.Controllers
     public class DoctorController : Controller
     {
         private readonly IDoctorService _doctorService;
+		private readonly IPatientService _patientService;
 		private readonly IBaseRepository<MedicalRecord> _baseRepository;
 		private readonly IMapper _mapper;
 		private readonly IAppointmentService _appointmentService;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public DoctorController(IDoctorService doctorService, IBaseRepository<MedicalRecord> baseRepository, IMapper mapper, IAppointmentService appointmentService, UserManager<ApplicationUser> userManager)
+        public DoctorController(IDoctorService doctorService, IBaseRepository<MedicalRecord> baseRepository, IMapper mapper, IAppointmentService appointmentService, UserManager<ApplicationUser> userManager, IPatientService patientService)
         {
             _doctorService = doctorService;
             _baseRepository = baseRepository;
             _mapper = mapper;
             _appointmentService = appointmentService;
             _userManager = userManager;
+            _patientService = patientService;
         }
 
         public async Task<IActionResult> Index()
@@ -148,6 +151,21 @@ namespace HMSphere.MVC.Controllers
 			return NotFound();
 		}
 
-
-    }
+		[HttpGet]
+		public async Task<IActionResult> SearchPatientByName(string name)
+		{
+			var currentUser = await _userManager.GetUserAsync(User);
+			List<PatientDto> patients = new();
+			if (string.IsNullOrEmpty(name))
+			{
+				patients = await _doctorService.GetAllPatientAsync(currentUser.Id);
+			}
+			else
+			{
+				patients = await _patientService.SearchByName(name, currentUser.Id);
+			}
+			var model = patients.Select(p => _mapper.Map<PatientsHistoryViewModel>(p)).ToList();
+			return Json(model);
+		}
+	}
 }

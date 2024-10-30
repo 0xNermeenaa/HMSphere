@@ -81,7 +81,7 @@ namespace HMSphere.Application.Services
 			}
 		}
 
-        public async Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId)
+        public async Task<List<PatientDto>> GetAllPatientAsync(string doctorId)
 		{
 			var patients = await _context.MedicalRecords
 				.Include(m=>m.Patient.User)

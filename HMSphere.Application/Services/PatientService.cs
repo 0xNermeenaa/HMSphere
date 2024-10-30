@@ -24,7 +24,7 @@ namespace HMSphere.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PatientDto>> GetAll()
+        public async Task<List<PatientDto>> GetAll()
         {
             try
             {
@@ -175,5 +175,19 @@ namespace HMSphere.Application.Services
 
             return medicalRecordDto;
         }
+
+        public async Task<List<PatientDto>> SearchByName(string name,string doctorId)
+        {
+            var patients = await _context.MedicalRecords.Include(p => p.Patient.User)
+                .Where(m => m.Patient.User.FirstName.Contains(name)
+                && m.DoctorId==doctorId).Select(m=>m.Patient)
+                .ToListAsync();
+            if (patients.Any())
+            {
+                return patients.Select(p => _mapper.Map<PatientDto>(p)).ToList();
+            }
+            return new List<PatientDto>();
+        }
+
     }
 }

@@ -29,17 +29,20 @@
 
 	<div class="row mb-3">
 		<div class="col-md-3">
-			<input type="text" class="form-control" placeholder="Search by Name">
+			<input type="text" id="nameSearch" class="form-control" placeholder="Search by Name"
+				   onkeyup="searchByName()">
 		</div>
 		<div class="col-md-3">
-			<input type="text" class="form-control" placeholder="Search by NID">
+			<input type="text" id="nidSearch" class="form-control" placeholder="Search by NID"
+				   onkeyup="searchByNid()">
 		</div>
 		<div class="col-md-3">
-			<input type="text" class="form-control" placeholder="Search by Blood Type">
+			<input type="text" id="bloodSearch" class="form-control" placeholder="Search by Blood Type"
+				   onkeyup="searchByBloodType()">
 		</div>
-		<div class="col-md-3">
+		@* <div class="col-md-3">
 			<button class="btn btn-primary w-100">Search</button>
-		</div>
+		</div>  *@
 	</div>
 
 	<div class="table-responsive">
@@ -57,7 +60,7 @@
 					<th>Medical Record</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="patientsTable">
 				@foreach(var item in Model)
 				{
 					<tr>
@@ -82,4 +85,49 @@
 		</table>
 	</div>
 </div>
+
+<script>
+	function searchByName() {
+		var name = document.getElementById("nameSearch").value;
+		console.log("Searching for:", name);
+
+		$.ajax({
+			url: '/Doctor/SearchPatientByName',
+			type: 'GET',
+			data: { name: name },
+			success: function (response) {
+				console.log("Response:", response);
+				updateTable(response);
+			},
+			error: function (xhr, status, error) {
+				console.error("Error:", error);
+			}
+		});
+	}
+
+	function updateTable(patients) {
+		$('#patientsTable').empty();
+
+		if (!patients || patients.length === 0) {
+			$('#patientsTable').append(`<tr><td colspan="9">No patients found.</td></tr>`);
+			return;
+		}
+
+		patients.forEach(function (patient) {
+			var row =
+				`<tr>
+				<td>${patient.firstName}</td>
+				<td>${patient.gender}</td>
+				<td>${patient.weight}</td>
+				<td>${patient.height}</td>
+				<td>${patient.age}</td>
+				<td>${patient.blood}</td>
+				<td>${patient.phoneNumber}</td>
+				<td>${patient.GetLastVisitDate}</td>
+				<td><button class="btn btn-primary">View</button></td>
+			</tr>`;
+			$('#patientsTable').append(row);
+		});
+	}
+</script>
 

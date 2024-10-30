@@ -116,7 +116,7 @@
                 <tbody>
                     @foreach (var appointment in Model)
                     {
-                        <tr class="@(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "table-success" : "table-active")">
+                        <tr class="@(appointment.Status == HMSphere.Domain.Enums.Status.Completed ? "table-success" : "table-light")">
                             <td>@appointment.Id</td>
                             <td>@appointment.DoctorName</td>
                             <td>@appointment.Date?.ToString("dd-MM-yyyy")</td>

@@ -61,5 +61,7 @@ namespace HMSphere.MVC.ViewModels
 			return Appointments?.OrderByDescending(a => a.Date).FirstOrDefault()?.Date;
 		}
 
-	}
+		public int Age => CalculateAgeFromNID(NID);
+
+    }
 }

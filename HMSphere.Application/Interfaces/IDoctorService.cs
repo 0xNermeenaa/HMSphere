@@ -13,7 +13,7 @@ namespace HMSphere.Application.Interfaces
     {
         Task<List<DoctorDto>> GetAll();
         public Task<List<Doctor>> GetDoctorsByDepartmentIdAsync(int? departmentId);
-        Task<IEnumerable<PatientDto>> GetAllPatientAsync(string doctorId);
+        Task<List<PatientDto>> GetAllPatientAsync(string doctorId);
         Task<IEnumerable<MedicalRecordDto>> GetAllMedicalRecordsAsync(string pateintId);
 		Task<bool> AddMedicalRecordAsync(MedicalRecordDto entity, string doctorId , string patientId);
         Task<ResponseDTO> Profile(string doctorId);
