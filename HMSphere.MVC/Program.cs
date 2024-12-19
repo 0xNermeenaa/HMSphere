@@ -1,18 +1,16 @@
 using HMSphere.Application.Interfaces;
+using HMSphere.Application.Mailing;
 using HMSphere.Application.Services;
 using HMSphere.Domain.Entities;
 using HMSphere.Infrastructure.DataContext;
+using HMSphere.Infrastructure.Repositories;
 using HMSphere.MVC.AutoMapper;
-using HMSphere.MVC;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using HMSphere.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using HMSphere.Application.Mailing;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+
 namespace HMSphere.MVC
 {
     public class Program
@@ -24,123 +22,80 @@ namespace HMSphere.MVC
             // Add services to the container.
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            builder.Services.Configure<IdentityOptions>(options =>
-            {
-                // Password Settings
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredUniqueChars = 0;
-                options.Password.RequiredLength = 2;
-                options.Password.RequireNonAlphanumeric = false;
 
-                // Lockout Settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-
-                // User Settings
-                options.User.AllowedUserNameCharacters =
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
-            });
-
-
-            //Add Identity
+            // Configure Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<HmsContext>().AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<HmsContext>()
+                .AddDefaultTokenProviders();
 
+            // CORS policy configuration
             builder.Services.AddCors(corsOptions =>
             {
                 corsOptions.AddPolicy("MyPolicy",
-                    corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
-                                                          .AllowAnyHeader()
-                                                          .AllowAnyMethod());
+                    corsPolicyBuilder => corsPolicyBuilder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
             });
 
-            //Add DbContext
+            // Database Context
             builder.Services.AddDbContext<HmsContext>(options =>
-            options.UseSqlServer(builder.Configuration
-            .GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			//email
+            // Email configuration
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
 
-            //configure  Services
-            builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            // Register application services
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IMailingService, MailingService>();
             builder.Services.AddScoped<IUserRoleFactory, UserRoleFactory>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
-			builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+            builder.Services.AddScoped<IShiftService, ShiftService>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<IPatientService, PatientService>();
-            builder.Services.AddScoped<IStaffService, StaffService>();
 
+            // Localization Configuration
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[] { new CultureInfo("en-US") };
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
-            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mailing"));
+            // Authentication and Authorization configuration
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                });
 
-
-            //seeding Data
-            builder.Services.AddScoped<StoredContextSeed>();
-            // builder.Services.AddScoped<IdentitySeed>();
-
-            #region jwt
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(options =>
-            //{
-            //	options.RequireHttpsMetadata = false;
-            //	options.SaveToken = true;
-            //	options.TokenValidationParameters = new TokenValidationParameters
-            //	{
-            //		ValidateIssuerSigningKey = true,
-            //		ValidateLifetime = true,
-            //		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-            //		ValidateIssuer = true,
-            //		ValidIssuer = builder.Configuration["JWT:issuer"],
-            //		ValidateAudience = true,
-            //		ValidAudience = builder.Configuration["JWT:audience"],
-            //		ClockSkew = TimeSpan.Zero // Optional: reduce the default clock skew
-            //	};
-            //});
-            #endregion
-
-			#region cookies
-			builder.Services.AddAuthentication(options =>
-			{
-				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			})
-				.AddCookie(options =>
-				{
-					options.LoginPath = "/Account/Login";
-				});
-			#endregion
-
-			builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
-			//For Seeding Data 
-			using (var scope = app.Services.CreateScope())
-			{
-				var services = scope.ServiceProvider;
-				var context = services.GetRequiredService<HmsContext>();
-				var usermanager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                await StoredContextSeed.SeedAsync(context);
-                //await StoredContextSeed.SeedUserAsync(usermanager,context);
-                // await IdentitySeed.SeedUserAsync(usermanager);
+
+            // Apply localization settings
+            var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
+            app.UseRequestLocalization(localizationOptions);
+
+            // For Seeding Data
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<HmsContext>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                // Optionally seed database
+                // await StoredContextSeed.SeedUserAsync(userManager, context);
             }
 
-
-            // Configure the HTTP request pipeline.
+            // Configure HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

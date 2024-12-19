@@ -52,7 +52,6 @@ namespace HMSphere.MVC.Controllers
 			return View("Register", model);
 		}
 
-
 		[HttpPost]
 		public async Task<IActionResult> SaveRegister(RegisterViewModel userViewModel)
 		{

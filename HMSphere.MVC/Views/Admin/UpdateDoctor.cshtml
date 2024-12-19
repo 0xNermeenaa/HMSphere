@@ -1,105 +1,39 @@
-﻿@{
+﻿@model HMSphere.MVC.ViewModels.DoctorViewModel
+
+@{
     ViewData["Title"] = "Update Doctor";
 }
-<style>
-    {
-        box-sizing: border-box;
-    }
-    .close-btn {
-        cursor: pointer;
-        font-size: 1.2rem;
-    }
+<h1>Edit Doctor</h1>
 
-    .profile-card {
-        background-color: #2a9fd9;
-        padding: 20px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .profile-img {
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-    }
-
-    .drprofile-img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
-
-    .profile-text {
-        margin-left: 20px;
-    }
-
-        .profile-text h2 {
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .profile-text p {
-            margin: 0;
-        }
-
-    .experience {
-        margin-top: 10px;
-        font-style: italic;
-    }
-
-    .has-shadow {
-        box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.2);
-        width: 32%;
-    }
-
-    .bi {
-        font-size: 80px;
-        margin-left: 1.5vw;
-        margin-right: 1vw;
-    }
-
-    .table-header {
-        background-color: #2a9fd9;
-        color: white;
-    }
-
-    .btn-view {
-        background-color: #2a9fd9;
-        color: white;
-        border-radius: 20px;
-        padding: 5px 15px;
-    }
-
-        .btn-view:hover {
-            background-color: #17a2b8;
-        }
-</style>
-<h1>Update Doctor</h1>
-<form>
+<form asp-action="SaveUpdateDoctor" asp-controller="Admin" asp-route-id="@Model.Id">
     <div class="mb-3">
-        <label for="name" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="firstname">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" />
     </div>
     <div class="mb-3">
-        <label for="name" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="lastname">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Specialization" class="form-label"></label>
+        <input asp-for="Specialization" class="form-control" />
+    </div>
+
+    <!-- Department Dropdown -->
+    <div class="mb-3">
+        <label asp-for="DepartmentId" class="form-label"></label>
+        <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control">
+            <option value="">-- Select Department --</option>
+        </select>
     </div>
 
     <div class="mb-3">
-        <label for="specialization" class="form-label">Specialization</label>
-        <input type="text" class="form-control" id="specialization">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
     </div>
 
-    <div class="mb-3">
-        <label for="department" class="form-label">Department</label>
-        <input type="text" class="form-control" id="department">
-    </div>
-    <div class="mb-3">
-        <label for="phonenumber" class="form-label">Phone Number</label>
-        <input type="text" class="form-control" id="phonenumber">
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <input type="submit" class="btn btn-success" value="Save" />
 </form>
+</br>
+
+<a asp-action="Doctors" class="btn-primary" style="color:#FFF;padding:5px; text-decoration:none; border-radius:5px;">Back To List</a>

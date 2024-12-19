@@ -5,11 +5,11 @@ using HMSphere.MVC.ViewModels;
 
 namespace HMSphere.MVC.AutoMapper
 {
-    public class MappingProfiles:Profile
+    public class MappingProfiles : Profile
     {
         public MappingProfiles()
         {
-            CreateMap<AuthDto,AuthViewModel>().ReverseMap();
+            CreateMap<AuthDto, AuthViewModel>().ReverseMap();
             CreateMap<RegisterDto, RegisterViewModel>().ReverseMap();
             CreateMap<LoginDto, LoginViewModel>().ReverseMap();
             CreateMap<MedicalRecordDto, PatientMedicalRecordsViewModel>().ReverseMap();
@@ -35,7 +35,7 @@ namespace HMSphere.MVC.AutoMapper
                     .ForMember(dest => dest.FirstName, d => d.MapFrom(d => d.User.FirstName))
                     .ForMember(dest => dest.LastName, d => d.MapFrom(d => d.User.LastName))
                     .ForMember(dest => dest.PhoneNumber, d => d.MapFrom(d => d.User.PhoneNumber))
-                    .ForMember(dest => dest.Department, d => d.MapFrom(d => d.Department.Name))
+                    .ForMember(dest => dest.DepartmentName, d => d.MapFrom(d => d.Department.Name))
                     .ReverseMap();
             }
 
@@ -45,7 +45,7 @@ namespace HMSphere.MVC.AutoMapper
                     .ForMember(dest => dest.FirstName, s => s.MapFrom(src => src.User.FirstName))
                     .ForMember(dest => dest.LastName, s => s.MapFrom(src => src.User.LastName))
                     .ForMember(dest => dest.PhoneNumber, s => s.MapFrom(src => src.User.PhoneNumber))
-                    .ForMember(dest => dest.Department, s => s.MapFrom(src => src.Department.Name))
+                    .ForMember(dest => dest.DepartmentName, s => s.MapFrom(src => src.Department.Name))
                     .ReverseMap();
             }
 
@@ -64,7 +64,7 @@ namespace HMSphere.MVC.AutoMapper
                 .ForMember(dest => dest.FirstName, o => o.MapFrom(src => src.User.FirstName))
                 .ForMember(dest => dest.LastName, o => o.MapFrom(src => src.User.LastName))
                 .ForMember(dest => dest.Specialization, o => o.MapFrom(src => src.Specialization))
-                .ForMember(dest => dest.Department, o => o.MapFrom(src => src.Department.Name))
+                .ForMember(dest => dest.DepartmentName, o => o.MapFrom(src => src.Department.Name))
                 .ReverseMap();
             }
 
