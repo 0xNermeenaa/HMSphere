@@ -13,7 +13,8 @@ namespace HMSphere.Application.Interfaces
         //Task<IEnumerable<object>> GetAllAsync();
         Task<IEnumerable<ShiftDto>> GetShiftsForStaffAsync(string StaffId);
 		Task<IEnumerable<StaffDto>> GetAllAsync();
-   
+        Task<ResponseDTO> Profile(string Id);
 
-	}
+
+    }
 }

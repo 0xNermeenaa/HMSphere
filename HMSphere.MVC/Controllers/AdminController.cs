@@ -48,9 +48,24 @@ namespace HMSphere.MVC.Controllers
             _shiftService = shiftService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound();
+            }
+            var response = await _staffService.Profile(userId);
+            if (response.IsSuccess)
+            {
+                var admin = _mapper.Map<StaffViewModel>(response.Model);
+                if (admin != null)
+                {
+                    return View(admin);
+                }
+                return NotFound();
+            }
+            return NotFound();
         }
 
         [HttpPost]
@@ -526,7 +541,7 @@ namespace HMSphere.MVC.Controllers
             var doctors = await _doctorRepo.GetAllAsync();
             var doctorViewModels = doctors.Select(doctor => _mapper.Map<DoctorViewModel>(doctor)).ToList();
 
-            var Staff = await _staffRepo.GetAllAsync();
+            var Staff = await _staffService.GetAllAsync();
             var StaffViewModels = Staff.Select(staff => _mapper.Map<StaffViewModel>(staff)).ToList();
 
             var shifts = await _shiftRepo.GetAllAsync();

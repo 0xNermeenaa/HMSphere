@@ -30,7 +30,48 @@ namespace HMSphere.Application.Services
 
         }
 
-		public async Task<StaffDto> GetById(string id)
+        public async Task<ResponseDTO> Profile(string id)
+        {
+            try
+            {
+                var staff = await _context.Staff.Include(s => s.User)
+                    .Include(s=>s.Department)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+                if (staff != null)
+                {
+                    var dto = new StaffDto
+                    {
+                        Id = staff.User.Id,
+                        FirstName = staff.User.FirstName,
+                        LastName = staff.User.LastName,
+                        DepartmentName = staff.Department.Name,
+                        JobTitle = staff.JobTitle,
+                        PhoneNumber = staff.User.PhoneNumber,
+                        HireDate = staff.HireDate,
+                    };
+
+                    return new ResponseDTO
+                    {
+                        IsSuccess = true,
+                        StatusCode = 200,
+                        Model = dto
+                    };
+                }
+
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = 404,
+                    Message = "patient not found!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO { IsSuccess = false, Message = "An error occured, please try again", StatusCode = 500 };
+            }
+        }
+
+        public async Task<StaffDto> GetById(string id)
 		{
 			var staff = await _context.Staff.Include(s => s.User)
 				.FirstOrDefaultAsync(s => s.Id == id);
