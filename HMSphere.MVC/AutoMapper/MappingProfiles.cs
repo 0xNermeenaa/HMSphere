@@ -69,6 +69,7 @@ namespace HMSphere.MVC.AutoMapper
             }
 
 
+
             CreateMap<Patient, PatientsHistoryViewModel>()
             .ForMember(dest => dest.FirstName, o => o.MapFrom(src => src.User.FirstName))
             .ForMember(dest => dest.LastName, o => o.MapFrom(src => src.User.LastName))
