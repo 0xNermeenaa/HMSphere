@@ -425,7 +425,7 @@ namespace HMSphere.Application.Services
                 return false;
             }
 
-            if (appointment.Status != HMSphere.Domain.Enums.Status.Pending)
+            if (appointment.Status !=Status.Pending)
             {
                 return false;
             }
@@ -435,6 +435,24 @@ namespace HMSphere.Application.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<AppointmentDto>> SearchByStatus(string status, string doctorId)
+        {
+			var appointments=new List<Appointment>();
+
+			if (Enum.TryParse<Status>(status, true, out var parsedStatus))
+            {
+                appointments = await _context.Appointments.Include(a => a.Doctor.User)
+                    .Include(a => a.Patient.User).Where(a => a.Status == parsedStatus && a.DoctorId == doctorId)
+                    .ToListAsync();
+            }
+            if (appointments.Any())
+            {
+                return appointments.Select(a=>_mapper.Map<AppointmentDto>(a)).ToList();
+
+            }
+            return new List<AppointmentDto>();
         }
 
     }

@@ -19,5 +19,7 @@ namespace HMSphere.Application.Interfaces
         Task<List<PatientDto>> GetAll();
         Task<List<Patient>> GetPatients();
         Task<List<PatientDto>> SearchByName(string name, string doctorId);
+        Task<List<PatientDto>> SearchByNID(string nid, string doctorId);
+        Task<List<PatientDto>> SearchByBloodType(string type, string doctorId);
     }
 }

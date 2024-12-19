@@ -19,5 +19,7 @@ namespace HMSphere.Application.Interfaces
         Task<bool> ApproveAppointment(int appointmentId, bool isApproved);
         Task<bool> CancelAppointment(int appointmentId);
         Task<IEnumerable<AppointmentDto>> GetPendingAppointments();
-	}
+
+        Task<List<AppointmentDto>> SearchByStatus(string status, string doctorId);
+    }
 }

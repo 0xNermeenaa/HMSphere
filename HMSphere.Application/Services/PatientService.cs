@@ -180,7 +180,7 @@ namespace HMSphere.Application.Services
         {
             var patients = await _context.MedicalRecords.Include(p => p.Patient.User)
                 .Where(m => m.Patient.User.FirstName.Contains(name)
-                && m.DoctorId==doctorId).Select(m=>m.Patient)
+                && m.DoctorId==doctorId).Select(m=>m.Patient).Distinct()
                 .ToListAsync();
             if (patients.Any())
             {
@@ -189,5 +189,30 @@ namespace HMSphere.Application.Services
             return new List<PatientDto>();
         }
 
-    }
+        public async Task<List<PatientDto>> SearchByNID(string nid, string doctorId)
+        {
+            var patients = await _context.MedicalRecords.Include(p => p.Patient.User)
+                .Where(m => m.Patient.User.NID.Contains(nid)
+                && m.DoctorId == doctorId).Select(m => m.Patient).Distinct()
+                .ToListAsync();
+            if (patients.Any())
+            {
+                return patients.Select(p => _mapper.Map<PatientDto>(p)).ToList();
+            }
+            return new List<PatientDto>();
+        }
+
+		public async Task<List<PatientDto>> SearchByBloodType(string type, string doctorId)
+		{
+			var patients = await _context.MedicalRecords.Include(p => p.Patient.User)
+				.Where(m => m.Patient.Blood.Contains(type)
+				&& m.DoctorId == doctorId).Select(m => m.Patient).Distinct()
+				.ToListAsync();
+			if (patients.Any())
+			{
+				return patients.Select(p => _mapper.Map<PatientDto>(p)).ToList();
+			}
+			return new List<PatientDto>();
+		}
+	}
 }

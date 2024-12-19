@@ -17,9 +17,15 @@
 		padding: 5px 15px;
 	}
 
-		.btn-view:hover {
-			background-color: #17a2b8;
-		}
+	.btn-view:hover {
+		background-color: #17a2b8;
+	}
+
+	.bi{
+		font-size:25px;
+		margin-left: 15px;
+	}
+
 </style>
 
 <div class="container mt-4">
@@ -34,15 +40,15 @@
 		</div>
 		<div class="col-md-3">
 			<input type="text" id="nidSearch" class="form-control" placeholder="Search by NID"
-				   onkeyup="searchByNid()">
+				   onkeyup="searchByNID()">
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-3 d-flex">
 			<input type="text" id="bloodSearch" class="form-control" placeholder="Search by Blood Type"
 				   onkeyup="searchByBloodType()">
+			<i class="bi bi-search text-secondary"></i>
 		</div>
-		@* <div class="col-md-3">
-			<button class="btn btn-primary w-100">Search</button>
-		</div>  *@
+
+
 	</div>
 
 	<div class="table-responsive">
@@ -87,6 +93,7 @@
 </div>
 
 <script>
+
 	function searchByName() {
 		var name = document.getElementById("nameSearch").value;
 		console.log("Searching for:", name);
@@ -95,6 +102,42 @@
 			url: '/Doctor/SearchPatientByName',
 			type: 'GET',
 			data: { name: name },
+			success: function (response) {
+				console.log("Response:", response);
+				updateTable(response);
+			},
+			error: function (xhr, status, error) {
+				console.error("Error:", error);
+			}
+		});
+	}
+
+	function searchByNID() {
+		var nid = document.getElementById("nidSearch").value;
+		console.log("Searching for NID:", nid);
+
+		$.ajax({
+			url: '/Doctor/SearchPatientByNID',
+			type: 'GET',
+			data: { nid: nid },
+			success: function (response) {
+				console.log("Response:", response);
+				updateTable(response);
+			},
+			error: function (xhr, status, error) {
+				console.error("Error:", error);
+			}
+		});
+	}
+
+	function searchByBloodType() {
+		var type = document.getElementById("bloodSearch").value;
+		console.log("Searching for blood type:", type);
+
+		$.ajax({
+			url: '/Doctor/SearchPatientByBloodType',
+			type: 'GET',
+			data: { type: type },
 			success: function (response) {
 				console.log("Response:", response);
 				updateTable(response);
@@ -115,7 +158,7 @@
 
 		patients.forEach(function (patient) {
 			var row =
-				`<tr>
+			`<tr>
 				<td>${patient.firstName}</td>
 				<td>${patient.gender}</td>
 				<td>${patient.weight}</td>
@@ -124,10 +167,20 @@
 				<td>${patient.blood}</td>
 				<td>${patient.phoneNumber}</td>
 				<td>${patient.GetLastVisitDate}</td>
-				<td><button class="btn btn-primary">View</button></td>
+				<td>
+					<form action="/Doctor/MedicalRecords" method="get">
+						<input type="hidden" name="patientId" value="${patient.patientId}" />
+						<button type="submit" class="btn btn-view">View</button>
+					</form>
+				</td>
 			</tr>`;
 			$('#patientsTable').append(row);
 		});
 	}
+
+	// to reload page when navigate it back
+	// if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD) {
+	// 	window.location.reload();
+	// }
 </script>
 

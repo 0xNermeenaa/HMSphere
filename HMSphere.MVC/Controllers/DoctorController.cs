@@ -167,5 +167,56 @@ namespace HMSphere.MVC.Controllers
 			var model = patients.Select(p => _mapper.Map<PatientsHistoryViewModel>(p)).ToList();
 			return Json(model);
 		}
+
+        [HttpGet]
+        public async Task<IActionResult> SearchPatientByNID(string nid)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            List<PatientDto> patients = new();
+            if (string.IsNullOrEmpty(nid))
+            {
+                patients = await _doctorService.GetAllPatientAsync(currentUser.Id);
+            }
+            else
+            {
+                patients = await _patientService.SearchByNID(nid, currentUser.Id);
+            }
+            var model = patients.Select(p => _mapper.Map<PatientsHistoryViewModel>(p)).ToList();
+            return Json(model);
+        }
+
+		[HttpGet]
+		public async Task<IActionResult> SearchPatientByBloodType(string type)
+		{
+			var currentUser = await _userManager.GetUserAsync(User);
+			List<PatientDto> patients = new();
+			if (string.IsNullOrEmpty(type))
+			{
+				patients = await _doctorService.GetAllPatientAsync(currentUser.Id);
+			}
+			else
+			{
+				patients = await _patientService.SearchByBloodType(type, currentUser.Id);
+			}
+			var model = patients.Select(p => _mapper.Map<PatientsHistoryViewModel>(p)).ToList();
+			return Json(model);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> SearchAppointmentByStatus(string status)
+		{
+			var currentUser = await _userManager.GetUserAsync(User);
+			List<AppointmentDto> appointments = new();
+			if (string.IsNullOrEmpty(status)||status=="All")
+			{
+				appointments = await _doctorService.GetAllAppointments(currentUser.Id);
+			}
+			else
+			{
+				appointments = await _appointmentService.SearchByStatus(status, currentUser.Id);
+			}
+			var model = appointments.Select(a => _mapper.Map<AppointmentsViewModel>(a)).ToList();
+			return Json(model);
+		}
 	}
 }
