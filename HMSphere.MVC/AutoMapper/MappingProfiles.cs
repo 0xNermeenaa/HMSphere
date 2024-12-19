@@ -68,22 +68,24 @@ namespace HMSphere.MVC.AutoMapper
                 .ReverseMap();
             }
 
-            {
-                CreateMap<Patient, PatientsHistoryViewModel>()
-                .ForMember(dest => dest.FirstName, o => o.MapFrom(src => src.User.FirstName))
-                .ForMember(dest => dest.LastName, o => o.MapFrom(src => src.User.LastName))
-                .ReverseMap();
-            }
 
+            CreateMap<Patient, PatientsHistoryViewModel>()
+            .ForMember(dest => dest.FirstName, o => o.MapFrom(src => src.User.FirstName))
+            .ForMember(dest => dest.LastName, o => o.MapFrom(src => src.User.LastName))
+            .ReverseMap();
+            CreateMap<Appointment, AppointmentDto>()
+                .ForMember(dest => dest.PatientName, a => a.MapFrom(src => src.Patient.User.FirstName))
+                .ForMember(dest => dest.DoctorName, a => a.MapFrom(src => src.Doctor.User.FirstName))
+
+                .ReverseMap();
             CreateMap<AppointmentDto, AppointmentsViewModel>().ReverseMap();
             CreateMap<AppointmentDto, AppointmentViewModel>().ReverseMap();
-            {
-                CreateMap<Appointment, AppointmentDto>()
-                    .ForMember(dest => dest.PatientName, a => a.MapFrom(src => src.Patient.User.FirstName))
-                    .ForMember(dest => dest.DoctorName, a => a.MapFrom(src => src.Doctor.User.FirstName))
-                    .ReverseMap();
-            }
-		
+            CreateMap<MedicalRecordDto, PatientMedicalRecordsViewModel>().ReverseMap();
+            CreateMap<AppointmentDto, PatientAppointmentsViewModel>().ReverseMap();
+            CreateMap<ShiftViewModel, ShiftDto>().ReverseMap();
+            CreateMap<ShiftDto, Shift>().ReverseMap();
+
+            CreateMap<NextAppointmentDto, NextAppointmentViewModel>().ReverseMap();
 
         }
     }
