@@ -1,5 +1,4 @@
-﻿using HMSphere.Application.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +10,5 @@ namespace HMSphere.Application.Interfaces
     {
         Task<bool> AssignStaffToShiftAsync(int shiftId, string staffId);
         Task<bool> AssignDoctorToShiftAsync(int shiftId, string doctorId);
-        Task<ShiftMembersDto> GetShiftMembersAsync(int shiftId);
     }
 }

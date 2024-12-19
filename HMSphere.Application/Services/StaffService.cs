@@ -20,6 +20,7 @@ namespace HMSphere.Application.Services
         private readonly DbSet<StaffShift> _dbSet;
 		private readonly DbSet<DoctorShift> _dbSet2;
 
+
 		public StaffService(HmsContext context, IMapper mapper)
 		{
 			_context = context;

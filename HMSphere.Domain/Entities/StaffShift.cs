@@ -16,8 +16,8 @@ namespace HMSphere.Domain.Entities
         public string StaffId { get; set; }
         public int ShiftId { get; set; }
 
-        public virtual Staff Staff { get; set; }
-        public virtual Shift Shift { get; set; } 
+        public virtual Staff Staff { get; set; } = new();
+        public virtual Shift Shift { get; set; } = new();
 
     }
 }
